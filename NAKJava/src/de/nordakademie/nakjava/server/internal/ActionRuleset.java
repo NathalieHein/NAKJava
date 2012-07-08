@@ -1,10 +1,16 @@
 package de.nordakademie.nakjava.server.internal;
 
 public class ActionRuleset {
-	private Model model;
+	private static ActionRuleset instance;
 
-	public ActionRuleset(Model model) {
-		this.model = model;
+	private ActionRuleset() {
+	}
+
+	public static ActionRuleset getInstance() {
+		if (instance == null) {
+			instance = new ActionRuleset();
+		}
+		return instance;
 	}
 
 	public void update() {

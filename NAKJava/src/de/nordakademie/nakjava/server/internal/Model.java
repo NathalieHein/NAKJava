@@ -1,6 +1,5 @@
 package de.nordakademie.nakjava.server.internal;
 
-import de.nordakademie.nakjava.server.shared.proxy.Action;
 
 public class Model {
 	private static Model instance;

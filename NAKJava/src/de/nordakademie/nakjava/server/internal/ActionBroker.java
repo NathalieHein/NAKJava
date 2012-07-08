@@ -32,6 +32,9 @@ public class ActionBroker {
 	}
 
 	public void commit() {
+		for (Player player : Player.getPlayers()) {
+			player.triggerChangeEvent();
+		}
 		lock.unlock();
 	}
 }
