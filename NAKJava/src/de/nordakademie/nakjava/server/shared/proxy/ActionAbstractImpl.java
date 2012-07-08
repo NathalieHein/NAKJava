@@ -4,6 +4,9 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import de.nordakademie.nakjava.server.internal.ActionBroker;
 import de.nordakademie.nakjava.server.internal.ActionRuleset;
@@ -20,10 +23,14 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 	private static ExecutorService threadPool = Executors.newFixedThreadPool(2);
 	private int threadCount = 2;
 
+	private Lock lock = new ReentrantLock();
+	private Condition waitCondition;
+
 	@Override
 	public void perform() throws RemoteException {
 		if (ActionBroker.getInstance().verify(this)) {
 			performImpl(Model.getInstance());
+
 			threadPool.execute(new Runnable() {
 
 				@Override
@@ -41,6 +48,19 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 				}
 			});
 
+			// Needs to be done for changing the thread context back
+			// to the thread that holds the lock in the ActionBroker
+			waitCondition = lock.newCondition();
+			lock.lock();
+			try {
+				waitCondition.await();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			lock.unlock();
+
+			ActionBroker.getInstance().commit();
+
 		}
 
 	}
@@ -48,7 +68,9 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 	private synchronized void finishThread() {
 		threadCount--;
 		if (threadCount == 0) {
-			ActionBroker.getInstance().commit();
+			lock.lock();
+			waitCondition.signal();
+			lock.unlock();
 		}
 	}
 

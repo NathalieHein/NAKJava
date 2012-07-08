@@ -1,8 +1,9 @@
-package de.nordakademie.nakjava.server.shared.proxy;
+package de.nordakademie.nakjava.server.shared.proxy.actions;
 
 import java.rmi.RemoteException;
 
 import de.nordakademie.nakjava.server.internal.Model;
+import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 
 public class InitAction extends ActionAbstractImpl {
 

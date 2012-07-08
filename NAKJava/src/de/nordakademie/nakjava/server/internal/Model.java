@@ -1,11 +1,20 @@
 package de.nordakademie.nakjava.server.internal;
 
-
 public class Model {
 	private static Model instance;
 
+	private String name = "";
+
 	private Model() {
 
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**

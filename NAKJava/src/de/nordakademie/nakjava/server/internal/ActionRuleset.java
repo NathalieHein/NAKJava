@@ -1,13 +1,18 @@
 package de.nordakademie.nakjava.server.internal;
 
+import java.awt.event.KeyEvent;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.nordakademie.nakjava.server.shared.proxy.Action;
+import de.nordakademie.nakjava.server.shared.proxy.actions.KeyAction;
 
 public class ActionRuleset {
 	private static ActionRuleset instance;
 
 	private ActionRuleset() {
+
 	}
 
 	public static ActionRuleset getInstance() {
@@ -20,7 +25,16 @@ public class ActionRuleset {
 	public void update() {
 
 		for (Player player : Player.getPlayers()) {
-			player.getState().setActions(new ArrayList<Action>());
+			List<Action> actions = new ArrayList<>();
+
+			for (int i = KeyEvent.VK_A; i <= KeyEvent.VK_Z; i++) {
+				try {
+					actions.add(new KeyAction(i));
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+			}
+			player.getState().setActions(actions);
 		}
 	}
 }

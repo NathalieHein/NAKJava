@@ -7,5 +7,5 @@ import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 
 public interface PlayerStateListener extends Remote {
 
-	public void stateChanged(PlayerState state) throws RemoteException;
+	public abstract void stateChanged(PlayerState state) throws RemoteException;
 }

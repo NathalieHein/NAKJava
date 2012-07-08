@@ -8,7 +8,7 @@ import java.util.List;
 
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
 import de.nordakademie.nakjava.server.shared.proxy.Action;
-import de.nordakademie.nakjava.server.shared.proxy.InitAction;
+import de.nordakademie.nakjava.server.shared.proxy.actions.InitAction;
 
 public class PlayerState implements Serializable {
 	private PlayerModel model;
@@ -18,6 +18,7 @@ public class PlayerState implements Serializable {
 
 	public PlayerState(PlayerStateListener stateListener) {
 		this.stateListener = stateListener;
+		model = new PlayerModel();
 	}
 
 	public PlayerModel getModel() {
