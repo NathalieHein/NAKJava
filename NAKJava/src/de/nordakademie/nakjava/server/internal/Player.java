@@ -17,12 +17,15 @@ public class Player {
 
 	public Player(PlayerControlListener controlListener,
 			PlayerStateListener stateListener) {
-		state = new PlayerState(stateListener);
+		players.add(this);
 		try {
 			control = new PlayerControlImpl(controlListener);
 		} catch (RemoteException e) {
+			e.printStackTrace();
 		}
-		players.add(this);
+		state = new PlayerState(stateListener);
+		state.initialize();
+
 	}
 
 	public static List<Player> getPlayers() {

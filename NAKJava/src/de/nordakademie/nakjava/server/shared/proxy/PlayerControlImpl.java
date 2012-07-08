@@ -18,8 +18,6 @@ public class PlayerControlImpl extends UnicastRemoteObject implements
 
 	@Override
 	public void triggerChangeEvent() {
-		// TODO Auto-generated method stub
-
 	}
 
 }

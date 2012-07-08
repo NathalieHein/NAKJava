@@ -23,7 +23,6 @@ public class CheckInImpl extends UnicastRemoteObject implements CheckIn {
 			PlayerStateListener stateListener) throws RemoteException {
 		new Player(controlListener, stateListener);
 
-		stateListener.stateChanged(null);
 	}
 
 	public static void main(String[] args) {
@@ -37,6 +36,8 @@ public class CheckInImpl extends UnicastRemoteObject implements CheckIn {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		System.out.println("Server started");
 
 	}
 

@@ -43,9 +43,6 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 
 		}
 
-		// TODO performImpl
-		// TODO update über ActionRuleset, VisibleModleUpdater
-		// TODO commit beim ActionBroker (damit wieder Freigabe)
 	}
 
 	private synchronized void finishThread() {

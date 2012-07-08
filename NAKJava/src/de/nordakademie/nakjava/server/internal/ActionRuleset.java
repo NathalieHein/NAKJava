@@ -1,5 +1,9 @@
 package de.nordakademie.nakjava.server.internal;
 
+import java.util.ArrayList;
+
+import de.nordakademie.nakjava.server.shared.proxy.Action;
+
 public class ActionRuleset {
 	private static ActionRuleset instance;
 
@@ -15,5 +19,8 @@ public class ActionRuleset {
 
 	public void update() {
 
+		for (Player player : Player.getPlayers()) {
+			player.getState().setActions(new ArrayList<Action>());
+		}
 	}
 }
