@@ -7,12 +7,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
-import de.nordakademie.nakjava.server.shared.proxy.Action;
 import de.nordakademie.nakjava.server.shared.proxy.actions.InitAction;
 
 public class PlayerState implements Serializable {
 	private PlayerModel model;
-	private List<Action> actions;
+	private List<ActionContext> actions;
 	private PlayerStateListener stateListener;
 	private boolean dirty = false;
 
@@ -30,11 +29,11 @@ public class PlayerState implements Serializable {
 		dirty = true;
 	}
 
-	public List<Action> getActions() {
-		return new ArrayList<Action>(actions);
+	public List<ActionContext> getActions() {
+		return new ArrayList<ActionContext>(actions);
 	}
 
-	public void setActions(List<Action> actions) {
+	public void setActions(List<ActionContext> actions) {
 		this.actions = actions;
 		dirty = true;
 	}

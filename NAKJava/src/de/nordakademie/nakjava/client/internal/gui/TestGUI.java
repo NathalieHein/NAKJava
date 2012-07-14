@@ -13,15 +13,15 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.JFrame;
 
 import de.nordakademie.nakjava.client.internal.Client;
-import de.nordakademie.nakjava.server.shared.proxy.Action;
 import de.nordakademie.nakjava.server.shared.proxy.actions.KeyAction;
+import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 
 public class TestGUI extends Client {
 
 	private TextField textField;
 	private Lock actionsLock;
-	private List<Action> actions;
+	private List<ActionContext> actions;
 
 	protected TestGUI() throws RemoteException {
 		super();
@@ -36,8 +36,9 @@ public class TestGUI extends Client {
 		textField.addKeyListener(new KeyAdapter() {
 
 			@Override
-			public void keyTyped(KeyEvent e) {
-				Action action = selectAction(e.getKeyCode());
+			public void keyReleased(KeyEvent e) {
+				ActionContext action = selectAction(e
+						.getExtendedKeyCodeForChar(e.getKeyChar()));
 				if (action != null) {
 					textField.setText("");
 					try {
@@ -57,14 +58,14 @@ public class TestGUI extends Client {
 
 	}
 
-	private Action selectAction(int key) {
+	private ActionContext selectAction(int key) {
 		actionsLock.lock();
 		if (actions == null) {
 			actionsLock.unlock();
 			return null;
 		}
 
-		for (Action action : actions) {
+		for (ActionContext action : actions) {
 			if (action instanceof KeyAction) {
 				KeyAction keyAction = (KeyAction) action;
 				if (keyAction.getKey() == key) {

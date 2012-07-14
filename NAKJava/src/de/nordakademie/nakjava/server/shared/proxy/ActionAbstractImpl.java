@@ -74,6 +74,6 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 		}
 	}
 
-	protected abstract void performImpl(Model mod);
+	protected abstract void performImpl(Model model);
 
 }

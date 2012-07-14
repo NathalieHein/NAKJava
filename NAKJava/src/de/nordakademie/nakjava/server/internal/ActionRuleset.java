@@ -5,8 +5,8 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.nordakademie.nakjava.server.shared.proxy.Action;
 import de.nordakademie.nakjava.server.shared.proxy.actions.KeyAction;
+import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public class ActionRuleset {
 	private static ActionRuleset instance;
@@ -25,7 +25,7 @@ public class ActionRuleset {
 	public void update() {
 
 		for (Player player : Player.getPlayers()) {
-			List<Action> actions = new ArrayList<>();
+			List<ActionContext> actions = new ArrayList<>();
 
 			for (int i = KeyEvent.VK_A; i <= KeyEvent.VK_Z; i++) {
 				try {
