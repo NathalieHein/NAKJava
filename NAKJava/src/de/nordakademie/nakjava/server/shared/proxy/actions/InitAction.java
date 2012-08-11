@@ -3,18 +3,18 @@ package de.nordakademie.nakjava.server.shared.proxy.actions;
 import java.rmi.RemoteException;
 
 import de.nordakademie.nakjava.server.internal.Model;
-import de.nordakademie.nakjava.server.shared.proxy.Action;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
+import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public class InitAction extends ActionContext {
 
-	public InitAction() throws RemoteException {
-		super();
+	public InitAction(long batch) throws RemoteException {
+		super(batch);
 	}
 
 	@Override
-	protected Action getAction() throws RemoteException {
+	protected ServerAction getAction() throws RemoteException {
 		return new ActionAbstractImpl() {
 
 			@Override

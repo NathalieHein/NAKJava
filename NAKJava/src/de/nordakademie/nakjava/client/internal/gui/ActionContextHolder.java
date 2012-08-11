@@ -10,4 +10,6 @@ public interface ActionContextHolder {
 	public void noActionContextAvailable();
 
 	public void setActionContextSelector(ActionContextSelector selector);
+
+	public void revokeActionContext(long batch);
 }

@@ -14,7 +14,7 @@ public class VisibleModelUpdater {
 		return instance;
 	}
 
-	public void update() {
+	public void update(long batch) {
 		for (Player player : Player.getPlayers()) {
 			player.getState().getModel().setName(Model.getInstance().getName());
 		}

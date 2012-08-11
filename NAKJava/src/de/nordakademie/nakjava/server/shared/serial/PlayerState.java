@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
+import de.nordakademie.nakjava.server.internal.Batch;
 import de.nordakademie.nakjava.server.shared.proxy.actions.InitAction;
 
 public class PlayerState implements Serializable {
@@ -55,7 +56,8 @@ public class PlayerState implements Serializable {
 		InitAction initAction = null;
 
 		try {
-			initAction = new InitAction();
+			Batch.increaseBatchNr();
+			initAction = new InitAction(Batch.getCurrentBatchNr());
 			actions.add(initAction);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block

@@ -58,8 +58,7 @@ public class Button extends JButton implements ActionListener,
 
 	@Override
 	public void noActionContextAvailable() {
-		actionContext = null;
-		this.setEnabled(false);
+		removeActionContext();
 
 	}
 
@@ -67,6 +66,17 @@ public class Button extends JButton implements ActionListener,
 	public void setActionContextSelector(ActionContextSelector selector) {
 		this.selector = selector;
 
+	}
+
+	@Override
+	public void revokeActionContext(long batch) {
+		removeActionContext();
+
+	}
+
+	private void removeActionContext() {
+		this.setEnabled(false);
+		actionContext = null;
 	}
 
 }

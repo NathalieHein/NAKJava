@@ -10,11 +10,12 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import de.nordakademie.nakjava.server.internal.ActionBroker;
 import de.nordakademie.nakjava.server.internal.ActionRuleset;
+import de.nordakademie.nakjava.server.internal.Batch;
 import de.nordakademie.nakjava.server.internal.Model;
 import de.nordakademie.nakjava.server.internal.VisibleModelUpdater;
 
 public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
-		Action {
+		ServerAction {
 
 	protected ActionAbstractImpl() throws RemoteException {
 		super();
@@ -30,12 +31,13 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 	public void perform() throws RemoteException {
 		if (ActionBroker.getInstance().verify(this)) {
 			performImpl(Model.getInstance());
-
+			Batch.increaseBatchNr();
 			threadPool.execute(new Runnable() {
 
 				@Override
 				public void run() {
-					ActionRuleset.getInstance().update();
+					ActionRuleset.getInstance().update(
+							Batch.getCurrentBatchNr());
 					finishThread();
 				}
 			});
@@ -43,7 +45,8 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 
 				@Override
 				public void run() {
-					VisibleModelUpdater.getInstance().update();
+					VisibleModelUpdater.getInstance().update(
+							Batch.getCurrentBatchNr());
 					finishThread();
 				}
 			});

@@ -4,16 +4,16 @@ import java.awt.event.KeyEvent;
 import java.rmi.RemoteException;
 
 import de.nordakademie.nakjava.server.internal.Model;
-import de.nordakademie.nakjava.server.shared.proxy.Action;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
+import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public class KeyAction extends ActionContext {
 
 	private int key;
 
-	public KeyAction(int key) throws RemoteException {
-		super();
+	public KeyAction(int key, long batch) throws RemoteException {
+		super(batch);
 		this.key = key;
 	}
 
@@ -22,7 +22,7 @@ public class KeyAction extends ActionContext {
 	}
 
 	@Override
-	protected Action getAction() throws RemoteException {
+	protected ServerAction getAction() throws RemoteException {
 		return new ActionAbstractImpl() {
 
 			@Override

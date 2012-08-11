@@ -21,14 +21,14 @@ public class ActionRuleset {
 		return instance;
 	}
 
-	public void update() {
+	public void update(long batch) {
 
 		for (Player player : Player.getPlayers()) {
 			List<ActionContext> actions = new ArrayList<>();
 
 			for (int i = 1; i <= 10000; i++) {
 				try {
-					actions.add(new KeyAction(i));
+					actions.add(new KeyAction(i, batch));
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				}
@@ -38,10 +38,10 @@ public class ActionRuleset {
 			if (model.isX() && model.isY()) {
 				// Spiel verloren
 			} else if (model.isX()) {
-				actions.add(new ButtonAction(ButtonAction.Y));
+				actions.add(new ButtonAction(ButtonAction.Y, batch));
 			} else {
-				actions.add(new ButtonAction(ButtonAction.X));
-				actions.add(new ButtonAction(ButtonAction.Y));
+				actions.add(new ButtonAction(ButtonAction.X, batch));
+				actions.add(new ButtonAction(ButtonAction.Y, batch));
 			}
 
 			player.getState().setActions(actions);

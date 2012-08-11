@@ -14,7 +14,7 @@ public class Model {
 
 	/**
 	 * {@link ActionBroker} ensures serializable transaction-handling for
-	 * {@link Action}s
+	 * {@link ServerAction}s
 	 * 
 	 * @return
 	 */

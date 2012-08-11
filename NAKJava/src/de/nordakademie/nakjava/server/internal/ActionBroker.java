@@ -3,7 +3,7 @@ package de.nordakademie.nakjava.server.internal;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import de.nordakademie.nakjava.server.shared.proxy.Action;
+import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
 public class ActionBroker {
 	private static ActionBroker instance;
@@ -20,10 +20,10 @@ public class ActionBroker {
 		return instance;
 	}
 
-	public boolean verify(Action action) {
+	public boolean verify(ServerAction serverAction) {
 		lock.lock();
 		for (Player player : Player.getPlayers()) {
-			if (player.getState().getActions().contains(action)) {
+			if (player.getState().getActions().contains(serverAction)) {
 				return true;
 			}
 		}
