@@ -28,5 +28,4 @@ public abstract class Client extends UnicastRemoteObject implements
 			e.printStackTrace();
 		}
 	}
-
 }

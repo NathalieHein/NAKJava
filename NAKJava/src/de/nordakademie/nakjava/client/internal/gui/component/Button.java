@@ -6,19 +6,25 @@ import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 
+import de.nordakademie.nakjava.client.internal.gui.ActionContextHolder;
+import de.nordakademie.nakjava.client.internal.gui.ActionContextSelector;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
-public class Button extends JButton implements ActionListener {
+public class Button extends JButton implements ActionListener,
+		ActionContextHolder {
 
 	private ActionContext actionContext;
+	private ActionContextSelector selector;
 
 	private boolean initialized = false;
 
-	public ActionContext getActionContext() {
-		return actionContext;
-	}
-
+	@Override
 	public void setActionContext(ActionContext actionContext) {
+
+		if (!this.isEnabled()) {
+			this.setEnabled(true);
+		}
+
 		this.actionContext = actionContext;
 		if (!initialized) {
 			this.addActionListener(this);
@@ -38,6 +44,29 @@ public class Button extends JButton implements ActionListener {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public boolean isActionContextApplicable(ActionContext context) {
+		if (selector == null) {
+			return false;
+		} else {
+			return selector.select(context);
+		}
+
+	}
+
+	@Override
+	public void noActionContextAvailable() {
+		actionContext = null;
+		this.setEnabled(false);
+
+	}
+
+	@Override
+	public void setActionContextSelector(ActionContextSelector selector) {
+		this.selector = selector;
+
 	}
 
 }
