@@ -65,20 +65,59 @@ public class CardGenerator {
 					throw new RuntimeException("Class could not be loaded.");
 				}
 
-				Card cardAnnotation = clazz.getAnnotation(Card.class);
+				Card annotation = clazz.getAnnotation(Card.class);
 
-				if (cardAnnotation != null
+				if (annotation != null
 						&& AbstractCard.class.isAssignableFrom(clazz)) {
+
+					String cardCostDescription = generateCostDescription(annotation
+							.costs());
+					String cardDescription = generateBasicEffectDescription(
+							annotation.self(), annotation.enemy());
+					if (!cardDescription.equals("")
+							&& !annotation.additionalDescription().equals("")) {
+						cardDescription += "/"
+								+ annotation.additionalDescription();
+					} else {
+						cardDescription += annotation.additionalDescription();
+					}
+
 					library.getCardInformation().put(
-							cardAnnotation.name(),
-							new CardInformation(cardAnnotation.name(),
-									cardAnnotation.description(), "",
-									cardAnnotation.type()));
+							annotation.name(),
+							new CardInformation(annotation.name(),
+									cardDescription, cardCostDescription,
+									annotation.type()));
 				}
 
 			}
 
 		}
+	}
+
+	private static String generateCostDescription(Cost[] costs) {
+		if (costs.length == 0) {
+			return "keine";
+		} else {
+			StringBuilder sb = new StringBuilder();
+
+			boolean firstRun = true;
+			for (Cost cost : costs) {
+				if (firstRun) {
+					firstRun = false;
+				} else {
+					sb.append("/");
+				}
+
+				sb.append(cost.amount() + " " + cost.ressource());
+			}
+
+			return sb.toString();
+		}
+	}
+
+	private static String generateBasicEffectDescription(Effect self,
+			Effect enemy) {
+		return "";
 	}
 
 	public static void main(String[] args) {

@@ -9,8 +9,10 @@ package de.nordakademie.nakjava.gamelogic.cards.impl;
  */
 public abstract class AbstractCard {
 
-	protected AbstractCard() {
+	private Card annotation;
 
+	protected AbstractCard() {
+		annotation = getClass().getAnnotation(Card.class);
 	}
 
 	/**
@@ -23,7 +25,7 @@ public abstract class AbstractCard {
 	/**
 	 * May be overridden for additional Actions
 	 */
-	public void performAction() {
+	private void performAction() {
 	}
 
 	/**
@@ -40,21 +42,23 @@ public abstract class AbstractCard {
 	 * 
 	 * @return
 	 */
-	public boolean checkPrerequirements() {
+	private boolean checkPrerequirements() {
 		return true;
-	}
-
-	/**
-	 * May be overridden for additional payment
-	 */
-	public void pay() {
-
 	}
 
 	/**
 	 * Pay for playing a card
 	 */
 	public void payImpl() {
-		pay();
+	}
+
+	public int getTotalCosts() {
+		int result = 0;
+
+		for (Cost cost : annotation.costs()) {
+			result += cost.amount();
+		}
+
+		return result;
 	}
 }

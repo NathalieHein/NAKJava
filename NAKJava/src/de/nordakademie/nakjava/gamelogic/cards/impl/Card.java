@@ -20,7 +20,13 @@ import de.nordakademie.nakjava.gamelogic.shared.cards.CardType;
 public @interface Card {
 	String name();
 
-	String description();
+	String additionalDescription() default "";
 
 	CardType type();
+
+	Cost[] costs() default {};
+
+	Effect self() default @Effect;
+
+	Effect enemy() default @Effect;
 }
