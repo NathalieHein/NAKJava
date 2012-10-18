@@ -24,6 +24,7 @@ public class ActionBroker {
 		lock.lock();
 		for (Player player : Player.getPlayers()) {
 			if (player.getState().getActions().contains(serverAction)) {
+				Model.getInstance().setCurrentPlayer(player);
 				return true;
 			}
 		}
@@ -33,7 +34,10 @@ public class ActionBroker {
 
 	public void commit() {
 		for (Player player : Player.getPlayers()) {
-			player.triggerChangeEvent();
+			if (!Model.getInstance().isModeUnique()
+					|| player == Model.getInstance().getCurrentPlayer()) {
+				player.triggerChangeEvent();
+			}
 		}
 		lock.unlock();
 	}
