@@ -15,10 +15,18 @@ public class VisibleModelUpdater {
 	}
 
 	public void update(long batch) {
-		for (Player player : Player.getPlayers()) {
-			player.getState().getModel().setName(Model.getInstance().getName());
+		if (!Model.getInstance().isModeUnique()) {
+			for (Player player : Player.getPlayers()) {
+				updatePlayerModel(player);
+			}
+		} else {
+			updatePlayerModel(Model.getInstance().getCurrentPlayer());
 		}
 
+	}
+
+	private void updatePlayerModel(Player player) {
+		player.getState().getModel().setName(Model.getInstance().getName());
 	}
 
 }

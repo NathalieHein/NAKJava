@@ -1,13 +1,19 @@
 package de.nordakademie.nakjava.server.internal;
 
+import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
+
 public class Model {
 	private static Model instance;
+	private boolean modeUnique;
+	private Player currentPlayer;
 
 	private boolean x;
 	private boolean y;
 	private String name;
 
 	private Model() {
+		modeUnique = true;
+
 		setX(false);
 		setY(true);
 	}
@@ -54,5 +60,21 @@ public class Model {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public boolean isModeUnique() {
+		return modeUnique;
+	}
+
+	public void setModeUnique(boolean modeUnique) {
+		this.modeUnique = modeUnique;
+	}
+
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	public void setCurrentPlayer(Player currentPlayer) {
+		this.currentPlayer = currentPlayer;
 	}
 }
