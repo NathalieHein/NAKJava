@@ -4,15 +4,15 @@ import java.util.Collection;
 
 public class ArtifactTupel {
 
-	private Artifact artifact;
+	private Enum<? extends Artifact> artifact;
 	private int count;
 
-	public ArtifactTupel(Artifact artifact, int count) {
+	public ArtifactTupel(Enum<? extends Artifact> artifact, int count) {
 		this.artifact = artifact;
 		this.count = count;
 	}
 
-	public Artifact getArtifact() {
+	public Enum<? extends Artifact> getArtifact() {
 		return artifact;
 	}
 
@@ -25,11 +25,11 @@ public class ArtifactTupel {
 	}
 
 	public Collection<ArtifactTupel> prePlayAction() {
-		return artifact.prePlayAction(this);
+		return ((Artifact) artifact).prePlayAction(this);
 	}
 
 	public Collection<ArtifactTupel> postPlayAction() {
-		return artifact.postPlayAction(this);
+		return ((Artifact) artifact).postPlayAction(this);
 	}
 
 	public void melt(ArtifactTupel other) {
