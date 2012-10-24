@@ -18,17 +18,20 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.ArtifactTupel;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.factories.Factory;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.infrastructure.Infrastructure;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.ressources.Ressource;
+import de.nordakademie.nakjava.gamelogic.shared.artifacts.ArtifactFactory;
+import de.nordakademie.nakjava.gamelogic.shared.artifacts.factories.Steinbruch;
+import de.nordakademie.nakjava.gamelogic.shared.artifacts.factories.Verlies;
+import de.nordakademie.nakjava.gamelogic.shared.artifacts.infrastructure.Mauer;
+import de.nordakademie.nakjava.gamelogic.shared.artifacts.infrastructure.Turm;
+import de.nordakademie.nakjava.gamelogic.shared.artifacts.ressources.Monster;
+import de.nordakademie.nakjava.gamelogic.shared.artifacts.ressources.Ziegel;
 
 public class ArtifactInfoPanel extends JPanel {
 	public ArtifactInfoPanel() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 	}
 
-	public void setArtifacts(final List<ArtifactTupel> artifacts) {
+	public void setArtifacts(final List<Artifact> artifacts) {
 
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
@@ -36,13 +39,15 @@ public class ArtifactInfoPanel extends JPanel {
 				@Override
 				public void run() {
 					ArtifactInfoPanel.this.removeAll();
-					Map<Class<? extends Artifact>, List<ArtifactTupel>> sortedByArtifacts = splitListToMap(artifacts);
+					Map<Class<? extends Artifact>, List<Artifact>> sortedByArtifacts = splitListToMap(artifacts);
 
-					for (Entry<Class<? extends Artifact>, List<ArtifactTupel>> entry : sortedByArtifacts
+					for (Entry<Class<? extends Artifact>, List<Artifact>> entry : sortedByArtifacts
 							.entrySet()) {
 						ArtifactInfoPanel.this.add(new ArtifactTypeInfoPanel(
 								entry.getValue()));
 					}
+
+					ArtifactInfoPanel.this.revalidate();
 
 				}
 			});
@@ -56,9 +61,9 @@ public class ArtifactInfoPanel extends JPanel {
 
 	}
 
-	private Map<Class<? extends Artifact>, List<ArtifactTupel>> splitListToMap(
-			List<ArtifactTupel> artifacts) {
-		Map<Class<? extends Artifact>, List<ArtifactTupel>> sortedByArtifacts = new TreeMap<Class<? extends Artifact>, List<ArtifactTupel>>(
+	private Map<Class<? extends Artifact>, List<Artifact>> splitListToMap(
+			List<Artifact> artifacts) {
+		Map<Class<? extends Artifact>, List<Artifact>> sortedByArtifacts = new TreeMap<Class<? extends Artifact>, List<Artifact>>(
 				new Comparator<Class<? extends Artifact>>() {
 
 					@Override
@@ -68,29 +73,30 @@ public class ArtifactInfoPanel extends JPanel {
 					}
 				});
 
-		for (ArtifactTupel tupel : artifacts) {
+		for (Artifact artifact : artifacts) {
 
-			Class<? extends Artifact> artifactClazz = tupel.getArtifact()
-					.getDeclaringClass();
+			Class<? extends Artifact> artifactClazz = (Class<? extends Artifact>) artifact
+					.getClass().getSuperclass();
 
-			List<ArtifactTupel> tupels = sortedByArtifacts.get(artifactClazz);
+			List<Artifact> tupels = sortedByArtifacts.get(artifactClazz);
 			if (tupels == null) {
 				tupels = new ArrayList<>();
 				sortedByArtifacts.put(artifactClazz, tupels);
 			}
 
-			tupels.add(tupel);
+			tupels.add(artifact);
 		}
 
-		for (List<ArtifactTupel> tupellList : sortedByArtifacts.values()) {
-			Collections.sort(tupellList, new Comparator<ArtifactTupel>() {
+		for (List<Artifact> artifactList : sortedByArtifacts.values()) {
+			Collections.sort(artifactList, new Comparator<Artifact>() {
 
 				@Override
-				public int compare(ArtifactTupel o1, ArtifactTupel o2) {
+				public int compare(Artifact o1, Artifact o2) {
 					// This can not be expressed with generics...
 					// Those enums are from the same type, but we do not know
 					// the type
-					return ((Enum) o1.getArtifact()).compareTo(o2.getArtifact());
+					return (o1.getClass().getName().compareTo(o2.getClass()
+							.getName()));
 				}
 			});
 		}
@@ -100,12 +106,12 @@ public class ArtifactInfoPanel extends JPanel {
 
 	private class ArtifactTypeInfoPanel extends JPanel {
 
-		public ArtifactTypeInfoPanel(List<ArtifactTupel> tupels) {
+		public ArtifactTypeInfoPanel(List<Artifact> artifacts) {
 			this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-			for (ArtifactTupel tupel : tupels) {
-				this.add(new Label(tupel.getArtifact().name() + ": "
-						+ tupel.getCount()));
+			for (Artifact artifact : artifacts) {
+				this.add(new Label(artifact.getClass().getSimpleName() + ": "
+						+ artifact.getCount()));
 			}
 		}
 
@@ -120,13 +126,23 @@ public class ArtifactInfoPanel extends JPanel {
 		frame.setSize(new Dimension(800, 600));
 		frame.setVisible(true);
 
-		List<ArtifactTupel> tupels = new LinkedList<>();
-		tupels.add(new ArtifactTupel(Ressource.ZIEGEL, 15));
-		tupels.add(new ArtifactTupel(Ressource.MONSTER, 10));
-		tupels.add(new ArtifactTupel(Infrastructure.TURM, 5));
-		tupels.add(new ArtifactTupel(Infrastructure.MAUER, 17));
-		tupels.add(new ArtifactTupel(Factory.STEINBRUCH, 3));
-		tupels.add(new ArtifactTupel(Factory.VERLIES, 4));
+		List<Artifact> tupels = new LinkedList<>();
+		tupels.add(ArtifactFactory.createArtifact(Ziegel.class));
+		tupels.add(ArtifactFactory.createArtifact(Monster.class));
+		tupels.add(ArtifactFactory.createArtifact(Turm.class));
+
+		infoPanel.setArtifacts(tupels);
+
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		tupels.add(ArtifactFactory.createArtifact(Mauer.class));
+		tupels.add(ArtifactFactory.createArtifact(Steinbruch.class));
+		tupels.add(ArtifactFactory.createArtifact(Verlies.class));
 
 		infoPanel.setArtifacts(tupels);
 	}

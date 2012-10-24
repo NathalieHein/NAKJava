@@ -1,5 +1,6 @@
 package de.nordakademie.nakjava.gamelogic.shared.artifacts;
 
+import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,23 +23,22 @@ public class Artifacts {
 
 	public static void generateArtifacts() {
 		new Artifacts();
-		List<Class<?>> enums = ClasspathScanner.findClasses(
+		List<Class<?>> artifacts = ClasspathScanner.findClasses(
 				"de.nordakademie.nakjava.gamelogic.shared.artifacts",
 				"de.nordakademie.nakjava.artifactPackages",
 				new ClassAcceptor() {
 
 					@Override
 					public boolean acceptClass(Class<?> clazz) {
-						return clazz.isEnum()
+						return !Modifier.isAbstract(clazz.getModifiers())
 								&& Artifact.class.isAssignableFrom(clazz);
 					}
 				});
 
-		for (Class<?> enumClass : enums) {
-			for (Object enumValue : enumClass.getEnumConstants()) {
-
-				instance.artifacts.add((Artifact) enumValue);
-			}
+		for (Class<?> artifact : artifacts) {
+			// isAssignableFrom does this magic
+			instance.artifacts.add(ArtifactFactory
+					.createArtifact((Class<? extends Artifact>) artifact));
 		}
 
 	}
