@@ -1,4 +1,4 @@
-package de.nordakademie.nakjava.util.classpathschanner;
+package de.nordakademie.nakjava.util.classpathscanner;
 
 import java.io.File;
 import java.io.FilenameFilter;

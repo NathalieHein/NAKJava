@@ -9,27 +9,28 @@ import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 
 public class PlayerState {
 
-	private List<Artifact> artifacts;
+	private List<? extends Artifact> artifacts;
 
 	// EnumMap not possible because of different enums
 	private Map<Class<? extends Artifact>, Integer> cache = new HashMap<>();
 
-	public PlayerState(List<Artifact> initialArtifacts) {
+	public PlayerState(List<? extends Artifact> initialArtifacts) {
 		this.artifacts = initialArtifacts;
 	}
 
-	public List<Artifact> getArtifacts() {
+	public List<? extends Artifact> getArtifacts() {
 		return artifacts;
 	}
 
-	public Artifact getTupelForClass(Class<? extends Artifact> searchedArtifact) {
-		Artifact lookupArtifact = cacheLookup(searchedArtifact);
+	public <T extends Artifact> T getTupelForClass(Class<T> searchedArtifact) {
+		T lookupArtifact = cacheLookup(searchedArtifact);
 
 		if (lookupArtifact == null) {
 			for (int i = 0; i < artifacts.size(); i++) {
 				if (artifacts.get(i).getClass().equals(searchedArtifact)) {
 					cache.put(searchedArtifact, i);
-					lookupArtifact = artifacts.get(i);
+					// Look two lines above...
+					lookupArtifact = (T) artifacts.get(i);
 					break;
 				}
 			}
@@ -42,22 +43,22 @@ public class PlayerState {
 		return lookupArtifact;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Artifact> getTupelsForArtifactType(
-			Class<? extends Artifact> artifactType) {
+	public <T extends Artifact> List<T> getTupelsForArtifactType(
+			Class<T> artifactType) {
 
-		List<Artifact> result = new LinkedList<>();
+		List<T> result = new LinkedList<>();
 
 		for (Artifact artifact : artifacts) {
 			if (artifactType.isAssignableFrom(artifact.getClass())) {
-				result.add(artifact);
+				// isAssignableFrom=true
+				result.add((T) artifact);
 			}
 		}
 
 		return result;
 	}
 
-	private Artifact cacheLookup(Class<? extends Artifact> artifact) {
+	private <T extends Artifact> T cacheLookup(Class<T> artifact) {
 		Integer artifactPointer = cache.get(artifact);
 
 		if (artifactPointer == null) {
@@ -70,6 +71,7 @@ public class PlayerState {
 			return null;
 		}
 
-		return foundArtifact;
+		// Class is equal
+		return (T) foundArtifact;
 	}
 }

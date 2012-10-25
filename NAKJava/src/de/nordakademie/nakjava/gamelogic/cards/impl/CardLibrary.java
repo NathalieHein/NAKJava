@@ -5,6 +5,12 @@ import java.util.Map;
 
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 
+/**
+ * The {@link CardLibrary} is a singleton that allows lookups for both:
+ * card-metadata ({@link CardInformation}) and card implementations (types that
+ * extend {@link AbstractCard})
+ * 
+ */
 public class CardLibrary {
 
 	private Map<String, AbstractCard> cards;
@@ -12,10 +18,13 @@ public class CardLibrary {
 
 	private static CardLibrary instance;
 
+	/**
+	 * This singleton is instantiated by {@link CardGenerator}
+	 */
 	CardLibrary() {
 		cards = new HashMap<>();
 		cardInformation = new HashMap<>();
-		instance = this;
+		CardLibrary.instance = this;
 	}
 
 	public static CardLibrary get() {

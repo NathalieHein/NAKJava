@@ -4,8 +4,8 @@ import java.lang.reflect.Modifier;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.nordakademie.nakjava.util.classpathschanner.ClassAcceptor;
-import de.nordakademie.nakjava.util.classpathschanner.ClasspathScanner;
+import de.nordakademie.nakjava.util.classpathscanner.ClassAcceptor;
+import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class Artifacts {
 
