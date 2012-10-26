@@ -6,6 +6,7 @@ import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 
+import de.nordakademie.nakjava.client.internal.gui.ActionContextDelegator;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextHolder;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextSelector;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
@@ -17,6 +18,20 @@ public class Button extends JButton implements ActionListener,
 	private ActionContextSelector selector;
 
 	private boolean initialized = false;
+
+	public Button(String text, ActionContextSelector selector,
+			boolean autoRegister) {
+		super(text);
+		if (autoRegister) {
+			ActionContextDelegator.getInstance().registerActionContextHolder(
+					this);
+		}
+		this.selector = selector;
+
+		if (actionContext == null) {
+			setEnabled(false);
+		}
+	}
 
 	@Override
 	public void setActionContext(ActionContext actionContext) {
