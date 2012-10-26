@@ -10,12 +10,14 @@ import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 public class PlayerState {
 
 	private List<? extends Artifact> artifacts;
+	private CardSet cards;
 
 	// EnumMap not possible because of different enums
 	private Map<Class<? extends Artifact>, Integer> cache = new HashMap<>();
 
 	public PlayerState(List<? extends Artifact> initialArtifacts) {
 		this.artifacts = initialArtifacts;
+		this.cards = new CardSet();
 	}
 
 	public List<? extends Artifact> getArtifacts() {
@@ -73,5 +75,9 @@ public class PlayerState {
 
 		// Class is equal
 		return (T) foundArtifact;
+	}
+
+	public CardSet getCards() {
+		return cards;
 	}
 }
