@@ -2,6 +2,7 @@ package de.nordakademie.nakjava.server.shared.proxy.actions;
 
 import java.rmi.RemoteException;
 
+import de.nordakademie.nakjava.gamelogic.stateMachine.events.PlayCardEvent;
 import de.nordakademie.nakjava.server.internal.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
@@ -11,8 +12,8 @@ public class PlayCardAction extends ActionContext {
 
 	private String cardName;
 
-	protected PlayCardAction(String cardName, long batch) {
-		super(batch);
+	protected PlayCardAction(String cardName, long batch, long sessionNr) {
+		super(batch, sessionNr);
 		this.cardName = cardName;
 	}
 
@@ -21,15 +22,13 @@ public class PlayCardAction extends ActionContext {
 	}
 
 	@Override
-	protected ServerAction getAction() throws RemoteException {
-		return new ActionAbstractImpl() {
+	protected ServerAction getAction(long sessionNr) throws RemoteException {
+		return new ActionAbstractImpl(sessionNr) {
 
 			@Override
 			protected void performImpl(Model model) {
-				// TODO Auto-generated method stub
-
+				model.getStateMachine().receive(new PlayCardEvent(cardName));
 			}
 		};
 	}
-
 }

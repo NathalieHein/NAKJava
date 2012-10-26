@@ -16,11 +16,11 @@ public abstract class ActionContext implements Serializable {
 	private long batch;
 	private boolean possiblyStable = false;
 
-	protected ActionContext(long batch) {
+	protected ActionContext(long batch, long sessionNr) {
 		this.batch = batch;
 		preClientActions = new LinkedList<>();
 		try {
-			serverAction = getAction();
+			serverAction = getAction(sessionNr);
 		} catch (RemoteException e) {
 
 			// TODO Auto-generated catch block
@@ -28,7 +28,11 @@ public abstract class ActionContext implements Serializable {
 		}
 	}
 
-	protected abstract ServerAction getAction() throws RemoteException;
+	// TODO this is not a nice way of doing it (parameterized sessionNr for
+	// creating the action), but couldn't think of any other
+	// possible solution
+	protected abstract ServerAction getAction(long sessionNr)
+			throws RemoteException;
 
 	public void perform() throws RemoteException {
 		for (ClientAction action : preClientActions) {

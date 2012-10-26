@@ -17,42 +17,54 @@ import de.nordakademie.nakjava.server.internal.VisibleModelUpdater;
 public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 		ServerAction {
 
-	protected ActionAbstractImpl() throws RemoteException {
+	protected ActionAbstractImpl(long sessionNr) throws RemoteException {
 		super();
+		this.sessionNr = sessionNr;
 	}
 
-	private static ExecutorService threadPool = Executors.newFixedThreadPool(2);
+	// TODO implement shutDown method after use? If not needed than simply
+	// Executor-Interface?
+	// private static ExecutorService threadPool =
+	// Executors.newFixedThreadPool(2);
+	private static ExecutorService threadPool = Executors.newCachedThreadPool();
 	private int threadCount = 2;
 
 	private Lock lock = new ReentrantLock();
 	private Condition waitCondition;
 
+	private long sessionNr;
+
 	@Override
 	public void perform() throws RemoteException {
-		if (ActionBroker.getInstance().verify(this)) {
-			performImpl(Model.getInstance());
-			Batch.increaseBatchNr();
-			threadPool.execute(new Runnable() {
+		Model model = ActionBroker.getInstance().verify(this);
+		if (model != null) {
+			performImpl(model);
+			long batchNr = Batch.increaseAndGetBatchNr();
+			threadPool.execute(new ActionRuleset(model, batchNr) {
+				@Override
+				public void run() {
+					super.run();
+					finishThread();
+				}
+			}
+
+			);
+			threadPool.execute(new VisibleModelUpdater(model, batchNr){
+				
+			};
+			
+			/*{
 
 				@Override
 				public void run() {
-					ActionRuleset.getInstance().update(
-							Batch.getCurrentBatchNr());
+					VisibleModelUpdater.getInstance().update(batchNr);
 					finishThread();
 				}
-			});
-			threadPool.execute(new Runnable() {
-
-				@Override
-				public void run() {
-					VisibleModelUpdater.getInstance().update(
-							Batch.getCurrentBatchNr());
-					finishThread();
-				}
-			});
+			});*/
 
 			// Needs to be done for changing the thread context back
 			// to the thread that holds the lock in the ActionBroker
+			//TODO this is easier if using thread.join()
 			waitCondition = lock.newCondition();
 			lock.lock();
 			try {
@@ -62,7 +74,7 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 			}
 			lock.unlock();
 
-			ActionBroker.getInstance().commit();
+			ActionBroker.getInstance().commit(this);
 
 		}
 
@@ -78,5 +90,14 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 	}
 
 	protected abstract void performImpl(Model model);
+
+	@Override
+	public long getSessionNr() {
+		return sessionNr;
+	}
+
+	public void setSessionNr(long sessionNr) {
+		this.sessionNr = sessionNr;
+	}
 
 }

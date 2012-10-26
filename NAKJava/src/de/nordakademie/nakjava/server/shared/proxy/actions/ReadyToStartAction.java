@@ -4,17 +4,26 @@ import java.rmi.RemoteException;
 
 import de.nordakademie.nakjava.server.internal.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
+import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
+import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
-public class ReadyToStartAction extends ActionAbstractImpl {
+public class ReadyToStartAction extends ActionContext {
 
-	protected ReadyToStartAction() throws RemoteException {
-		super();
-		// TODO Auto-generated constructor stub
+	protected ReadyToStartAction(long batch, long sessionNr)
+			throws RemoteException {
+		super(batch, sessionNr);
 	}
 
 	@Override
-	protected void performImpl(Model model) {
+	protected ServerAction getAction(long sessionNr) throws RemoteException {
+		return new ActionAbstractImpl(sessionNr) {
 
+			@Override
+			protected void performImpl(Model model) {
+				// TODO Auto-generated method stub
+
+			}
+		};
 	}
 
 }

@@ -11,8 +11,8 @@ public class SimulateCardAction extends ActionContext {
 
 	private String cardName;
 
-	protected SimulateCardAction(String cardName, long batch) {
-		super(batch);
+	protected SimulateCardAction(String cardName, long batch, long sessionNr) {
+		super(batch, sessionNr);
 		this.cardName = cardName;
 	}
 
@@ -21,8 +21,8 @@ public class SimulateCardAction extends ActionContext {
 	}
 
 	@Override
-	protected ServerAction getAction() throws RemoteException {
-		return new ActionAbstractImpl() {
+	protected ServerAction getAction(long sessionNr) throws RemoteException {
+		return new ActionAbstractImpl(sessionNr) {
 
 			@Override
 			protected void performImpl(Model model) {
@@ -31,5 +31,4 @@ public class SimulateCardAction extends ActionContext {
 			}
 		};
 	}
-
 }

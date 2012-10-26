@@ -13,14 +13,14 @@ public class ButtonAction extends ActionContext {
 	public static final String X = "x";
 	public static final String Y = "y";
 
-	public ButtonAction(String buttonText, long batch) {
-		super(batch);
+	public ButtonAction(String buttonText, long batch, long sessionNr) {
+		super(batch, sessionNr);
 		this.buttonText = buttonText;
 	}
 
 	@Override
-	protected ServerAction getAction() throws RemoteException {
-		return new ActionAbstractImpl() {
+	protected ServerAction getAction(long sessionNr) throws RemoteException {
+		return new ActionAbstractImpl(sessionNr) {
 
 			@Override
 			protected void performImpl(Model model) {

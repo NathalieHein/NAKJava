@@ -12,8 +12,9 @@ public class KeyAction extends ActionContext {
 
 	private int key;
 
-	public KeyAction(int key, long batch) throws RemoteException {
-		super(batch);
+	public KeyAction(int key, long batch, long sessionNr)
+			throws RemoteException {
+		super(batch, sessionNr);
 		this.key = key;
 	}
 
@@ -22,8 +23,8 @@ public class KeyAction extends ActionContext {
 	}
 
 	@Override
-	protected ServerAction getAction() throws RemoteException {
-		return new ActionAbstractImpl() {
+	protected ServerAction getAction(long sessionNr) throws RemoteException {
+		return new ActionAbstractImpl(sessionNr) {
 
 			@Override
 			protected void performImpl(Model model) {

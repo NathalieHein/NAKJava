@@ -11,8 +11,8 @@ public class WithdrawCardAction extends ActionContext {
 
 	private String cardName;
 
-	public WithdrawCardAction(String cardName, long batch) {
-		super(batch);
+	public WithdrawCardAction(String cardName, long batch, long sessionNr) {
+		super(batch, sessionNr);
 		this.cardName = cardName;
 	}
 
@@ -21,8 +21,8 @@ public class WithdrawCardAction extends ActionContext {
 	}
 
 	@Override
-	protected ServerAction getAction() throws RemoteException {
-		return new ActionAbstractImpl() {
+	protected ServerAction getAction(long sessionNr) throws RemoteException {
+		return new ActionAbstractImpl(sessionNr) {
 
 			@Override
 			protected void performImpl(Model model) {
