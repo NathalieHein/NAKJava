@@ -16,4 +16,5 @@ public abstract @interface ArtifactEffect {
 
 	de.nordakademie.nakjava.gamelogic.cards.impl.Target target();
 
+	public String metaText = "{count} {artifact.getSimpleName} für {target.description}";
 }
