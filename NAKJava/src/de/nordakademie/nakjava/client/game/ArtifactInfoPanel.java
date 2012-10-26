@@ -1,6 +1,7 @@
 package de.nordakademie.nakjava.client.game;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Label;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -107,7 +108,7 @@ public class ArtifactInfoPanel extends JPanel {
 	private class ArtifactTypeInfoPanel extends JPanel {
 
 		public ArtifactTypeInfoPanel(List<Artifact> artifacts) {
-			this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+			this.setLayout(new FlowLayout(FlowLayout.LEFT, 2, 2));
 
 			for (Artifact artifact : artifacts) {
 				this.add(new Label(artifact.getClass().getSimpleName() + ": "

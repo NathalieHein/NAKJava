@@ -7,15 +7,33 @@ import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public class ActionContextDelegator {
 
+	private static ActionContextDelegator instance;
 	private List<ActionContextHolder> holders;
 
-	public ActionContextDelegator() {
+	private List<ActionContext> toBeDistributed;
+
+	public static synchronized ActionContextDelegator getInstance() {
+		if (instance == null) {
+			instance = new ActionContextDelegator();
+		}
+
+		return instance;
+	}
+
+	private ActionContextDelegator() {
 		holders = new LinkedList<>();
+		toBeDistributed = new LinkedList<>();
 	}
 
 	public void registerActionContextHolder(
 			ActionContextHolder actionContextHolder) {
 		holders.add(actionContextHolder);
+
+		for (ActionContext context : toBeDistributed) {
+			if (actionContextHolder.isActionContextApplicable(context)) {
+				actionContextHolder.setActionContext(context);
+			}
+		}
 	}
 
 	public void delegateActionContexts(List<ActionContext> actionContexts) {
