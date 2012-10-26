@@ -9,8 +9,12 @@ import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
-public @interface Cost {
-	Class<? extends Artifact> ressource();
+public abstract @interface ArtifactEffect {
+	Class<? extends Artifact> artifact();
 
-	int amount();
+	int count();
+
+	de.nordakademie.nakjava.gamelogic.cards.impl.Target target();
+
+	public String metaText = "{count} {artifact.getSimpleName} für {target.description}";
 }

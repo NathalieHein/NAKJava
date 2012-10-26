@@ -1,13 +1,10 @@
 package de.nordakademie.nakjava.gamelogic.cards.impl;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
+import de.nordakademie.nakjava.util.classpathscanner.ClassAcceptor;
+import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 /**
  * Looks for cards in classpath, instantiates them and generates
@@ -29,69 +26,38 @@ public class CardGenerator {
 	public static void generateCards() {
 		CardLibrary library = new CardLibrary();
 
-		List<String> packages = Arrays
-				.asList((System.getProperty(
-						"de.nordakademie.nakjava.cardPackages", "") + "de.nordakademie.nakjava.gamelogic.cards")
-						.split(","));
+		List<Class<?>> classes = ClasspathScanner.findClasses(
+				"de.nordakademie.nakjava.gamelogic.cards",
+				"de.nordakademie.nakjava.cardPackages", new ClassAcceptor() {
 
-		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-
-		for (String pack : packages) {
-			URL resource = classLoader.getResource(pack.replace(".", "/"));
-			File directory = null;
-
-			try {
-				directory = new File(resource.toURI());
-			} catch (URISyntaxException e) {
-				throw new RuntimeException(
-						"Could not load file from packagename.");
-			}
-
-			String[] classNames = directory.list(new FilenameFilter() {
-
-				@Override
-				public boolean accept(File dir, String name) {
-					return name.endsWith(".class");
-				}
-			});
-
-			for (String className : classNames) {
-				Class<?> clazz;
-
-				try {
-					clazz = Class.forName(pack + "."
-							+ className.substring(0, className.length() - 6));
-				} catch (ClassNotFoundException e) {
-					throw new RuntimeException("Class could not be loaded.");
-				}
-
-				Card annotation = clazz.getAnnotation(Card.class);
-
-				if (annotation != null
-						&& AbstractCard.class.isAssignableFrom(clazz)) {
-
-					String cardCostDescription = generateCostDescription(annotation
-							.costs());
-					String cardDescription = generateBasicEffectDescription(
-							annotation.self(), annotation.enemy());
-					if (!cardDescription.equals("")
-							&& !annotation.additionalDescription().equals("")) {
-						cardDescription += "/"
-								+ annotation.additionalDescription();
-					} else {
-						cardDescription += annotation.additionalDescription();
+					@Override
+					public boolean acceptClass(Class<?> clazz) {
+						Card annotation = clazz.getAnnotation(Card.class);
+						return annotation != null
+								&& AbstractCard.class.isAssignableFrom(clazz);
 					}
+				});
 
-					library.getCardInformation().put(
-							annotation.name(),
-							new CardInformation(annotation.name(),
-									cardDescription, cardCostDescription,
-									annotation.type()));
-				}
+		for (Class<?> clazz : classes) {
+			Card annotation = clazz.getAnnotation(Card.class);
 
+			String cardCostDescription = generateCostDescription(annotation
+					.costs());
+			String cardDescription = generateBasicEffectDescription(
+					annotation.artifactEffects(), annotation.damageEffects());
+			if (!cardDescription.equals("")
+					&& !annotation.additionalDescription().equals("")) {
+				cardDescription += "/" + annotation.additionalDescription();
+			} else {
+				cardDescription += annotation.additionalDescription();
 			}
 
+			library.getCardInformation().put(
+					annotation.name(),
+					new CardInformation(annotation.name(), cardDescription,
+							cardCostDescription, annotation.type()));
 		}
+
 	}
 
 	private static String generateCostDescription(Cost[] costs) {
@@ -115,8 +81,8 @@ public class CardGenerator {
 		}
 	}
 
-	private static String generateBasicEffectDescription(Effect self,
-			Effect enemy) {
+	private static String generateBasicEffectDescription(
+			ArtifactEffect[] artifactEffect, DamageEffect[] damage) {
 		return "";
 	}
 

@@ -26,7 +26,7 @@ public @interface Card {
 
 	Cost[] costs() default {};
 
-	Effect self() default @Effect;
+	ArtifactEffect[] artifactEffects() default {};
 
-	Effect enemy() default @Effect;
+	DamageEffect[] damageEffects() default {};
 }

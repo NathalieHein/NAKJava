@@ -6,77 +6,72 @@ import java.util.List;
 import java.util.Map;
 
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.ArtifactTupel;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.factories.Factory;
 
 public class PlayerState {
 
-	private List<ArtifactTupel> artifacts;
+	private List<? extends Artifact> artifacts;
 
 	// EnumMap not possible because of different enums
-	private Map<Enum<? extends Artifact>, Integer> cache = new HashMap<>();
+	private Map<Class<? extends Artifact>, Integer> cache = new HashMap<>();
 
-	public PlayerState(List<ArtifactTupel> initialArtifacts) {
+	public PlayerState(List<? extends Artifact> initialArtifacts) {
 		this.artifacts = initialArtifacts;
 	}
 
-	public List<ArtifactTupel> getArtifacts() {
+	public List<? extends Artifact> getArtifacts() {
 		return artifacts;
 	}
 
-	public ArtifactTupel getTupelForArtifact(
-			Enum<? extends Artifact> searchedArtifact) {
-		ArtifactTupel lookupTupel = cacheLookup(searchedArtifact);
+	public <T extends Artifact> T getTupelForClass(Class<T> searchedArtifact) {
+		T lookupArtifact = cacheLookup(searchedArtifact);
 
-		if (lookupTupel == null) {
+		if (lookupArtifact == null) {
 			for (int i = 0; i < artifacts.size(); i++) {
-				if (artifacts.get(i).getArtifact() == searchedArtifact) {
+				if (artifacts.get(i).getClass().equals(searchedArtifact)) {
 					cache.put(searchedArtifact, i);
-					lookupTupel = artifacts.get(i);
+					// Look two lines above...
+					lookupArtifact = (T) artifacts.get(i);
 					break;
 				}
 			}
-			if (lookupTupel == null) {
+			if (lookupArtifact == null) {
 				throw new IllegalStateException("Fatal: Artifact: "
 						+ searchedArtifact + " is not initialized.");
 			}
 		}
 
-		getTupelForArtifact(Factory.STEINBRUCH);
-		return lookupTupel;
+		return lookupArtifact;
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<ArtifactTupel> getTupelsForArtifactType(
-			Class<? extends Artifact> artifactType) {
-		if (!artifactType.isEnum()) {
-			throw new IllegalArgumentException(
-					"Fatal: Classes that extend Artifact need to be enums!");
-		}
+	public <T extends Artifact> List<T> getTupelsForArtifactType(
+			Class<T> artifactType) {
 
-		List<ArtifactTupel> result = new LinkedList<>();
+		List<T> result = new LinkedList<>();
 
-		for (Artifact artifact : artifactType.getEnumConstants()) {
-			// we ARE iterating the enum constants...
-			result.add(getTupelForArtifact((Enum<? extends Artifact>) artifact));
+		for (Artifact artifact : artifacts) {
+			if (artifactType.isAssignableFrom(artifact.getClass())) {
+				// isAssignableFrom=true
+				result.add((T) artifact);
+			}
 		}
 
 		return result;
 	}
 
-	private ArtifactTupel cacheLookup(Enum<? extends Artifact> artifact) {
-		Integer tupelPointer = cache.get(artifact);
+	private <T extends Artifact> T cacheLookup(Class<T> artifact) {
+		Integer artifactPointer = cache.get(artifact);
 
-		if (tupelPointer == null) {
+		if (artifactPointer == null) {
 			return null;
 		}
 
-		ArtifactTupel tupel = artifacts.get(tupelPointer);
-		if (tupel == null || tupel.getArtifact() != artifact) {
+		Artifact foundArtifact = artifacts.get(artifactPointer);
+		if (foundArtifact == null || !foundArtifact.getClass().equals(artifact)) {
 			cache.remove(artifact);
 			return null;
 		}
 
-		return tupel;
+		// Class is equal
+		return (T) foundArtifact;
 	}
 }
