@@ -3,17 +3,14 @@ package de.nordakademie.nakjava.gamelogic.shared.playerstate;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class CardSet implements Serializable {
-	// TODO really use Vector here?? i don't know how to best initialze the
-	// vector
 
 	// TODO questionable return-types: boolean (operation worked) or
 	// List<>(performed for those cards) or void
-	private Vector<String> deck = new Vector(100, 1);
-	private Vector<String> hand = new Vector(6, 1);
-	private Vector<String> cemetry = new Vector(100, 1);
+	private List<String> deck = new ArrayList<>();
+	private List<String> hand = new ArrayList<>();
+	private List<String> cemetry = new ArrayList<>();
 
 	public void shuffle() {
 		deck.addAll(cemetry);
