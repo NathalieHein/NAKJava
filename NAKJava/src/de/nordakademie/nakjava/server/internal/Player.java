@@ -1,8 +1,6 @@
 package de.nordakademie.nakjava.server.internal;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.List;
 
 import de.nordakademie.nakjava.client.shared.PlayerControlListener;
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
@@ -13,11 +11,11 @@ import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 public class Player {
 	private PlayerState state;
 	private PlayerControl control;
-	private static List<Player> players = new ArrayList<>();
+	private de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState gamelogicPlayer;
 
 	public Player(PlayerControlListener controlListener,
 			PlayerStateListener stateListener) {
-		players.add(this);
+		Sessions.getInstance().addPlayer(this);
 		try {
 			control = new PlayerControlImpl(controlListener);
 		} catch (RemoteException e) {
@@ -26,10 +24,6 @@ public class Player {
 		state = new PlayerState(stateListener);
 		state.initialize();
 
-	}
-
-	public static List<Player> getPlayers() {
-		return new ArrayList<Player>(players);
 	}
 
 	public PlayerState getState() {
@@ -41,8 +35,17 @@ public class Player {
 	}
 
 	public void triggerChangeEvent() {
-		control.triggerChangeEvent();
+		// TODO is it here where Exceptions occur??
 		state.triggerChangeEvent();
+		control.triggerChangeEvent();
+	}
+
+	public de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState getGamelogicPlayer() {
+		return gamelogicPlayer;
+	}
+
+	public void setGamelogicPlayer(de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState gamelogicPlayer) {
+		this.gamelogicPlayer = gamelogicPlayer;
 	}
 
 }

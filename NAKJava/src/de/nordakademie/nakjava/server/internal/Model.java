@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import de.nordakademie.nakjava.gamelogic.stateMachine.StateMachine;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
 public class Model {
@@ -13,6 +14,7 @@ public class Model {
 	private Lock lock = new ReentrantLock(true);
 	private boolean modeUnique;
 	private Player actionInvoker;
+	private StateMachine stateMachine;
 
 	public void commit() {
 		for (Player player : players) {
@@ -27,6 +29,8 @@ public class Model {
 		modeUnique = true;
 		players.add(player);
 		furtherAllowedNumberOfPlayers--;
+		// TODO stateMachine einbauen
+		// stateMachine = new StateMachine(player);
 		// TODO set of currentPlayer necessary??
 	}
 
@@ -90,6 +94,10 @@ public class Model {
 
 	public void setActionInvoker(Player actionInvoker) {
 		this.actionInvoker = actionInvoker;
+	}
+
+	public StateMachine getStateMachine() {
+		return stateMachine;
 	}
 
 }
