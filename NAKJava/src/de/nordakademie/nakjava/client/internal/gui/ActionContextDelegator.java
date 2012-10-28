@@ -9,6 +9,7 @@ public class ActionContextDelegator {
 
 	private static ActionContextDelegator instance;
 	private List<ActionContextHolder> holders;
+	private long currentBatch;
 
 	private List<ActionContext> toBeDistributed;
 
@@ -23,6 +24,7 @@ public class ActionContextDelegator {
 	private ActionContextDelegator() {
 		holders = new LinkedList<>();
 		toBeDistributed = new LinkedList<>();
+		currentBatch = Long.MIN_VALUE;
 	}
 
 	public void registerActionContextHolder(
@@ -37,10 +39,38 @@ public class ActionContextDelegator {
 	}
 
 	public void delegateActionContexts(List<ActionContext> actionContexts) {
-		List<ActionContextHolder> tempHolders = new LinkedList<>(holders);
-		// TODO erst revoke, dann verteilen. noActionAvailable auf die, die
-		// nichts bekommen haben. (Kontext: Prüfung auf Gleichheit bei Actions
-		// -> isPossiblyStable-Flag)
+		List<ActionContextHolder> notMatched = new LinkedList<>(holders);
+		toBeDistributed = new LinkedList<>();
+
+		for (ActionContextHolder holder : holders) {
+			holder.revokeActionContext(currentBatch);
+		}
+
+		if (actionContexts.size() != 0) {
+			currentBatch = actionContexts.get(0).getBatch();
+			for (ActionContext context : actionContexts) {
+
+				boolean matched = false;
+
+				for (ActionContextHolder holder : holders) {
+					if (holder.isActionContextApplicable(context)) {
+						holder.setActionContext(context);
+						notMatched.remove(holder);
+						matched = true;
+						break;
+					}
+				}
+				if (!matched) {
+					toBeDistributed.add(context);
+				}
+			}
+
+			for (ActionContextHolder holder : notMatched) {
+				holder.noActionContextAvailable();
+			}
+		}
+
+		// TODO possibly Stable Flag??
 	}
 
 	public void revokeActionContexts(long batch) {

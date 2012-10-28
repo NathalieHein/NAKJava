@@ -1,12 +1,18 @@
 package de.nordakademie.nakjava.client.internal.gui.component;
 
 import java.awt.BorderLayout;
-import java.util.HashMap;
-import java.util.Map;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeListener;
+import java.rmi.RemoteException;
 
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.ComponentInputMap;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 
+import de.nordakademie.nakjava.client.internal.gui.ActionContextDelegator;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextHolder;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextSelector;
 import de.nordakademie.nakjava.server.shared.proxy.actions.KeyAction;
@@ -14,46 +20,120 @@ import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public class TextField extends JTextField implements ActionContextHolder {
 
-	public TextField() {
-		actionMap = new HashMap<>();
-		this.setEditable(true);
-		// setInputMap(WHEN_IN_FOCUSED_WINDOW, null);
-		// setInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, null);
-		// ComponentInputMap inputMap = new ComponentInputMap(this);
-		// inputMap.clear();
-		// inputMap.put(KeyStroke.getKeyStroke('a'), "b");
-		// setInputMap(WHEN_FOCUSED, inputMap);
-	}
+	private ComponentInputMap inputMap;
+	private ActionMap actionMap;
 
-	public Map<Integer, KeyAction> actionMap;
+	private Class<? extends KeyAction> desiredAction;
+
+	private long currentBatch = Long.MIN_VALUE;
+
+	public TextField(Class<? extends KeyAction> desiredAction) {
+		ActionContextDelegator.getInstance().registerActionContextHolder(this);
+		this.desiredAction = desiredAction;
+		this.setEditable(false);
+		setInputMap(WHEN_IN_FOCUSED_WINDOW, null);
+		setInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, null);
+		inputMap = new ComponentInputMap(this);
+		inputMap.clear();
+
+		setInputMap(WHEN_FOCUSED, inputMap);
+
+		actionMap = new ActionMap();
+		setActionMap(actionMap);
+	}
 
 	@Override
 	public void setActionContext(ActionContext actionContext) {
-		// TODO Auto-generated method stub
+		if (!(actionContext instanceof KeyAction)) {
+			return;
+		}
 
+		KeyAction action = (KeyAction) actionContext;
+
+		if (actionContext.getBatch() > currentBatch) {
+			currentBatch = actionContext.getBatch();
+			actionMap.clear();
+			inputMap.clear();
+		} else if (actionContext.getBatch() < currentBatch) {
+			return;
+		}
+
+		inputMap.put(KeyStroke.getKeyStroke(action.getKey(), 0),
+				action.getKey());
+		actionMap.put(action.getKey(), new ActionAdapter(action));
+		setEditable(true);
 	}
 
 	@Override
 	public boolean isActionContextApplicable(ActionContext context) {
-		// TODO Auto-generated method stub
-		return false;
+		return desiredAction.isAssignableFrom(context.getClass());
 	}
 
 	@Override
 	public void noActionContextAvailable() {
-		// TODO Auto-generated method stub
-
+		actionMap.clear();
+		inputMap.clear();
+		setEditable(false);
 	}
 
 	@Override
 	public void setActionContextSelector(ActionContextSelector selector) {
-		// TODO Auto-generated method stub
-
+		throw new UnsupportedOperationException(
+				"ActionContextSelector can not be set here");
 	}
 
 	@Override
 	public void revokeActionContext(long batch) {
-		// TODO Auto-generated method stub
+		if (currentBatch == batch) {
+			actionMap.clear();
+			inputMap.clear();
+		}
+
+	}
+
+	private class ActionAdapter implements Action {
+
+		private KeyAction action;
+
+		public ActionAdapter(KeyAction action) {
+			this.action = action;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			try {
+				action.perform();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		public void addPropertyChangeListener(PropertyChangeListener listener) {
+		}
+
+		@Override
+		public Object getValue(String key) {
+			return null;
+		}
+
+		@Override
+		public boolean isEnabled() {
+			return true;
+		}
+
+		@Override
+		public void putValue(String key, Object value) {
+		}
+
+		@Override
+		public void removePropertyChangeListener(PropertyChangeListener listener) {
+		}
+
+		@Override
+		public void setEnabled(boolean b) {
+		}
 
 	}
 
@@ -61,7 +141,7 @@ public class TextField extends JTextField implements ActionContextHolder {
 		JFrame frame = new JFrame("Test");
 
 		frame.setLayout(new BorderLayout());
-		frame.add(new TextField());
+		frame.add(new TextField(null));
 
 		frame.setVisible(true);
 	}

@@ -15,7 +15,7 @@ public abstract class AbstractGUIClient extends Client {
 
 	protected AbstractGUIClient() throws RemoteException {
 		super();
-		delegator = new ActionContextDelegator();
+		delegator = ActionContextDelegator.getInstance();
 	}
 
 	@Override
