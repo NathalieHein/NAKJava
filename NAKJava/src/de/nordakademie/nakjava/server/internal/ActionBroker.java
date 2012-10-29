@@ -1,5 +1,6 @@
 package de.nordakademie.nakjava.server.internal;
 
+import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -20,25 +21,39 @@ public class ActionBroker {
 		return instance;
 	}
 
-	public boolean verify(ServerAction serverAction) {
+	// TODO comment missing
+	public Model verify(ServerAction serverAction) {
 		lock.lock();
-		for (Player player : Player.getPlayers()) {
-			if (player.getState().getActions().contains(serverAction)) {
-				Model.getInstance().setCurrentPlayer(player);
-				return true;
+		Model mod = null;
+		Map<Long, Model> sessions = Sessions.getInstance().getSessionMap();
+		if (sessions.containsKey(serverAction.getSessionNr())) {
+			if (sessions.get(serverAction.getSessionNr()).verify(serverAction)) {
+				mod = sessions.get(serverAction.getSessionNr());
 			}
 		}
+
+		// TODO
+		/*
+		 * for (Player player : Player.getPlayers()) { if
+		 * (player.getState().getActions().contains(serverAction)) {
+		 * Sessions.getInstance().setCurrentPlayer(player); return true; } }
+		 */
 		lock.unlock();
-		return false;
+		return mod;
 	}
 
-	public void commit() {
-		for (Player player : Player.getPlayers()) {
-			if (!Model.getInstance().isModeUnique()
-					|| player == Model.getInstance().getCurrentPlayer()) {
-				player.triggerChangeEvent();
-			}
-		}
+	public void commit(ServerAction serverAction) {
+		// ensures that thread on Model.waitCondition has exclusive access for
+		// rest of its verify()-Process
+		lock.lock();
+		// TODO kann hier in der Zwischenzeit die Session gelöscht worden sein?
+		// Wenn ja, nochmal auf null überprüfen
+		Sessions.getInstance().getSessionMap().get(serverAction.getSessionNr())
+				.commit();
+		lock.unlock();
+	}
+
+	public void releaseLock() {
 		lock.unlock();
 	}
 }

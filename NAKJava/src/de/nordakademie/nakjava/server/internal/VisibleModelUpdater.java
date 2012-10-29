@@ -1,32 +1,54 @@
 package de.nordakademie.nakjava.server.internal;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import de.nordakademie.nakjava.gamelogic.cards.impl.CardLibrary;
+import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
+import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
+import de.nordakademie.nakjava.server.shared.serial.PlayerModel;
+
 public class VisibleModelUpdater {
-	private static VisibleModelUpdater instance;
 
+	// Suppresses default constructor for noninstantiability
 	private VisibleModelUpdater() {
-
+		throw new AssertionError();
 	}
 
-	public static VisibleModelUpdater getInstance() {
-		if (instance == null) {
-			instance = new VisibleModelUpdater();
+	private static void updatePlayerModel(Player player, PlayerState opponent) {
+		// TODO Do I want to see what card the opponent played???
+		// TODO ErrorHandling: how are we doing it?
+		PlayerModel playerModel = player.getState().getModel();
+		playerModel.setArtifacts(player.getGamelogicPlayer().getArtifacts());
+		List<CardInformation> cards = new ArrayList<>();
+		for (String cardName : player.getGamelogicPlayer().getCards()
+				.getCardsOnHand()) {
+			CardInformation cardInfo = CardLibrary.get().getCardInformation()
+					.get(cardName);
+			if (cardInfo != null) {
+				cards.add(cardInfo);
+			} else {
+				// throw new Exception("Card not found in CardLibrary");
+			}
 		}
-		return instance;
+		playerModel.setCardHand(cards);
+		playerModel.setSelfState(player.getGamelogicPlayer().getState());
+		playerModel.setOpponentState(opponent.getState());
 	}
 
-	public void update(long batch) {
-		if (!Model.getInstance().isModeUnique()) {
-			for (Player player : Player.getPlayers()) {
-				updatePlayerModel(player);
+	public static void update(Model model, long batchNr) {
+		if (!model.isModeUnique()) {
+			for (Player player : model.getIterableListOfPlayers()) {
+				for (Player otherPlayer : model.getIterableListOfPlayers()) {
+					if (player != otherPlayer) {
+						updatePlayerModel(player,
+								otherPlayer.getGamelogicPlayer());
+					}
+				}
 			}
 		} else {
-			updatePlayerModel(Model.getInstance().getCurrentPlayer());
+			// TODO in CardChooseState that player that last triggered action
+			updatePlayerModel(model.getActionInvoker(), null);
 		}
-
 	}
-
-	private void updatePlayerModel(Player player) {
-		player.getState().getModel().setName(Model.getInstance().getName());
-	}
-
 }

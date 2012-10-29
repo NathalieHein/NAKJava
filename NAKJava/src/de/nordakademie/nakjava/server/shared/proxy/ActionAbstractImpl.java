@@ -40,31 +40,25 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 		if (model != null) {
 			performImpl(model);
 			long batchNr = Batch.increaseAndGetBatchNr();
-			threadPool.execute(new ActionRuleset(model, batchNr) {
-				@Override
-				public void run() {
-					super.run();
-					finishThread();
-				}
-			}
-
-			);
-			threadPool.execute(new VisibleModelUpdater(model, batchNr){
-				
-			};
-			
-			/*{
+			threadPool.execute(new Runnable() {
 
 				@Override
 				public void run() {
-					VisibleModelUpdater.getInstance().update(batchNr);
+					ActionRuleset.update(model, batchNr);
 					finishThread();
 				}
-			});*/
+			});
+			threadPool.execute(new Runnable() {
+				@Override
+				public void run() {
+					VisibleModelUpdater.update(model, batchNr);
+					finishThread();
+				}
+			});
 
 			// Needs to be done for changing the thread context back
 			// to the thread that holds the lock in the ActionBroker
-			//TODO this is easier if using thread.join()
+			// TODO this is easier if using thread.join()
 			waitCondition = lock.newCondition();
 			lock.lock();
 			try {

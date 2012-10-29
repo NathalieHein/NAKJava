@@ -5,16 +5,19 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import de.nordakademie.nakjava.gamelogic.stateMachine.StateMachine;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.WinStrategy;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
 public class Model {
 	private int furtherAllowedNumberOfPlayers = 2;
-	private List<Player> players = new LinkedList<>();
-	private Lock lock = new ReentrantLock(true);
 	private boolean modeUnique;
+
+	private List<Player> players = new LinkedList<>();
 	private Player actionInvoker;
-	private StateMachine stateMachine;
+	private WinStrategy strategy;
+	private long sessionId;
+
+	private Lock lock = new ReentrantLock(true);
 
 	public void commit() {
 		for (Player player : players) {
@@ -29,8 +32,6 @@ public class Model {
 		modeUnique = true;
 		players.add(player);
 		furtherAllowedNumberOfPlayers--;
-		// TODO stateMachine einbauen
-		// stateMachine = new StateMachine(player);
 		// TODO set of currentPlayer necessary??
 	}
 
@@ -67,11 +68,6 @@ public class Model {
 		return new Model(player);
 	}
 
-	public Player nextPlayer() {
-		// TODO or should currentPlayer be internal and
-		return players.get(players.indexOf(actionInvoker) + 1);
-	}
-
 	public List<Player> getIterableListOfPlayers() {
 		return players;
 	}
@@ -96,8 +92,20 @@ public class Model {
 		this.actionInvoker = actionInvoker;
 	}
 
-	public StateMachine getStateMachine() {
-		return stateMachine;
+	public WinStrategy getStrategy() {
+		return strategy;
+	}
+
+	public void setStrategy(WinStrategy strategy) {
+		this.strategy = strategy;
+	}
+
+	public long getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(int sessionId) {
+		this.sessionId = sessionId;
 	}
 
 }
