@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.State;
 
 public class PlayerState {
 
 	private List<? extends Artifact> artifacts;
 	private CardSet cards;
+	private State state;
 
 	// EnumMap not possible because of different enums
 	private Map<Class<? extends Artifact>, Integer> cache = new HashMap<>();
@@ -79,5 +81,13 @@ public class PlayerState {
 
 	public CardSet getCards() {
 		return cards;
+	}
+
+	public State getState() {
+		return state;
+	}
+
+	public void setState(State state) {
+		this.state = state;
 	}
 }
