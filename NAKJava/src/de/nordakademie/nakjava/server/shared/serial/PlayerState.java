@@ -56,8 +56,7 @@ public class PlayerState implements Serializable {
 		InitAction initAction = null;
 
 		try {
-			Batch.increaseBatchNr();
-			initAction = new InitAction(Batch.getCurrentBatchNr());
+			initAction = new InitAction(Batch.increaseAndGetBatchNr());
 			actions.add(initAction);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block

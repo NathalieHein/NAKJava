@@ -40,6 +40,14 @@ public class CardSet implements Serializable {
 		return false;
 	}
 
+	public int getNumberOfCardsOnHand() {
+		return hand.size();
+	}
+
+	public List<String> getCardsOnHand() {
+		return hand;
+	}
+
 	public String drawCardFromDeck() {
 		if (deck.size() != 0) {
 			String card = deck.remove((int) (Math.random() * deck.size()));
@@ -56,7 +64,7 @@ public class CardSet implements Serializable {
 
 	public boolean drawUntilNCardsOnHand(int n) {
 		if (n <= getCardSetSize()) {
-			int numberOfDrawnCards = 0;
+			int numberOfDrawnCards = hand.size();
 			while (numberOfDrawnCards < n) {
 				drawCardFromDeck();
 				numberOfDrawnCards++;
