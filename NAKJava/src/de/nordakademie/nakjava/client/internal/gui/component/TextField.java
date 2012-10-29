@@ -1,6 +1,7 @@
 package de.nordakademie.nakjava.client.internal.gui.component;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
@@ -40,6 +41,7 @@ public class TextField extends JTextField implements ActionContextHolder {
 
 		actionMap = new ActionMap();
 		setActionMap(actionMap);
+		this.setPreferredSize(new Dimension(100, 25));
 	}
 
 	@Override
@@ -89,6 +91,11 @@ public class TextField extends JTextField implements ActionContextHolder {
 			inputMap.clear();
 		}
 
+	}
+
+	@Override
+	public boolean isDisposed() {
+		return this.isShowing();
 	}
 
 	private class ActionAdapter implements Action {

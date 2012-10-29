@@ -6,6 +6,7 @@ import javax.swing.JCheckBox;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import de.nordakademie.nakjava.client.internal.gui.ActionContextDelegator;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextHolder;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextSelector;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
@@ -16,8 +17,10 @@ public class CheckBox extends JCheckBox implements ActionContextHolder {
 	private ActionContext context;
 
 	public CheckBox(ActionContextSelector selector) {
+		super();
 		this.selector = selector;
 		this.setEnabled(false);
+		ActionContextDelegator.getInstance().registerActionContextHolder(this);
 
 		addChangeListener(new ChangeListener() {
 
@@ -36,7 +39,7 @@ public class CheckBox extends JCheckBox implements ActionContextHolder {
 
 	@Override
 	public void setActionContext(ActionContext actionContext) {
-		this.context = context;
+		this.context = actionContext;
 		this.setEnabled(true);
 
 	}
@@ -60,6 +63,11 @@ public class CheckBox extends JCheckBox implements ActionContextHolder {
 	public void revokeActionContext(long batch) {
 		this.selector = null;
 		this.setEnabled(false);
+	}
+
+	@Override
+	public boolean isDisposed() {
+		return this.isShowing();
 	}
 
 }

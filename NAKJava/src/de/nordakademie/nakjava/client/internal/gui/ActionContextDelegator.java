@@ -38,12 +38,19 @@ public class ActionContextDelegator {
 		}
 	}
 
-	public void delegateActionContexts(List<ActionContext> actionContexts) {
+	public void delegateActionContexts(List<ActionContext> actionContexts,
+			boolean careTaking) {
 		List<ActionContextHolder> notMatched = new LinkedList<>(holders);
 		toBeDistributed = new LinkedList<>();
 
 		for (ActionContextHolder holder : holders) {
 			holder.revokeActionContext(currentBatch);
+			if (careTaking) {
+				if (!holder.isDisposed()) {
+					holders.remove(holder);
+				}
+			}
+
 		}
 
 		if (actionContexts.size() != 0) {

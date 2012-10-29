@@ -33,6 +33,16 @@ public class Button extends JButton implements ActionListener,
 		}
 	}
 
+	public Button(String text, final Class<? extends ActionContext> actionClass) {
+		this(text, new ActionContextSelector() {
+
+			@Override
+			public boolean select(ActionContext context) {
+				return actionClass.isAssignableFrom(context.getClass());
+			}
+		}, true);
+	}
+
 	@Override
 	public void setActionContext(ActionContext actionContext) {
 
@@ -86,7 +96,11 @@ public class Button extends JButton implements ActionListener,
 	@Override
 	public void revokeActionContext(long batch) {
 		removeActionContext();
+	}
 
+	@Override
+	public boolean isDisposed() {
+		return this.isShowing();
 	}
 
 	private void removeActionContext() {

@@ -12,4 +12,6 @@ public interface ActionContextHolder {
 	public void setActionContextSelector(ActionContextSelector selector);
 
 	public void revokeActionContext(long batch);
+
+	public boolean isDisposed();
 }

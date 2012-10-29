@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.swing.JComboBox;
 
+import de.nordakademie.nakjava.client.internal.gui.ActionContextDelegator;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextHolder;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextSelector;
 import de.nordakademie.nakjava.server.shared.proxy.actions.SelectAction;
@@ -21,6 +22,7 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder {
 
 	public ComboBox(final Class<? extends SelectAction> selectAction) {
 		setEnabled(false);
+		ActionContextDelegator.getInstance().registerActionContextHolder(this);
 		actions = new HashMap<String, SelectAction>();
 		selector = new ActionContextSelector() {
 
@@ -91,6 +93,11 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder {
 			actions.clear();
 			setEnabled(false);
 		}
+	}
+
+	@Override
+	public boolean isDisposed() {
+		return this.isShowing();
 	}
 
 }
