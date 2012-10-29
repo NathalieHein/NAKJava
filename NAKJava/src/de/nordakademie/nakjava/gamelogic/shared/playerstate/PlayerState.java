@@ -20,6 +20,7 @@ public class PlayerState {
 	public PlayerState(List<? extends Artifact> initialArtifacts) {
 		this.artifacts = initialArtifacts;
 		this.cards = new CardSet();
+		state = State.STOP;
 	}
 
 	public List<? extends Artifact> getArtifacts() {

@@ -1,5 +1,6 @@
 package de.nordakademie.nakjava.server.internal;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ import de.nordakademie.nakjava.gamelogic.cards.impl.AbstractCard;
 import de.nordakademie.nakjava.gamelogic.cards.impl.CardLibrary;
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
+import de.nordakademie.nakjava.server.shared.proxy.actions.InitAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.PlayCardAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.SimulateCardAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.WithdrawCardAction;
@@ -53,7 +55,13 @@ public class ActionRuleset {
 		case STOP:
 			break;
 		case NEXT:
-			// TODO only a ServerAction here
+			try {
+				ActionContext initAction = new InitAction(batch, sessionId);
+				initAction.perform();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 		}
 

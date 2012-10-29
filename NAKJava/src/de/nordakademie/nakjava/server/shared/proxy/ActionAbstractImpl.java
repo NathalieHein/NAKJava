@@ -24,9 +24,7 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 
 	// TODO implement shutDown method after use? If not needed than simply
 	// Executor-Interface?
-	// private static ExecutorService threadPool =
-	// Executors.newFixedThreadPool(2);
-	private static ExecutorService threadPool = Executors.newCachedThreadPool();
+	private static ExecutorService threadPool = Executors.newFixedThreadPool(2);
 	private int threadCount = 2;
 
 	private Lock lock = new ReentrantLock();
@@ -36,10 +34,10 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 
 	@Override
 	public void perform() throws RemoteException {
-		Model model = ActionBroker.getInstance().verify(this);
+		final Model model = ActionBroker.getInstance().verify(this);
 		if (model != null) {
 			performImpl(model);
-			long batchNr = Batch.increaseAndGetBatchNr();
+			final long batchNr = Batch.increaseAndGetBatchNr();
 			threadPool.execute(new Runnable() {
 
 				@Override
@@ -85,7 +83,6 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 
 	protected abstract void performImpl(Model model);
 
-	@Override
 	public long getSessionNr() {
 		return sessionNr;
 	}

@@ -44,7 +44,11 @@ public class Artifacts {
 	}
 
 	public List<Artifact> getArtifacts() {
-		return artifacts;
+		List<Artifact> newArtifacts = new LinkedList<>();
+		for (Artifact artifact : artifacts) {
+			newArtifacts.add(ArtifactFactory.cloneArtifact(artifact));
+		}
+		return newArtifacts;
 	}
 
 	public static Artifacts getInstance() {

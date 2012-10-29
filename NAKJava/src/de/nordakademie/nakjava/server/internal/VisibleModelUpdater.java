@@ -18,6 +18,7 @@ public class VisibleModelUpdater {
 	private static void updatePlayerModel(Player player, PlayerState opponent) {
 		// TODO Do I want to see what card the opponent played???
 		// TODO ErrorHandling: how are we doing it?
+		// TODO state differently -> as Enums
 		PlayerModel playerModel = player.getState().getModel();
 		playerModel.setArtifacts(player.getGamelogicPlayer().getArtifacts());
 		List<CardInformation> cards = new ArrayList<>();

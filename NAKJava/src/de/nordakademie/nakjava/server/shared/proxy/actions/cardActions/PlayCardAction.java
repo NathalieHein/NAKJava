@@ -28,6 +28,7 @@ public class PlayCardAction extends AbstractCardAction {
 			protected void performImpl(Model model) {
 				AbstractCard card = CardLibrary.get().getCards().get(cardName);
 				Map<Target, PlayerState> map = new HashMap<>();
+
 				for (Player player : model.getIterableListOfPlayers()) {
 					if (player == model.getActionInvoker()) {
 						map.put(Target.SELF, player.getGamelogicPlayer());
@@ -35,12 +36,14 @@ public class PlayCardAction extends AbstractCardAction {
 						map.put(Target.OPPONENT, player.getGamelogicPlayer());
 					}
 				}
+
 				if (card != null) {
 					card.payImpl(map);
 					card.performActionImpl(map);
 					if (!map.get(Target.SELF).getCards()
 							.discardCardFromHand(cardName)) {
-						// TODO Fehlerbehandlung
+						throw new IllegalStateException(
+								"Card to be discarded is not in cardhand");
 					}
 					StateMachine.run(map);
 				} else {

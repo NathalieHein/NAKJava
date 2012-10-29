@@ -26,16 +26,18 @@ public class Sessions {
 		return instance;
 	}
 
-	public void addPlayer(Player player) {
+	public long addPlayer(Player player) {
 		for (Model session : sessions.values()) {
 			// this check is in this class because Model does not know that
 			// there is a session context
 			if (session.isStillRoom()) {
-				session.addPlayer(player);
-				return;
+				session.addPlayer(nextSessionId, player);
+				return nextSessionId;
 			}
 		}
-		sessions.put(nextSessionId++, new Model(player));
+		nextSessionId++;
+		sessions.put(nextSessionId, new Model(player));
+		return nextSessionId;
 	}
 
 	public Map<Long, Model> getSessionMap() {

@@ -51,12 +51,14 @@ public class PlayerState implements Serializable {
 		dirty = false;
 	}
 
-	public void initialize() {
+	public void initialize(long sessionId) {
 		actions = new LinkedList<>();
 		InitAction initAction = null;
 
 		try {
-			initAction = new InitAction(Batch.increaseAndGetBatchNr());
+			// TODO this is not fine yet
+			initAction = new InitAction(Batch.increaseAndGetBatchNr(),
+					sessionId);
 			actions.add(initAction);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block

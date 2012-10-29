@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
+import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 
 public class ActionBroker {
 	private static ActionBroker instance;
@@ -22,7 +22,7 @@ public class ActionBroker {
 	}
 
 	// TODO comment missing
-	public Model verify(ServerAction serverAction) {
+	public Model verify(ActionAbstractImpl serverAction) {
 		lock.lock();
 		Model mod = null;
 		Map<Long, Model> sessions = Sessions.getInstance().getSessionMap();
@@ -42,12 +42,12 @@ public class ActionBroker {
 		return mod;
 	}
 
-	public void commit(ServerAction serverAction) {
+	public void commit(ActionAbstractImpl serverAction) {
 		// ensures that thread on Model.waitCondition has exclusive access for
 		// rest of its verify()-Process
 		lock.lock();
-		// TODO kann hier in der Zwischenzeit die Session gelöscht worden sein?
-		// Wenn ja, nochmal auf null überprüfen
+		// TODO kann hier in der Zwischenzeit die Session gelï¿½scht worden sein?
+		// Wenn ja, nochmal auf null ï¿½berprï¿½fen
 		Sessions.getInstance().getSessionMap().get(serverAction.getSessionNr())
 				.commit();
 		lock.unlock();

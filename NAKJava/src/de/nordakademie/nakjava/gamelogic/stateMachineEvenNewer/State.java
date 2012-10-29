@@ -5,7 +5,6 @@ import java.util.Map;
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.AdjustCardhand;
-import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.PlayCard;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.Postaction;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.Preaction;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.RoundEndAction;
@@ -25,7 +24,6 @@ public enum State {
 	PLAYCARDSTATE {
 		@Override
 		public void perform(Map<Target, PlayerState> playerStateMap) {
-			PlayCard.perform(playerStateMap);
 		}
 
 		@Override
@@ -56,6 +54,7 @@ public enum State {
 		}
 	},
 	STOP {
+		// TODO take out the stop of statemachine here
 		@Override
 		public void perform(Map<Target, PlayerState> playerStateMap) {
 			RoundEndAction.perform(playerStateMap);

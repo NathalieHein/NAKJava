@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.State;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.WinStrategy;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
@@ -31,6 +32,8 @@ public class Model {
 	public Model(Player player) {
 		modeUnique = true;
 		players.add(player);
+		// TODO state not to be set here!!!
+		player.getGamelogicPlayer().setState(State.NEXT);
 		furtherAllowedNumberOfPlayers--;
 		// TODO set of currentPlayer necessary??
 	}
@@ -47,6 +50,7 @@ public class Model {
 					// one transaction: or making verify() synchronized???
 					ActionBroker.getInstance().releaseLock();
 					lock.lock();
+					// TODO needs to go back to Action.perform() here
 
 				}
 				actionInvoker = player;
@@ -56,10 +60,11 @@ public class Model {
 		return false;
 	}
 
-	public Model addPlayer(Player player) {
+	public Model addPlayer(long sessionId, Player player) {
 		if (furtherAllowedNumberOfPlayers > 0) {
 			players.add(player);
 			furtherAllowedNumberOfPlayers--;
+			this.sessionId = sessionId;
 			// TODO questionable whether to set modeUnique or do it with an
 			// action (+create a playercontrol message??)
 			modeUnique = true;
