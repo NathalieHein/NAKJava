@@ -18,6 +18,9 @@ public class ArtifactChecker implements WinCheck, Serializable {
 	private Comparator comparator;
 	private boolean and;
 
+	public static final boolean AND = true;
+	public static final boolean OR = false;
+
 	public ArtifactChecker(Target target,
 			Class<? extends Artifact>[] artifacts, Comparator comparator,
 			int count, boolean and) {
@@ -90,6 +93,10 @@ public class ArtifactChecker implements WinCheck, Serializable {
 
 	public Comparator getComparator() {
 		return comparator;
+	}
+
+	public boolean getOperator() {
+		return and;
 	}
 
 }
