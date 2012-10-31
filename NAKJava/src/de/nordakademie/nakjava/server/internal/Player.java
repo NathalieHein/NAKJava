@@ -4,7 +4,6 @@ import java.rmi.RemoteException;
 
 import de.nordakademie.nakjava.client.shared.PlayerControlListener;
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifacts;
 import de.nordakademie.nakjava.server.shared.proxy.PlayerControl;
 import de.nordakademie.nakjava.server.shared.proxy.PlayerControlImpl;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
@@ -12,7 +11,6 @@ import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 public class Player {
 	private PlayerState state;
 	private PlayerControl control;
-	private de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState gamelogicPlayer;
 
 	public Player(PlayerControlListener controlListener,
 			PlayerStateListener stateListener) {
@@ -23,8 +21,6 @@ public class Player {
 			e.printStackTrace();
 		}
 		state = new PlayerState(stateListener);
-		gamelogicPlayer = new de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState(
-				Artifacts.getInstance().getArtifacts());
 		long sessionId = Sessions.getInstance().addPlayer(this);
 		state.initialize(sessionId);
 

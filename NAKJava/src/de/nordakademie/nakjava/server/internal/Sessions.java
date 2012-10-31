@@ -7,7 +7,7 @@ import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
 public class Sessions {
 	private static Sessions instance;
-	private Map<Long, Model> sessions = new HashMap<>();
+	private Map<Long, Session> sessions = new HashMap<>();
 	private long nextSessionId = 1;
 
 	private Sessions() {
@@ -27,7 +27,7 @@ public class Sessions {
 	}
 
 	public long addPlayer(Player player) {
-		for (Model session : sessions.values()) {
+		for (Session session : sessions.values()) {
 			// this check is in this class because Model does not know that
 			// there is a session context
 			if (session.isStillRoom()) {
@@ -36,11 +36,11 @@ public class Sessions {
 			}
 		}
 		nextSessionId++;
-		sessions.put(nextSessionId, new Model(player));
+		sessions.put(nextSessionId, new Session(player));
 		return nextSessionId;
 	}
 
-	public Map<Long, Model> getSessionMap() {
+	public Map<Long, Session> getSessionMap() {
 		return sessions;
 	}
 }
