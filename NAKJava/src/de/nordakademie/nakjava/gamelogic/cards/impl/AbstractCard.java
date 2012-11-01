@@ -71,7 +71,7 @@ public abstract class AbstractCard {
 	/**
 	 * May be overridden for additional Actions
 	 */
-	private void performAction(Map<Target, PlayerState> states) {
+	protected void performAction(Map<Target, PlayerState> states) {
 
 	}
 
@@ -99,7 +99,7 @@ public abstract class AbstractCard {
 	 * 
 	 * @return
 	 */
-	private boolean checkPrerequirements(Map<Target, PlayerState> states) {
+	protected boolean checkPrerequirements(Map<Target, PlayerState> states) {
 		return true;
 	}
 

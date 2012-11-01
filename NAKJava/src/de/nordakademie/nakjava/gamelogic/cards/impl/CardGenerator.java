@@ -3,6 +3,7 @@ package de.nordakademie.nakjava.gamelogic.cards.impl;
 import java.util.List;
 
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
+import de.nordakademie.nakjava.util.StringUtilities;
 import de.nordakademie.nakjava.util.classpathscanner.ClassAcceptor;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
@@ -47,7 +48,7 @@ public class CardGenerator {
 					annotation.artifactEffects(), annotation.damageEffects());
 			if (!cardDescription.equals("")
 					&& !annotation.additionalDescription().equals("")) {
-				cardDescription += "/" + annotation.additionalDescription();
+				cardDescription += annotation.additionalDescription();
 			} else {
 				cardDescription += annotation.additionalDescription();
 			}
@@ -56,6 +57,15 @@ public class CardGenerator {
 					annotation.name(),
 					new CardInformation(annotation.name(), cardDescription,
 							cardCostDescription, annotation.type()));
+
+			try {
+				library.getCards().put(annotation.name(),
+						(AbstractCard) clazz.newInstance());
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
@@ -74,7 +84,8 @@ public class CardGenerator {
 					sb.append("/");
 				}
 
-				sb.append(cost.amount() + " " + cost.ressource());
+				sb.append(cost.amount() + " "
+						+ cost.ressource().getSimpleName());
 			}
 
 			return sb.toString();
@@ -82,8 +93,19 @@ public class CardGenerator {
 	}
 
 	private static String generateBasicEffectDescription(
-			ArtifactEffect[] artifactEffect, DamageEffect[] damage) {
-		return "";
+			ArtifactEffect[] artifactEffects, DamageEffect[] damages) {
+		StringBuilder sb = new StringBuilder();
+		for (ArtifactEffect artifactEffect : artifactEffects) {
+			String text = AnnotationMetatextProcessor
+					.extractMetatext(artifactEffect);
+
+			if (StringUtilities.isNotNullOrEmpty(text)) {
+				sb.append(text);
+				sb.append("/");
+			}
+		}
+
+		return sb.toString();
 	}
 
 	public static void main(String[] args) {
