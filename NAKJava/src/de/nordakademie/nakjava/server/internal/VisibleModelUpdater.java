@@ -1,11 +1,15 @@
 package de.nordakademie.nakjava.server.internal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.nordakademie.nakjava.gamelogic.cards.impl.CardLibrary;
+import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.shared.serial.PlayerModel;
 
 public class VisibleModelUpdater {
@@ -34,8 +38,10 @@ public class VisibleModelUpdater {
 			}
 		}
 		playerModel.setCardHand(cards);
-		playerModel.setSelfState(self.getState());
-		playerModel.setOpponentState(opponent.getState());
+		Map<Target, State> targetToState = new HashMap<>();
+		targetToState.put(Target.SELF, self.getState());
+		targetToState.put(Target.OPPONENT, opponent.getState());
+		playerModel.setTargetToState(targetToState);
 	}
 
 	public static void update(Session session) {

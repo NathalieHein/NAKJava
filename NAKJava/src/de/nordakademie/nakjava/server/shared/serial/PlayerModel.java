@@ -2,32 +2,17 @@ package de.nordakademie.nakjava.server.shared.serial;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
+import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 
 public class PlayerModel implements Serializable {
-	private State selfState;
-	private State opponentState;
+	private Map<Target, State> targetToState;
 	private List<? extends Artifact> artifacts;
 	private List<CardInformation> cardHand;
-
-	public State getSelfState() {
-		return selfState;
-	}
-
-	public void setSelfState(State selfState) {
-		this.selfState = selfState;
-	}
-
-	public State getOpponentState() {
-		return opponentState;
-	}
-
-	public void setOpponentState(State opponentState) {
-		this.opponentState = opponentState;
-	}
 
 	public List<? extends Artifact> getArtifacts() {
 		return artifacts;
@@ -53,6 +38,14 @@ public class PlayerModel implements Serializable {
 		}
 		throw new IllegalArgumentException("No Artifact for type: "
 				+ artifact.getSimpleName());
+	}
+
+	public Map<Target, State> getTargetToState() {
+		return targetToState;
+	}
+
+	public void setTargetToState(Map<Target, State> targetToState) {
+		this.targetToState = targetToState;
 	}
 
 }
