@@ -1,9 +1,11 @@
 package de.nordakademie.nakjava.server.internal;
 
 import java.rmi.RemoteException;
+import java.util.Map;
 
 import de.nordakademie.nakjava.client.shared.PlayerControlListener;
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
+import de.nordakademie.nakjava.gamelogic.shared.playerstate.CardSet;
 import de.nordakademie.nakjava.server.shared.proxy.PlayerControl;
 import de.nordakademie.nakjava.server.shared.proxy.PlayerControlImpl;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
@@ -11,6 +13,10 @@ import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 public class Player {
 	private PlayerState state;
 	private PlayerControl control;
+	// TODO name and savedDecks should go into another entity
+	private String name;
+	// TODO savedDecks include StandardDeck
+	private Map<String, CardSet> savedDecks;
 
 	public Player(PlayerControlListener controlListener,
 			PlayerStateListener stateListener) {
@@ -40,13 +46,20 @@ public class Player {
 		control.triggerChangeEvent();
 	}
 
-	public de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState getGamelogicPlayer() {
-		return gamelogicPlayer;
+	public String getName() {
+		return name;
 	}
 
-	public void setGamelogicPlayer(
-			de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState gamelogicPlayer) {
-		this.gamelogicPlayer = gamelogicPlayer;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Map<String, CardSet> getSavedDecks() {
+		return savedDecks;
+	}
+
+	public void setSavedDecks(Map<String, CardSet> savedDecks) {
+		this.savedDecks = savedDecks;
 	}
 
 }

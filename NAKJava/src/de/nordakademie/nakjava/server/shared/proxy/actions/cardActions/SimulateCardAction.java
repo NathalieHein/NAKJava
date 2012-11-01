@@ -2,7 +2,7 @@ package de.nordakademie.nakjava.server.shared.proxy.actions.cardActions;
 
 import java.rmi.RemoteException;
 
-import de.nordakademie.nakjava.server.internal.Model;
+import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
@@ -17,8 +17,8 @@ public class SimulateCardAction extends AbstractCardAction {
 		return new ActionAbstractImpl(sessionNr) {
 
 			@Override
-			protected void performImpl(Model model) {
-				// TODO Auto-generated method stub
+			protected void performImpl(Session model) {
+				// TODO needs flag in model + cloned model fields
 
 			}
 		};

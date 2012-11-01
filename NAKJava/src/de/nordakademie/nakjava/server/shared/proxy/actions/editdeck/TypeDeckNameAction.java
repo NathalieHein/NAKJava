@@ -1,16 +1,16 @@
-package de.nordakademie.nakjava.server.shared.proxy.actions;
+package de.nordakademie.nakjava.server.shared.proxy.actions.editdeck;
 
 import java.rmi.RemoteException;
 
 import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
-import de.nordakademie.nakjava.server.shared.serial.ActionContext;
+import de.nordakademie.nakjava.server.shared.proxy.actions.KeyAction;
 
-public class InitAction extends ActionContext {
+public class TypeDeckNameAction extends KeyAction {
 
-	public InitAction(long batch, long sessionNr) throws RemoteException {
-		super(batch, sessionNr);
+	public TypeDeckNameAction(char key, long batch, long sessionNr) {
+		super(key, batch, sessionNr);
 	}
 
 	@Override
@@ -18,9 +18,8 @@ public class InitAction extends ActionContext {
 		return new ActionAbstractImpl(sessionNr) {
 
 			@Override
-			protected void performImpl(Session model) {
-				// TODO Auto-generated method stub
-
+			protected void performImpl(Session session) {
+				// TODO alter currently changed name accordingly
 			}
 		};
 	}

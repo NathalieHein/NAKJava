@@ -1,15 +1,16 @@
-package de.nordakademie.nakjava.server.shared.proxy.actions;
+package de.nordakademie.nakjava.server.shared.proxy.actions.login;
 
 import java.rmi.RemoteException;
 
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
 import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
-public class InitAction extends ActionContext {
+public class SubmitPlayerNameAction extends ActionContext {
 
-	public InitAction(long batch, long sessionNr) throws RemoteException {
+	public SubmitPlayerNameAction(long batch, long sessionNr) {
 		super(batch, sessionNr);
 	}
 
@@ -18,9 +19,11 @@ public class InitAction extends ActionContext {
 		return new ActionAbstractImpl(sessionNr) {
 
 			@Override
-			protected void performImpl(Session model) {
-				// TODO Auto-generated method stub
-
+			protected void performImpl(Session session) {
+				if (!session.isActionInvokerCurrentPlayer()) {
+					session.getModel().changeSelfAndOpponent();
+				}
+				StateMachine.getInstance().run(session.getModel());
 			}
 		};
 	}

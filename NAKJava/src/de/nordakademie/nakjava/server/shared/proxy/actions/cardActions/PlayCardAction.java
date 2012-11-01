@@ -1,7 +1,6 @@
 package de.nordakademie.nakjava.server.shared.proxy.actions.cardActions;
 
 import java.rmi.RemoteException;
-import java.util.HashMap;
 import java.util.Map;
 
 import de.nordakademie.nakjava.gamelogic.cards.impl.AbstractCard;
@@ -9,8 +8,7 @@ import de.nordakademie.nakjava.gamelogic.cards.impl.CardLibrary;
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
-import de.nordakademie.nakjava.server.internal.Model;
-import de.nordakademie.nakjava.server.internal.Player;
+import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
@@ -25,27 +23,24 @@ public class PlayCardAction extends AbstractCardAction {
 		return new ActionAbstractImpl(sessionNr) {
 
 			@Override
-			protected void performImpl(Model model) {
+			protected void performImpl(Session session) {
 				AbstractCard card = CardLibrary.get().getCards().get(cardName);
-				Map<Target, PlayerState> map = new HashMap<>();
-
-				for (Player player : model.getIterableListOfPlayers()) {
-					if (player == model.getActionInvoker()) {
-						map.put(Target.SELF, player.getGamelogicPlayer());
-					} else {
-						map.put(Target.OPPONENT, player.getGamelogicPlayer());
-					}
-				}
+				// no need to check whether actionInvoker == currentPlayer -->
+				// action would not be verified otherwise
 
 				if (card != null) {
-					card.payImpl(map);
-					card.performActionImpl(map);
-					if (!map.get(Target.SELF).getCards()
+					Map<Target, PlayerState> selfOpponentMap = session
+							.getModel().getSelfOpponentMap();
+					card.payImpl(selfOpponentMap);
+					card.performActionImpl(selfOpponentMap);
+					if (!selfOpponentMap.get(Target.SELF).getCards()
 							.discardCardFromHand(cardName)) {
 						throw new IllegalStateException(
 								"Card to be discarded is not in cardhand");
 					}
-					StateMachine.run(map);
+					// if card states: "Play again" than state must be set to
+					// "PREACTION"
+					StateMachine.getInstance().run(session.getModel());
 				} else {
 					// TODO what if card not found
 					// --> should be nothing because should go back to trigger

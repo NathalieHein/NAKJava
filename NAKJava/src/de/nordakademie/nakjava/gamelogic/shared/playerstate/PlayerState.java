@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
-import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.State;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 
 public class PlayerState {
 

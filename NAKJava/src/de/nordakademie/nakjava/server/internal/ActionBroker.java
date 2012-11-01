@@ -22,10 +22,10 @@ public class ActionBroker {
 	}
 
 	// TODO comment missing
-	public Model verify(ActionAbstractImpl serverAction) {
+	public Session verify(ActionAbstractImpl serverAction) {
 		lock.lock();
-		Model mod = null;
-		Map<Long, Model> sessions = Sessions.getInstance().getSessionMap();
+		Session mod = null;
+		Map<Long, Session> sessions = Sessions.getInstance().getSessionMap();
 		if (sessions.containsKey(serverAction.getSessionNr())) {
 			if (sessions.get(serverAction.getSessionNr()).verify(serverAction)) {
 				mod = sessions.get(serverAction.getSessionNr());

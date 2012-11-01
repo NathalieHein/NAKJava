@@ -14,6 +14,7 @@ public class Session {
 	private int furtherAllowedNumberOfPlayers = 2;
 
 	private Map<Player, PlayerState> playerToPlayerState = new HashMap<>();
+	private Model model;
 	private Player actionInvoker;
 	private long sessionId;
 
@@ -34,6 +35,10 @@ public class Session {
 		player.getGamelogicPlayer().setState(State.NEXT);
 		furtherAllowedNumberOfPlayers--;
 		// TODO set of currentPlayer necessary??
+	}
+
+	public boolean isActionInvokerCurrentPlayer() {
+		return playerToPlayerState.get(actionInvoker) == model.getSelf();
 	}
 
 	public boolean verify(ServerAction serverAction) {
@@ -96,6 +101,10 @@ public class Session {
 
 	public void setSessionId(int sessionId) {
 		this.sessionId = sessionId;
+	}
+
+	public Model getModel() {
+		return model;
 	}
 
 }

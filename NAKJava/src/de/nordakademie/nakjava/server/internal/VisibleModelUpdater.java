@@ -15,15 +15,16 @@ public class VisibleModelUpdater {
 		throw new AssertionError();
 	}
 
-	private static void updatePlayerModel(Player player, PlayerState opponent) {
+	private static void updatePlayerModel(Player player, PlayerState self,
+			PlayerState opponent) {
 		// TODO Do I want to see what card the opponent played???
 		// TODO ErrorHandling: how are we doing it?
-		// TODO state differently -> as Enums
+		// TODO this is only game itself not pregame: should be sufficient right
+		// now for KI
 		PlayerModel playerModel = player.getState().getModel();
-		playerModel.setArtifacts(player.getGamelogicPlayer().getArtifacts());
+		playerModel.setArtifacts(self.getArtifacts());
 		List<CardInformation> cards = new ArrayList<>();
-		for (String cardName : player.getGamelogicPlayer().getCards()
-				.getCardsOnHand()) {
+		for (String cardName : self.getCards().getCardsOnHand()) {
 			CardInformation cardInfo = CardLibrary.get().getCardInformation()
 					.get(cardName);
 			if (cardInfo != null) {
@@ -33,23 +34,19 @@ public class VisibleModelUpdater {
 			}
 		}
 		playerModel.setCardHand(cards);
-		playerModel.setSelfState(player.getGamelogicPlayer().getState());
+		playerModel.setSelfState(self.getState());
 		playerModel.setOpponentState(opponent.getState());
 	}
 
-	public static void update(Model model, long batchNr) {
-		if (!model.isModeUnique()) {
-			for (Player player : model.getIterableListOfPlayers()) {
-				for (Player otherPlayer : model.getIterableListOfPlayers()) {
-					if (player != otherPlayer) {
-						updatePlayerModel(player,
-								otherPlayer.getGamelogicPlayer());
-					}
+	public static void update(Session session) {
+		for (Player player : session.getSetOfPlayers()) {
+			for (Player otherPlayer : session.getSetOfPlayers()) {
+				if (player != otherPlayer) {
+					updatePlayerModel(player, session.getPlayerToStateMap()
+							.get(player),
+							session.getPlayerToStateMap().get(otherPlayer));
 				}
 			}
-		} else {
-			// TODO in CardChooseState that player that last triggered action
-			updatePlayerModel(model.getActionInvoker(), null);
 		}
 	}
 }

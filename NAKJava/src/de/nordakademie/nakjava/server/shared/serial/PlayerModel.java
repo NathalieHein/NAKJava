@@ -5,7 +5,7 @@ import java.util.List;
 
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
-import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.State;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 
 public class PlayerModel implements Serializable {
 	private State selfState;
