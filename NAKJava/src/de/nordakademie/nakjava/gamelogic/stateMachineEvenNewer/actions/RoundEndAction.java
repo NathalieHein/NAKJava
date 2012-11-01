@@ -1,21 +1,14 @@
 package de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions;
 
-import java.util.Map;
-
-import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
-import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
+import de.nordakademie.nakjava.server.internal.Model;
 
-public class RoundEndAction {
+public class RoundEndAction implements StateAction {
 
-	public static void perform(Map<Target, PlayerState> playerStateMap) {
-		PlayerState current = playerStateMap.get(Target.SELF);
-		playerStateMap.remove(Target.SELF);
-		playerStateMap.put(Target.SELF, playerStateMap.get(Target.OPPONENT));
-		playerStateMap.remove(Target.OPPONENT);
-		playerStateMap.put(Target.OPPONENT, current);
-
-		StateMachine.run(playerStateMap);
+	@Override
+	public void perform(Model model) {
+		model.changeSelfAndOpponent();
+		StateMachine.getInstance().run(model);
 	}
 
 }

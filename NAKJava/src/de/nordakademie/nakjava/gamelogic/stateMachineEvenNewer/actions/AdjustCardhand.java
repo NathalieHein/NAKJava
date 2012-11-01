@@ -1,24 +1,21 @@
 package de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions;
 
-import java.util.Map;
-
-import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.CardSet;
-import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
+import de.nordakademie.nakjava.server.internal.Model;
 
-public class AdjustCardhand {
+public class AdjustCardhand implements StateAction {
 
-	public static void perform(Map<Target, PlayerState> playerStateMap) {
+	@Override
+	public void perform(Model model) {
 		// TODO Auto-generated method stub
 		// TODO put number 6 in model somewhere, as constant or enum
-		CardSet currentPlayersCards = playerStateMap.get(Target.SELF)
-				.getCards();
+		CardSet currentPlayersCards = model.getSelf().getCards();
 		if (currentPlayersCards.getNumberOfCardsOnHand() < 6) {
 			currentPlayersCards.drawUntilNCardsOnHand(6);
-			StateMachine.run(playerStateMap);
+			StateMachine.getInstance().run(model);
 		} else if (currentPlayersCards.getNumberOfCardsOnHand() == 6) {
-			StateMachine.run(playerStateMap);
+			StateMachine.getInstance().run(model);
 		}
 	}
 

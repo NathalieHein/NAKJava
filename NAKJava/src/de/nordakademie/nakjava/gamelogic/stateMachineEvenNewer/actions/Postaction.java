@@ -1,16 +1,12 @@
 package de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions;
 
-import java.util.Map;
+import de.nordakademie.nakjava.server.internal.Model;
 
-import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
-import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
-import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
+public class Postaction implements StateAction {
 
-public class Postaction {
-
-	public static void perform(Map<Target, PlayerState> playerStateMap) {
+	@Override
+	public void perform(Model model) {
 		// TODO Auto-generated method stub
-		StateMachine.run(playerStateMap);
-	}
 
+	}
 }
