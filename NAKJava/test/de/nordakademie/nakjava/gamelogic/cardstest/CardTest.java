@@ -16,6 +16,8 @@ import de.nordakademie.nakjava.gamelogic.cards.impl.CardGenerator;
 import de.nordakademie.nakjava.gamelogic.cards.impl.CardLibrary;
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
+import de.nordakademie.nakjava.gamelogic.shared.artifacts.infrastructure.Mauer;
+import de.nordakademie.nakjava.gamelogic.shared.artifacts.infrastructure.Turm;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.ressources.Kristalle;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.ressources.Monster;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.ressources.Ziegel;
@@ -43,9 +45,17 @@ public class CardTest {
 		Monster monster = new Monster();
 		monster.setCount(10);
 
+		Mauer mauer = new Mauer();
+		mauer.setCount(3);
+
+		Turm turm = new Turm();
+		turm.setCount(5);
+
 		initialArtifacts.add(ziegel);
 		initialArtifacts.add(kristalle);
 		initialArtifacts.add(monster);
+		initialArtifacts.add(mauer);
+		initialArtifacts.add(turm);
 
 		PlayerState state = new PlayerState(initialArtifacts);
 
@@ -71,8 +81,8 @@ public class CardTest {
 
 	private void testInformation(CardInformation information) {
 		assertEquals("TestKarte", information.getTitle());
-		assertEquals("-15 Monster für dich/zusätzlicherTest",
-				information.getInformation());
+		assertEquals("-15 Monster für dich/zusätzlicherTest", information
+				.getInformation());
 		assertEquals("15 Ziegel/30 Kristalle", information.getCost());
 	}
 
@@ -96,9 +106,14 @@ public class CardTest {
 		assertEquals(0, model.get(Target.SELF).getTupelForClass(Monster.class)
 				.getCount());
 		// AdditionalAction
-		assertEquals(10,
-				model.get(Target.SELF).getTupelForClass(Kristalle.class)
-						.getCount());
+		assertEquals(10, model.get(Target.SELF).getTupelForClass(
+				Kristalle.class).getCount());
+
+		// TestDamage
+		assertEquals(0, model.get(Target.SELF).getTupelForClass(Mauer.class)
+				.getCount());
+		assertEquals(3, model.get(Target.SELF).getTupelForClass(Turm.class)
+				.getCount());
 
 	}
 }
