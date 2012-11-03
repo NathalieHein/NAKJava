@@ -16,7 +16,7 @@ public abstract class AbstractWinStrategy implements WinStrategy {
 	 * Lost has a higher priority than win
 	 */
 	@Override
-	public Map<Target, RoundResult> hasWon(Map<Target, PlayerState> playerMap) {
+	public Map<Target, RoundResult> getRoundResult(Map<Target, PlayerState> playerMap) {
 
 		Map<Target, PlayerState> inversePlayerMap = new EnumMap<>(Target.class);
 

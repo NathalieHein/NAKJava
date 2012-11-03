@@ -1,6 +1,9 @@
 package de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.genericRoundCheckers.impl;
 
 import java.io.Serializable;
+import java.lang.reflect.Modifier;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
@@ -39,34 +42,45 @@ public class ArtifactChecker implements WinCheck, Serializable {
 
 		for (Class<? extends Artifact> artifact : artifacts) {
 
-			if (comparator == Comparator.GREATER) {
-				if (and) {
-					won &= state.getTupelForClass(artifact).getCount() > count;
-				} else {
-					won |= state.getTupelForClass(artifact).getCount() > count;
-				}
+			List<Artifact> toCheck = new LinkedList<>();
 
-			} else if (comparator == Comparator.SMALLER) {
-				if (and) {
-					won &= state.getTupelForClass(artifact).getCount() < count;
-				} else {
-					won |= state.getTupelForClass(artifact).getCount() < count;
-				}
+			if (Modifier.isAbstract(artifact.getModifiers())) {
+				toCheck.addAll(state.getTupelsForArtifactType(artifact));
 			} else {
-				if (and) {
-					won &= state.getTupelForClass(artifact).getCount() == count;
-				} else {
-					won |= state.getTupelForClass(artifact).getCount() == count;
-				}
+				toCheck.add(state.getTupelForClass(artifact));
 			}
 
-			if (and) {
-				if (!won) {
-					break;
+			for (Artifact checkArtifact : toCheck) {
+
+				if (comparator == Comparator.GREATER) {
+					if (and) {
+						won &= checkArtifact.getCount() > count;
+					} else {
+						won |= checkArtifact.getCount() > count;
+					}
+
+				} else if (comparator == Comparator.SMALLER) {
+					if (and) {
+						won &= checkArtifact.getCount() < count;
+					} else {
+						won |= checkArtifact.getCount() < count;
+					}
+				} else {
+					if (and) {
+						won &= checkArtifact.getCount() == count;
+					} else {
+						won |= checkArtifact.getCount() == count;
+					}
 				}
-			} else {
-				if (won) {
-					break;
+
+				if (and) {
+					if (!won) {
+						break;
+					}
+				} else {
+					if (won) {
+						break;
+					}
 				}
 			}
 

@@ -16,5 +16,5 @@ public interface WinStrategy {
 	 * @param playerMap
 	 * @return
 	 */
-	public Map<Target, RoundResult> hasWon(Map<Target, PlayerState> playerMap);
+	public Map<Target, RoundResult> getRoundResult(Map<Target, PlayerState> playerMap);
 }
