@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.nordakademie.nakjava.gamelogic.cards.Orkan;
+import de.nordakademie.nakjava.gamelogic.cards.steinbruch.Orkan;
 
 public class AnnotationMetatextProcessor {
 

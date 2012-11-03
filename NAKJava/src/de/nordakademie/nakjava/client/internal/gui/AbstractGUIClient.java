@@ -3,6 +3,9 @@ package de.nordakademie.nakjava.client.internal.gui;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
 import de.nordakademie.nakjava.client.internal.Client;
 import de.nordakademie.nakjava.client.shared.ClientAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
@@ -12,10 +15,14 @@ import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 public abstract class AbstractGUIClient extends Client {
 
 	protected ActionContextDelegator delegator;
+	protected final JFrame frame = new JFrame();
 
 	protected AbstractGUIClient() throws RemoteException {
 		super();
 		delegator = ActionContextDelegator.getInstance();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
+		frame.setVisible(true);
 	}
 
 	@Override
@@ -55,5 +62,10 @@ public abstract class AbstractGUIClient extends Client {
 
 	public void revokeActionContexts(long batch) {
 		delegator.revokeActionContexts(batch);
+	}
+
+	protected void updateFrame(Runnable runnable) {
+		frame.removeAll();
+		SwingUtilities.invokeLater(runnable);
 	}
 }

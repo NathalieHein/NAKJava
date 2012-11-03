@@ -1,4 +1,4 @@
-package de.nordakademie.nakjava.client.game;
+package de.nordakademie.nakjava.client.game.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

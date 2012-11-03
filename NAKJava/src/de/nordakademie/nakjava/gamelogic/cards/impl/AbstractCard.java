@@ -34,10 +34,10 @@ public abstract class AbstractCard {
 
 	private final void performArtifactEffects(Map<Target, PlayerState> states) {
 		for (ArtifactEffect artifactEffect : annotation.artifactEffects()) {
-			states.get(artifactEffect.target())
-					.getTupelForClass(artifactEffect.artifact())
-					.merge(ArtifactFactory.createArtifact(
-							artifactEffect.artifact(), artifactEffect.count()));
+			states.get(artifactEffect.target()).getTupelForClass(
+					artifactEffect.artifact()).merge(
+					ArtifactFactory.createArtifact(artifactEffect.artifact(),
+							artifactEffect.count()));
 		}
 	}
 
@@ -86,9 +86,8 @@ public abstract class AbstractCard {
 
 		for (Cost cost : annotation.costs()) {
 			result = result
-					&& states.get(Target.SELF)
-							.getTupelForClass(cost.ressource()).getCount() >= cost
-							.amount();
+					&& states.get(Target.SELF).getTupelForClass(
+							cost.ressource()).getCount() >= cost.amount();
 		}
 
 		return result && checkPrerequirements(states);
@@ -108,10 +107,9 @@ public abstract class AbstractCard {
 	 */
 	public void payImpl(Map<Target, PlayerState> states) {
 		for (Cost cost : annotation.costs()) {
-			states.get(Target.SELF)
-					.getTupelForClass(cost.ressource())
-					.merge(ArtifactFactory.createArtifact(cost.ressource(),
-							-cost.amount()));
+			states.get(Target.SELF).getTupelForClass(cost.ressource()).merge(
+					ArtifactFactory.createArtifact(cost.ressource(), -cost
+							.amount()));
 		}
 	}
 
@@ -123,5 +121,9 @@ public abstract class AbstractCard {
 		}
 
 		return result;
+	}
+
+	public boolean canDrop() {
+		return annotation.canDrop();
 	}
 }

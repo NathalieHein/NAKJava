@@ -29,4 +29,6 @@ public @interface Card {
 	ArtifactEffect[] artifactEffects() default {};
 
 	DamageEffect[] damageEffects() default {};
+
+	boolean canDrop() default true;
 }

@@ -1,4 +1,4 @@
-package de.nordakademie.nakjava.client.game;
+package de.nordakademie.nakjava.client.game.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,9 +12,9 @@ import javax.swing.JPanel;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextSelector;
 import de.nordakademie.nakjava.client.internal.gui.component.Button;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
-import de.nordakademie.nakjava.server.shared.proxy.actions.PlayCardAction;
-import de.nordakademie.nakjava.server.shared.proxy.actions.SimulateCardAction;
-import de.nordakademie.nakjava.server.shared.proxy.actions.WithdrawCardAction;
+import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.PlayCardAction;
+import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.SimulateCardAction;
+import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.WithdrawCardAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public class CardInteractionPanel extends JPanel {

@@ -44,13 +44,13 @@ public class CardGenerator {
 
 			String cardCostDescription = generateCostDescription(annotation
 					.costs());
-			String cardDescription = generateBasicEffectDescription(
-					annotation.artifactEffects(), annotation.damageEffects());
-			if (!cardDescription.equals("")
-					&& !annotation.additionalDescription().equals("")) {
-				cardDescription += annotation.additionalDescription();
-			} else {
-				cardDescription += annotation.additionalDescription();
+			String cardDescription = generateBasicEffectDescription(annotation
+					.artifactEffects(), annotation.damageEffects());
+			if (!annotation.additionalDescription().equals("")) {
+				cardDescription += annotation.additionalDescription() + "/";
+			}
+			if (!annotation.canDrop()) {
+				cardDescription += "Kann nicht verworfen werden.";
 			}
 
 			library.getCardInformation().put(
