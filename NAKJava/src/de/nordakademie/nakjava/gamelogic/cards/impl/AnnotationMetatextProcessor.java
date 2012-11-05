@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import de.nordakademie.nakjava.gamelogic.cards.steinbruch.Orkan;
-
 public class AnnotationMetatextProcessor {
 
 	public static String extractMetatext(Object annotation) {
@@ -68,11 +66,4 @@ public class AnnotationMetatextProcessor {
 		return metaText;
 	}
 
-	public static void main(String[] args) {
-
-		Card cardAnnotation = Orkan.class.getAnnotation(Card.class);
-		for (ArtifactEffect effect : cardAnnotation.artifactEffects()) {
-			extractMetatext(effect);
-		}
-	}
 }

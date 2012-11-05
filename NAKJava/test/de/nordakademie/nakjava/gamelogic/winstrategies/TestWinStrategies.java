@@ -84,6 +84,27 @@ public class TestWinStrategies {
 	}
 
 	@Test
+	public void testTurmbau() {
+		WinStrategy strategy = WinStrategies.getInstance().getStrategyForName(
+				"Turmbau");
+		Assert.assertNotNull(strategy);
+		Map<Target, RoundResult> results = strategy
+				.getRoundResult(neutralModel);
+		Assert.assertNotNull(results);
+
+		Assert.assertEquals(RoundResult.NEUTRAL, results.get(Target.SELF));
+		Assert.assertEquals(RoundResult.NEUTRAL, results.get(Target.OPPONENT));
+
+		neutralModel.get(Target.SELF).getTupelForClass(Turm.class)
+				.setCount(100);
+
+		results = strategy.getRoundResult(neutralModel);
+
+		Assert.assertEquals(RoundResult.WIN, results.get(Target.SELF));
+		Assert.assertEquals(RoundResult.LOST, results.get(Target.OPPONENT));
+	}
+
+	@Test
 	public void testSammelwut() {
 		WinStrategy strategy = WinStrategies.getInstance().getStrategyForName(
 				"Sammelwut");
@@ -108,6 +129,5 @@ public class TestWinStrategies {
 		// TODO is this right?
 		Assert.assertEquals(RoundResult.WIN, results.get(Target.SELF));
 		Assert.assertEquals(RoundResult.WIN, results.get(Target.OPPONENT));
-
 	}
 }

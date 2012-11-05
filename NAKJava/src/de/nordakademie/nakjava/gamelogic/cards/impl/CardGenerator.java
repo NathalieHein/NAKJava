@@ -107,8 +107,4 @@ public class CardGenerator {
 
 		return sb.toString();
 	}
-
-	public static void main(String[] args) {
-		generateCards();
-	}
 }
