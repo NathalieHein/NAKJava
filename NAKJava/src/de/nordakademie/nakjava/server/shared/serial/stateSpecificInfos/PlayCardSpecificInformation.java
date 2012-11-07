@@ -5,7 +5,7 @@ import java.util.List;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 
-public class PlayCardSpecificInformation {
+public class PlayCardSpecificInformation implements StateSpecificInformation {
 
 	private List<? extends Artifact> artifacts;
 	private List<CardInformation> cardHand;
