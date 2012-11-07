@@ -1,44 +1,16 @@
 package de.nordakademie.nakjava.server.shared.serial;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
-import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
+import de.nordakademie.nakjava.server.shared.serial.stateSpecificInfos.StateSpecificInformation;
 
 public class PlayerModel implements Serializable {
 	private Map<Target, State> targetToState;
-	private List<? extends Artifact> artifacts;
-	private List<CardInformation> cardHand;
-
-	public List<? extends Artifact> getArtifacts() {
-		return artifacts;
-	}
-
-	public void setArtifacts(List<? extends Artifact> artifacts) {
-		this.artifacts = artifacts;
-	}
-
-	public List<CardInformation> getCardHand() {
-		return cardHand;
-	}
-
-	public void setCardHand(List<CardInformation> cardHand) {
-		this.cardHand = cardHand;
-	}
-
-	public Artifact getArtifactForClass(Class<? extends Artifact> artifact) {
-		for (Artifact currentArtifact : artifacts) {
-			if (currentArtifact.getClass().equals(artifact)) {
-				return currentArtifact;
-			}
-		}
-		throw new IllegalArgumentException("No Artifact for type: "
-				+ artifact.getSimpleName());
-	}
+	private Map<Target, String> targetToName;
+	private StateSpecificInformation stateSpecificInfos;
 
 	public Map<Target, State> getTargetToState() {
 		return targetToState;
@@ -46,6 +18,22 @@ public class PlayerModel implements Serializable {
 
 	public void setTargetToState(Map<Target, State> targetToState) {
 		this.targetToState = targetToState;
+	}
+
+	public Map<Target, String> getTargetToName() {
+		return targetToName;
+	}
+
+	public void setTargetToName(Map<Target, String> targetToName) {
+		this.targetToName = targetToName;
+	}
+
+	public StateSpecificInformation getStateSpecificInfos() {
+		return stateSpecificInfos;
+	}
+
+	public void setStateSpecificInfos(StateSpecificInformation stateSpecificInfos) {
+		this.stateSpecificInfos = stateSpecificInfos;
 	}
 
 }
