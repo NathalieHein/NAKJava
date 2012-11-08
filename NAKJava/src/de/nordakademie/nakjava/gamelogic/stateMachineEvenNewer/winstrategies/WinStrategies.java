@@ -37,21 +37,21 @@ public class WinStrategies {
 	}
 
 	public static void loadWinStrategies() {
-		List<Class<?>> classes = ClasspathScanner
+		List<Class<AbstractWinStrategy>> classes = ClasspathScanner
 				.findClasses(
 						"de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies",
 						"de.nordakademie.nakjava.gamelogic.winstrategies",
-						new ClassAcceptor() {
+						new ClassAcceptor<AbstractWinStrategy>() {
 
 							@Override
-							public boolean acceptClass(Class<?> clazz) {
+							public boolean acceptClass(
+									Class<AbstractWinStrategy> clazz) {
 								de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategy annotation = clazz
 										.getAnnotation(de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategy.class);
-								return (AbstractWinStrategy.class
-										.isAssignableFrom(clazz) && annotation != null);
+								return (annotation != null);
 
 							}
-						});
+						}, AbstractWinStrategy.class);
 
 		List<AbstractWinStrategy> instances = new LinkedList<>();
 

@@ -23,17 +23,16 @@ public class Artifacts {
 
 	public static void generateArtifacts() {
 		new Artifacts();
-		List<Class<?>> artifacts = ClasspathScanner.findClasses(
+		List<Class<Artifact>> artifacts = ClasspathScanner.findClasses(
 				"de.nordakademie.nakjava.gamelogic.shared.artifacts",
 				"de.nordakademie.nakjava.artifactPackages",
-				new ClassAcceptor() {
+				new ClassAcceptor<Artifact>() {
 
 					@Override
-					public boolean acceptClass(Class<?> clazz) {
-						return !Modifier.isAbstract(clazz.getModifiers())
-								&& Artifact.class.isAssignableFrom(clazz);
+					public boolean acceptClass(Class<Artifact> clazz) {
+						return !Modifier.isAbstract(clazz.getModifiers());
 					}
-				});
+				}, Artifact.class);
 
 		for (Class<?> artifact : artifacts) {
 			// isAssignableFrom does this magic
@@ -43,7 +42,7 @@ public class Artifacts {
 
 	}
 
-	public List<Artifact> getArtifacts() {
+	public List<Artifact> getInitialArtifacts() {
 		List<Artifact> newArtifacts = new LinkedList<>();
 		for (Artifact artifact : artifacts) {
 			newArtifacts.add(ArtifactFactory.cloneArtifact(artifact));

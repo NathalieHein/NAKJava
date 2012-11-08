@@ -27,17 +27,18 @@ public class CardGenerator {
 	public static void generateCards() {
 		CardLibrary library = new CardLibrary();
 
-		List<Class<?>> classes = ClasspathScanner.findClasses(
+		List<Class<AbstractCard>> classes = ClasspathScanner.findClasses(
 				"de.nordakademie.nakjava.gamelogic.cards",
-				"de.nordakademie.nakjava.cardPackages", new ClassAcceptor() {
+				"de.nordakademie.nakjava.cardPackages",
+				new ClassAcceptor<AbstractCard>() {
 
 					@Override
-					public boolean acceptClass(Class<?> clazz) {
+					public boolean acceptClass(Class<AbstractCard> clazz) {
 						Card annotation = clazz.getAnnotation(Card.class);
-						return annotation != null
-								&& AbstractCard.class.isAssignableFrom(clazz);
+						return annotation != null;
+
 					}
-				});
+				}, AbstractCard.class);
 
 		for (Class<?> clazz : classes) {
 			Card annotation = clazz.getAnnotation(Card.class);

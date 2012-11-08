@@ -1,12 +1,12 @@
 package de.nordakademie.nakjava.server.internal;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifacts;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
@@ -36,7 +36,8 @@ public class Session {
 		actionInvoker = player;
 		batch = new Batch();
 		// TODO where to get initial artifacts
-		PlayerState playerState = new PlayerState(new ArrayList<>());
+		PlayerState playerState = new PlayerState(Artifacts.getInstance()
+				.getInitialArtifacts());
 		model = new Model(playerState);
 		playerToPlayerState.put(player, playerState);
 		furtherAllowedNumberOfPlayers--;
@@ -71,7 +72,8 @@ public class Session {
 	public Session addPlayer(Player player) {
 		if (furtherAllowedNumberOfPlayers > 0) {
 			actionInvoker = player;
-			PlayerState playerState = new PlayerState(new ArrayList<>());
+			PlayerState playerState = new PlayerState(Artifacts.getInstance()
+					.getInitialArtifacts());
 			playerToPlayerState.put(player, playerState);
 			model.addPlayerState(playerState);
 			furtherAllowedNumberOfPlayers--;
