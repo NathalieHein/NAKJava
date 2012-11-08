@@ -1,17 +1,19 @@
 package de.nordakademie.nakjava.server.internal;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
+import de.nordakademie.nakjava.util.classpathscanner.ClassAcceptor;
+import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class ActionRuleset {
-	// TODO how do actionRules get here? -> scan classpath
 	private static List<ActionRule> actionRules;
 
 	// Suppresses default constructor for noninstantiability
 	private ActionRuleset() {
-		throw new AssertionError();
 	}
 
 	private static void updatePlayerActions(Player player, long sessionId) {
@@ -31,4 +33,28 @@ public class ActionRuleset {
 			updatePlayerActions(player, sessionId);
 		}
 	}
+
+	public static void createActionRulesetInstance() {
+		actionRules = new LinkedList<>();
+		List<Class<ActionRule>> actionRuleClasses = ClasspathScanner
+				.findClasses(
+						"de.nordakademie.nakjava.server.internal.actionRules",
+						"de.nordakademie.nakjava.actionRulePackage",
+						new ClassAcceptor<ActionRule>() {
+
+							@Override
+							public boolean acceptClass(Class<ActionRule> clazz) {
+								return !Modifier.isFinal(clazz.getModifiers());
+							}
+						}, ActionRule.class);
+
+		for (Class<ActionRule> clazz : actionRuleClasses) {
+			try {
+				actionRules.add(clazz.newInstance());
+			} catch (InstantiationException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 }
