@@ -15,10 +15,11 @@ import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 public abstract class AbstractGUIClient extends Client {
 
 	protected ActionContextDelegator delegator;
-	protected final JFrame frame = new JFrame();
+	protected final JFrame frame;
 
 	protected AbstractGUIClient() throws RemoteException {
 		super();
+		frame = new JFrame();
 		delegator = ActionContextDelegator.getInstance();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);

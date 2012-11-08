@@ -7,6 +7,7 @@ import java.util.List;
 
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 import de.nordakademie.nakjava.util.classpathscanner.ClassAcceptor;
+import de.nordakademie.nakjava.util.classpathscanner.ClassLookup;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class ActionRuleset {
@@ -34,7 +35,8 @@ public class ActionRuleset {
 		}
 	}
 
-	public static void createActionRulesetInstance() {
+	@ClassLookup
+	private static void createActionRules() {
 		actionRules = new LinkedList<>();
 		List<Class<ActionRule>> actionRuleClasses = ClasspathScanner
 				.findClasses(
@@ -44,7 +46,8 @@ public class ActionRuleset {
 
 							@Override
 							public boolean acceptClass(Class<ActionRule> clazz) {
-								return !Modifier.isFinal(clazz.getModifiers());
+								return !Modifier.isAbstract(clazz
+										.getModifiers());
 							}
 						}, ActionRule.class);
 

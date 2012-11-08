@@ -36,11 +36,13 @@ public class VisibleModelUpdater {
 		 */
 		Map<Target, String> targetToName = new HashMap<>();
 		targetToName.put(Target.SELF, player.getName());
-		targetToName.put(Target.OPPONENT, session.getOneOtherPlayer(player)
-				.getName());
 		Map<Target, State> targetToState = new HashMap<>();
 		targetToState.put(Target.SELF, self.getState());
-		targetToState.put(Target.OPPONENT, opponent.getState());
+		if (session.getOneOtherPlayer(player) != null) {
+			targetToName.put(Target.OPPONENT, session.getOneOtherPlayer(player)
+					.getName());
+			targetToState.put(Target.OPPONENT, opponent.getState());
+		}
 		playerModel.setTargetToState(targetToState);
 	}
 

@@ -55,4 +55,13 @@ public class Client extends AbstractGUIClient {
 
 		oldState = state;
 	}
+
+	public static void main(String[] args) {
+		try {
+			new Client();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
