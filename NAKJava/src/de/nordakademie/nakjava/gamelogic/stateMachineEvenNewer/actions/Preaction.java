@@ -5,7 +5,7 @@ import java.util.List;
 
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
-import de.nordakademie.nakjava.server.internal.Model;
+import de.nordakademie.nakjava.server.internal.model.Model;
 
 public class Preaction implements StateAction {
 

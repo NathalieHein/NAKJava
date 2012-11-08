@@ -14,7 +14,7 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.ReadyToSt
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.RoundEndAction;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.StateAction;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
-import de.nordakademie.nakjava.server.internal.Model;
+import de.nordakademie.nakjava.server.internal.model.Model;
 
 public class StateMachine {
 	static StateMachine instance;

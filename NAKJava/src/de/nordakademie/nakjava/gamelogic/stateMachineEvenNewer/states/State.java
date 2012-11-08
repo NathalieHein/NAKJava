@@ -7,19 +7,11 @@ public enum State implements Serializable {
 
 		@Override
 		public State getFollowUpState() {
-			return CHOOSEDECK;
+			return CONFIGUREGAME;
 		}
 
 	},
-	CHOOSEDECK {
-
-		@Override
-		public State getFollowUpState() {
-			return CHOOSESTRATEGY;
-		}
-
-	},
-	CHOOSESTRATEGY {
+	CONFIGUREGAME {
 
 		@Override
 		public State getFollowUpState() {
@@ -31,7 +23,7 @@ public enum State implements Serializable {
 
 		@Override
 		public State getFollowUpState() {
-			return PREACTIONSTATE;
+			return STOP;
 		}
 
 	},
@@ -39,15 +31,7 @@ public enum State implements Serializable {
 
 		@Override
 		public State getFollowUpState() {
-			return CHOOSEDECK;
-		}
-
-	},
-	GAMETOSTARTSTATE {
-
-		@Override
-		public State getFollowUpState() {
-			return STOP;
+			return CONFIGUREGAME;
 		}
 
 	},
@@ -85,15 +69,16 @@ public enum State implements Serializable {
 
 		@Override
 		public State getFollowUpState() {
-			return NEXT;
+			return PREACTIONSTATE;
 		}
 	},
-	NEXT {
+	OTHERPLAYERLEFTGAME {
 
 		@Override
 		public State getFollowUpState() {
-			return PREACTIONSTATE;
+			return READYTOSTARTSTATE;
 		}
+
 	};
 
 	public abstract State getFollowUpState();
