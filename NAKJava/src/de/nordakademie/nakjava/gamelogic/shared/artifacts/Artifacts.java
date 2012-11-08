@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.nordakademie.nakjava.util.classpathscanner.ClassAcceptor;
+import de.nordakademie.nakjava.util.classpathscanner.ClassLookup;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class Artifacts {
@@ -21,7 +22,8 @@ public class Artifacts {
 		generateArtifacts();
 	}
 
-	public static void generateArtifacts() {
+	@ClassLookup
+	private static void generateArtifacts() {
 		new Artifacts();
 		List<Class<Artifact>> artifacts = ClasspathScanner.findClasses(
 				"de.nordakademie.nakjava.gamelogic.shared.artifacts",

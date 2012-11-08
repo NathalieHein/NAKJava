@@ -2,13 +2,54 @@ package de.nordakademie.nakjava.util.classpathscanner;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.nordakademie.nakjava.util.StringUtilities;
+
 public class ClasspathScanner {
+
+	public static void lookupAnnotatedScanners() {
+		findClasses("de.nordakademie.nakjava", "", new ClassAcceptor() {
+
+			@Override
+			public boolean acceptClass(Class clazz) {
+
+				for (Method method : clazz.getMethods()) {
+					if (method.isAnnotationPresent(ClassLookup.class)) {
+						try {
+							method.invoke(null, null);
+						} catch (IllegalAccessException
+								| IllegalArgumentException
+								| InvocationTargetException e) {
+							e.printStackTrace();
+						}
+						return true;
+					}
+				}
+				for (Method method : clazz.getDeclaredMethods()) {
+					if (method.isAnnotationPresent(ClassLookup.class)) {
+						try {
+							method.setAccessible(true);
+							method.invoke(null, null);
+						} catch (IllegalAccessException
+								| IllegalArgumentException
+								| InvocationTargetException e) {
+							e.printStackTrace();
+						}
+						return true;
+					}
+				}
+
+				return false;
+			}
+		});
+	}
 
 	@SuppressWarnings("unchecked")
 	// Eclipse is not intelligent enough...
@@ -45,8 +86,9 @@ public class ClasspathScanner {
 			String additionalPackageProperty, ClassAcceptor acceptor) {
 		List<Class<?>> classes = new LinkedList<>();
 
-		String additionalPackageNames = "".equals(additionalPackageProperty) ? ""
-				: System.getProperty(additionalPackageProperty, "");
+		String additionalPackageNames = StringUtilities
+				.isNotNullOrEmpty(additionalPackageProperty) ? System
+				.getProperty(additionalPackageProperty, "") : "";
 
 		List<String> packages = Arrays.asList(((additionalPackageNames
 				.equals("") ? "" : additionalPackageNames + ",") + packagge)

@@ -9,11 +9,10 @@ import java.rmi.server.UnicastRemoteObject;
 
 import de.nordakademie.nakjava.client.shared.PlayerControlListener;
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
-import de.nordakademie.nakjava.gamelogic.cards.impl.CardGenerator;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifacts;
 import de.nordakademie.nakjava.server.internal.Player;
 import de.nordakademie.nakjava.server.shared.proxy.actions.InitAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
+import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class CheckInImpl extends UnicastRemoteObject implements CheckIn {
 
@@ -49,8 +48,7 @@ public class CheckInImpl extends UnicastRemoteObject implements CheckIn {
 	}
 
 	private static void load() {
-		Artifacts.generateArtifacts();
-		CardGenerator.generateCards();
+		ClasspathScanner.lookupAnnotatedScanners();
 	}
 
 }

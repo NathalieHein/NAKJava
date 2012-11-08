@@ -9,6 +9,7 @@ import java.util.Set;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.WinStrategy;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.genericRoundCheckers.ArtifactChecker;
 import de.nordakademie.nakjava.util.classpathscanner.ClassAcceptor;
+import de.nordakademie.nakjava.util.classpathscanner.ClassLookup;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class WinStrategies {
@@ -36,7 +37,8 @@ public class WinStrategies {
 		return instance;
 	}
 
-	public static void loadWinStrategies() {
+	@ClassLookup
+	private static void loadWinStrategies() {
 		List<Class<AbstractWinStrategy>> classes = ClasspathScanner
 				.findClasses(
 						"de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies",

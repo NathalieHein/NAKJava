@@ -5,6 +5,7 @@ import java.util.List;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 import de.nordakademie.nakjava.util.StringUtilities;
 import de.nordakademie.nakjava.util.classpathscanner.ClassAcceptor;
+import de.nordakademie.nakjava.util.classpathscanner.ClassLookup;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 /**
@@ -24,7 +25,8 @@ public class CardGenerator {
 	 * Additional packages may be given by property:
 	 * de.nordakademie.nakjava.cardPackages
 	 */
-	public static void generateCards() {
+	@ClassLookup
+	private static void generateCards() {
 		CardLibrary library = new CardLibrary();
 
 		List<Class<AbstractCard>> classes = ClasspathScanner.findClasses(
