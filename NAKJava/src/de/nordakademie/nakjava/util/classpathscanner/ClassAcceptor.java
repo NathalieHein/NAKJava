@@ -1,5 +1,5 @@
 package de.nordakademie.nakjava.util.classpathscanner;
 
-public interface ClassAcceptor {
-	public boolean acceptClass(Class<?> clazz);
+public interface ClassAcceptor<T> {
+	public boolean acceptClass(Class<T> clazz);
 }
