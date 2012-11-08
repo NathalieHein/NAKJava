@@ -9,6 +9,38 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ClasspathScanner {
+
+	@SuppressWarnings("unchecked")
+	// Eclipse is not intelligent enough...
+	public static <T> List<Class<T>> findClasses(String packagge,
+			String additionalPackageProperty, ClassAcceptor<T> acceptor,
+			final Class<T> baseClass) {
+
+		@SuppressWarnings("rawtypes")
+		// Generics are not possible here...
+		List<Class<?>> tempClasses = findClasses(packagge,
+				additionalPackageProperty, new ClassAcceptor() {
+
+					@Override
+					public boolean acceptClass(Class clazz) {
+						return baseClass.isAssignableFrom(clazz);
+					}
+
+				});
+
+		List<Class<T>> resultList = new LinkedList<>();
+
+		for (Class<?> tempClazz : tempClasses) {
+
+			if (acceptor.acceptClass((Class<T>) tempClazz)) {
+				resultList.add((Class<T>) tempClazz);
+			}
+		}
+
+		return resultList;
+	}
+
+	// Generics end here..
 	public static List<Class<?>> findClasses(String packagge,
 			String additionalPackageProperty, ClassAcceptor acceptor) {
 		List<Class<?>> classes = new LinkedList<>();
