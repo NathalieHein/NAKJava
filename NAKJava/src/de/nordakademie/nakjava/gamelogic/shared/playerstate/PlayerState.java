@@ -7,12 +7,14 @@ import java.util.Map;
 
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
+import de.nordakademie.nakjava.server.internal.model.StateSpecificModel;
 
 public class PlayerState {
 
 	private List<? extends Artifact> artifacts;
 	private CardSet cards;
 	private State state;
+	private StateSpecificModel stateSpecificModel;
 
 	// EnumMap not possible because of different enums
 	private Map<Class<? extends Artifact>, Integer> cache = new HashMap<>();
@@ -21,6 +23,10 @@ public class PlayerState {
 		this.artifacts = initialArtifacts;
 		this.cards = new CardSet();
 		state = State.STOP;
+	}
+
+	public PlayerState(PlayerState playerState) {
+		// TODO somehow return a deep copy here!!!
 	}
 
 	public List<? extends Artifact> getArtifacts() {
@@ -90,5 +96,13 @@ public class PlayerState {
 
 	public void setState(State state) {
 		this.state = state;
+	}
+
+	public StateSpecificModel getStateSpecificModel() {
+		return stateSpecificModel;
+	}
+
+	public void setStateSpecificModel(StateSpecificModel stateSpecificModel) {
+		this.stateSpecificModel = stateSpecificModel;
 	}
 }

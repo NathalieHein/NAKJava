@@ -1,4 +1,4 @@
-package de.nordakademie.nakjava.server.internal;
+package de.nordakademie.nakjava.server.internal.model;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +11,7 @@ public class Model {
 	private WinStrategy strategy;
 	private PlayerState self;
 	private PlayerState opponent;
+	private SimulationModel simulationModel;
 
 	public WinStrategy getStrategy() {
 		return strategy;
@@ -40,4 +41,13 @@ public class Model {
 		map.put(Target.OPPONENT, opponent);
 		return map;
 	}
+
+	public SimulationModel getSimulationModel() {
+		return simulationModel;
+	}
+
+	public void setSimulationModel(SimulationModel simulationModel) {
+		this.simulationModel = simulationModel;
+	}
+
 }
