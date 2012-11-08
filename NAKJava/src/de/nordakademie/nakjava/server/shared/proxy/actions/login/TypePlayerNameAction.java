@@ -3,6 +3,7 @@ package de.nordakademie.nakjava.server.shared.proxy.actions.login;
 import java.rmi.RemoteException;
 
 import de.nordakademie.nakjava.server.internal.Session;
+import de.nordakademie.nakjava.server.internal.model.LoginSpecificModel;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.KeyAction;
@@ -19,9 +20,10 @@ public class TypePlayerNameAction extends KeyAction {
 
 			@Override
 			protected void performImpl(Session session) {
-				// TODO handle backslash
-				session.getActionInvoker().setName(
-						session.getActionInvoker().getName() + getKey());
+				LoginSpecificModel model = (LoginSpecificModel) session
+						.getPlayerStateForPlayer(session.getActionInvoker())
+						.getStateSpecificModel();
+				model.appendPartOfName(getKey());
 			}
 		};
 	}
