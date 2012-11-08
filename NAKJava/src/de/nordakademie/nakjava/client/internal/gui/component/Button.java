@@ -22,14 +22,14 @@ public class Button extends JButton implements ActionListener,
 	public Button(String text, ActionContextSelector selector,
 			boolean autoRegister) {
 		super(text);
-		if (autoRegister) {
-			ActionContextDelegator.getInstance().registerActionContextHolder(
-					this);
-		}
 		this.selector = selector;
 
 		if (actionContext == null) {
 			setEnabled(false);
+		}
+		if (autoRegister) {
+			ActionContextDelegator.getInstance().registerActionContextHolder(
+					this);
 		}
 	}
 

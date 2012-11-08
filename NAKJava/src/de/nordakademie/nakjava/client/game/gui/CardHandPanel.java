@@ -62,10 +62,11 @@ public class CardHandPanel extends JPanel {
 				"Test1",
 				"tut blub\n tut bläh\n nochmehr bla blub bläh \n auf ein letztes",
 				"5 Holz, 3 Gold, 4 Steine", CardType.SPEZIAL));
-		cards.add(new CardInformation(
+		CardInformation cardInformation = new CardInformation(
 				"Test2",
 				"tut blub\n tut bläh\n nochmehr muh mäh blub bläh \n auf ein letztes",
-				"5 Holz, 3 Gold, 4 Steine", CardType.SPEZIAL));
+				"5 Holz, 3 Gold, 4 Steine", CardType.SPEZIAL);
+		cards.add(cardInformation);
 
 		cardHandPanel.setCards(cards);
 
@@ -80,6 +81,7 @@ public class CardHandPanel extends JPanel {
 
 		cards.add(new CardInformation("Test3", "ein kurzer",
 				"5 Holz, 3 Gold, 4 Steine", CardType.SPEZIAL));
+		cards.remove(cardInformation);
 
 		cardHandPanel.setCards(cards);
 	}

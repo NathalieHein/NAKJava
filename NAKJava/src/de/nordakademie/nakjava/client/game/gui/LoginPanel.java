@@ -1,5 +1,6 @@
 package de.nordakademie.nakjava.client.game.gui;
 
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -22,5 +23,13 @@ public class LoginPanel extends JPanel {
 	@Override
 	public void setName(String name) {
 		playerName.setText(name);
+	}
+
+	public static void main(String[] args) {
+		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().add(new LoginPanel());
+		frame.pack();
+		frame.setVisible(true);
 	}
 }

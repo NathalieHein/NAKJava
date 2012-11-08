@@ -2,6 +2,9 @@ package de.nordakademie.nakjava.client.internal.gui;
 
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -15,15 +18,9 @@ import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 public abstract class AbstractGUIClient extends Client {
 
 	protected ActionContextDelegator delegator;
-	protected final JFrame frame;
 
 	protected AbstractGUIClient() throws RemoteException {
 		super();
-		frame = new JFrame();
-		delegator = ActionContextDelegator.getInstance();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
-		frame.setVisible(true);
 	}
 
 	@Override
@@ -32,8 +29,22 @@ public abstract class AbstractGUIClient extends Client {
 		playerModelChanged(state.getModel());
 	}
 
-	public void playerActionsChanged(List<ActionContext> actions) {
+	private void playerActionsChanged(List<ActionContext> actions) {
 		extendActionContext(actions);
+		delegator.delegateActionContexts(actions, true);
+	}
+
+	@Override
+	protected void preCheckin() {
+		JFrame frame = new JFrame();
+		delegator = ActionContextDelegator.getInstance();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		preCheckinFinalValues.add(frame);
+	}
+
+	protected JFrame getFrame() {
+		return ((JFrame) preCheckinFinalValues.get(0));
 	}
 
 	/**
@@ -65,8 +76,31 @@ public abstract class AbstractGUIClient extends Client {
 		delegator.revokeActionContexts(batch);
 	}
 
-	protected void updateFrame(Runnable runnable) {
-		frame.removeAll();
-		SwingUtilities.invokeLater(runnable);
+	protected void updateFrame(final Runnable runnable) {
+
+		final Lock lock = new ReentrantLock();
+		lock.lock();
+		final Condition condition = lock.newCondition();
+
+		// invokeLater + Condition => synchroneous call
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				lock.lock();
+				getFrame().removeAll();
+				runnable.run();
+				getFrame().pack();
+				condition.signal();
+				lock.unlock();
+			}
+		});
+
+		try {
+			condition.await();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		lock.unlock();
 	}
 }

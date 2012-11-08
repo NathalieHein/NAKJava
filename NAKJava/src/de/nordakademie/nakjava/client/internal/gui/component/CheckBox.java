@@ -20,7 +20,6 @@ public class CheckBox extends JCheckBox implements ActionContextHolder {
 		super();
 		this.selector = selector;
 		this.setEnabled(false);
-		ActionContextDelegator.getInstance().registerActionContextHolder(this);
 
 		addChangeListener(new ChangeListener() {
 
@@ -35,6 +34,7 @@ public class CheckBox extends JCheckBox implements ActionContextHolder {
 
 			}
 		});
+		ActionContextDelegator.getInstance().registerActionContextHolder(this);
 	}
 
 	@Override

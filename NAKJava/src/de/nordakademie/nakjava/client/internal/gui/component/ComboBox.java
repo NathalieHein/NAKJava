@@ -21,9 +21,6 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder {
 	private Map<String, SelectAction> actions;
 
 	public ComboBox(final Class<? extends SelectAction> selectAction) {
-		setEnabled(false);
-		ActionContextDelegator.getInstance().registerActionContextHolder(this);
-		actions = new HashMap<String, SelectAction>();
 		selector = new ActionContextSelector() {
 
 			@Override
@@ -45,6 +42,9 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder {
 				}
 			}
 		});
+		setEnabled(false);
+		actions = new HashMap<String, SelectAction>();
+		ActionContextDelegator.getInstance().registerActionContextHolder(this);
 	}
 
 	@Override

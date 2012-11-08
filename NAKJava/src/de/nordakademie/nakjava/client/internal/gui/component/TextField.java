@@ -29,7 +29,6 @@ public class TextField extends JTextField implements ActionContextHolder {
 	private long currentBatch = Long.MIN_VALUE;
 
 	public TextField(Class<? extends KeyAction> desiredAction) {
-		ActionContextDelegator.getInstance().registerActionContextHolder(this);
 		this.desiredAction = desiredAction;
 		this.setEditable(false);
 		setInputMap(WHEN_IN_FOCUSED_WINDOW, null);
@@ -42,6 +41,7 @@ public class TextField extends JTextField implements ActionContextHolder {
 		actionMap = new ActionMap();
 		setActionMap(actionMap);
 		this.setPreferredSize(new Dimension(100, 25));
+		ActionContextDelegator.getInstance().registerActionContextHolder(this);
 	}
 
 	@Override
@@ -60,8 +60,8 @@ public class TextField extends JTextField implements ActionContextHolder {
 			return;
 		}
 
-		inputMap.put(KeyStroke.getKeyStroke(action.getKey(), 0),
-				action.getKey());
+		inputMap.put(KeyStroke.getKeyStroke(action.getKey(), 0), action
+				.getKey());
 		actionMap.put(action.getKey(), new ActionAdapter(action));
 		setEditable(true);
 	}

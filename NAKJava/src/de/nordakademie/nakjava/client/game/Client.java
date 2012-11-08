@@ -27,8 +27,9 @@ public class Client extends AbstractGUIClient {
 		switch (state) {
 		case LOGIN:
 			// TODO Loginname needs to be set to panel
-			LoginPanel panel = (LoginPanel) frame.getContentPane()
+			LoginPanel panel = (LoginPanel) getFrame().getContentPane()
 					.getComponents()[0];
+			panel.setName(model.getTargetToName().get(Target.SELF));
 			break;
 
 		default:
@@ -43,8 +44,7 @@ public class Client extends AbstractGUIClient {
 			updateFrame(new Runnable() {
 				@Override
 				public void run() {
-					frame.add(new LoginPanel());
-					frame.setSize(100, 50);
+					getFrame().add(new LoginPanel());
 				}
 			});
 			break;
