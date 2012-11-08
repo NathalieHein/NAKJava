@@ -44,7 +44,7 @@ public class Client extends AbstractGUIClient {
 			updateFrame(new Runnable() {
 				@Override
 				public void run() {
-					getFrame().add(new LoginPanel());
+					getFrame().getContentPane().add(new LoginPanel());
 				}
 			});
 			break;

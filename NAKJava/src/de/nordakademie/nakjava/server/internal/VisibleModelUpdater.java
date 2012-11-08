@@ -44,6 +44,7 @@ public class VisibleModelUpdater {
 			targetToState.put(Target.OPPONENT, opponent.getState());
 		}
 		playerModel.setTargetToState(targetToState);
+		playerModel.setTargetToName(targetToName);
 	}
 
 	public static void update(long sessionId) {
