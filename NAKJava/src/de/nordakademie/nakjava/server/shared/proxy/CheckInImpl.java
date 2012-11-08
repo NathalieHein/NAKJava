@@ -12,6 +12,8 @@ import de.nordakademie.nakjava.client.shared.PlayerStateListener;
 import de.nordakademie.nakjava.gamelogic.cards.impl.CardGenerator;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifacts;
 import de.nordakademie.nakjava.server.internal.Player;
+import de.nordakademie.nakjava.server.shared.proxy.actions.InitAction;
+import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public class CheckInImpl extends UnicastRemoteObject implements CheckIn {
 
@@ -23,8 +25,10 @@ public class CheckInImpl extends UnicastRemoteObject implements CheckIn {
 	@Override
 	public void register(PlayerControlListener controlListener,
 			PlayerStateListener stateListener) throws RemoteException {
-		new Player(controlListener, stateListener);
-
+		Player player = new Player(controlListener, stateListener);
+		// TODO this is not fine yet
+		ActionContext initAction = new InitAction(player);
+		initAction.perform();
 	}
 
 	public static void main(String[] args) {

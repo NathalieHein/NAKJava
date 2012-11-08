@@ -7,6 +7,7 @@ import java.util.Map;
 
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
+import de.nordakademie.nakjava.server.internal.model.LoginSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.StateSpecificModel;
 
 public class PlayerState {
@@ -22,7 +23,8 @@ public class PlayerState {
 	public PlayerState(List<? extends Artifact> initialArtifacts) {
 		this.artifacts = initialArtifacts;
 		this.cards = new CardSet();
-		state = State.STOP;
+		state = State.LOGIN;
+		stateSpecificModel = new LoginSpecificModel();
 	}
 
 	public PlayerState(PlayerState playerState) {

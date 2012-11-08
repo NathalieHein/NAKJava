@@ -1,6 +1,5 @@
 package de.nordakademie.nakjava.server.internal;
 
-import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -22,24 +21,25 @@ public class ActionBroker {
 	}
 
 	// TODO comment missing
-	public Session verify(ActionAbstractImpl serverAction) {
+	public boolean verify(ActionAbstractImpl serverAction) {
 		lock.lock();
-		Session mod = null;
-		Map<Long, Session> sessions = Sessions.getInstance().getSessionMap();
-		if (sessions.containsKey(serverAction.getSessionNr())) {
-			if (sessions.get(serverAction.getSessionNr()).verify(serverAction)) {
-				mod = sessions.get(serverAction.getSessionNr());
+		// TODO not nice -> maybe InitAction as ServerAction + validation via
+		// instanceof
+		if (serverAction.getSessionNr() == 0) {
+			lock.unlock();
+			return true;
+		}
+		Session session = Sessions.getInstance().getSession(
+				serverAction.getSessionNr());
+		if (session != null) {
+			if (session.verify(serverAction)) {
+				lock.unlock();
+				return true;
 			}
 		}
 
-		// TODO
-		/*
-		 * for (Player player : Player.getPlayers()) { if
-		 * (player.getState().getActions().contains(serverAction)) {
-		 * Sessions.getInstance().setCurrentPlayer(player); return true; } }
-		 */
 		lock.unlock();
-		return mod;
+		return false;
 	}
 
 	public void commit(ActionAbstractImpl serverAction) {
@@ -48,8 +48,7 @@ public class ActionBroker {
 		lock.lock();
 		// TODO kann hier in der Zwischenzeit die Session gel�scht worden sein?
 		// Wenn ja, nochmal auf null �berpr�fen
-		Sessions.getInstance().getSessionMap().get(serverAction.getSessionNr())
-				.commit();
+		Sessions.getInstance().getSession(serverAction.getSessionNr()).commit();
 		lock.unlock();
 	}
 

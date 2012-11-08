@@ -3,12 +3,9 @@ package de.nordakademie.nakjava.server.shared.serial;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
-import de.nordakademie.nakjava.server.internal.Batch;
-import de.nordakademie.nakjava.server.shared.proxy.actions.InitAction;
 
 public class PlayerState implements Serializable {
 	private PlayerModel model;
@@ -49,28 +46,6 @@ public class PlayerState implements Serializable {
 			}
 		}
 		dirty = false;
-	}
-
-	public void initialize(long sessionId) {
-		actions = new LinkedList<>();
-		InitAction initAction = null;
-
-		try {
-			// TODO this is not fine yet
-			initAction = new InitAction(Batch.increaseAndGetBatchNr(),
-					sessionId);
-			actions.add(initAction);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		try {
-			initAction.perform();
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 }

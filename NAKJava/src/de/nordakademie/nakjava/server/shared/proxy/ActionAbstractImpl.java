@@ -10,16 +10,18 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import de.nordakademie.nakjava.server.internal.ActionBroker;
 import de.nordakademie.nakjava.server.internal.ActionRuleset;
-import de.nordakademie.nakjava.server.internal.Batch;
 import de.nordakademie.nakjava.server.internal.Session;
+import de.nordakademie.nakjava.server.internal.Sessions;
 import de.nordakademie.nakjava.server.internal.VisibleModelUpdater;
 
 public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 		ServerAction {
 
-	protected ActionAbstractImpl(long sessionNr) throws RemoteException {
+	// TODO THIS is not possible because RemoteObject needs constructor without
+	// parameters, otherwise RemoteException
+	protected ActionAbstractImpl(long sessionId) throws RemoteException {
 		super();
-		this.sessionNr = sessionNr;
+		this.sessionId = sessionId;
 	}
 
 	// TODO implement shutDown method after use? If not needed than simply
@@ -30,26 +32,27 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 	private Lock lock = new ReentrantLock();
 	private Condition waitCondition;
 
-	private long sessionNr;
+	private long sessionId;
 
 	@Override
 	public void perform() throws RemoteException {
-		final Session session = ActionBroker.getInstance().verify(this);
-		if (session != null) {
+		if (ActionBroker.getInstance().verify(this)) {
+			Session session = Sessions.getInstance().getSession(sessionId);
 			performImpl(session);
-			final long batchNr = Batch.increaseAndGetBatchNr();
+			session = Sessions.getInstance().getSession(sessionId);
+			session.getBatch().increaseBatchNr();
 			threadPool.execute(new Runnable() {
 
 				@Override
 				public void run() {
-					ActionRuleset.update(session, batchNr);
+					ActionRuleset.update(sessionId);
 					finishThread();
 				}
 			});
 			threadPool.execute(new Runnable() {
 				@Override
 				public void run() {
-					VisibleModelUpdater.update(session);
+					VisibleModelUpdater.update(sessionId);
 					finishThread();
 				}
 			});
@@ -84,11 +87,11 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 	protected abstract void performImpl(Session model);
 
 	public long getSessionNr() {
-		return sessionNr;
+		return sessionId;
 	}
 
 	public void setSessionNr(long sessionNr) {
-		this.sessionNr = sessionNr;
+		this.sessionId = sessionNr;
 	}
 
 }

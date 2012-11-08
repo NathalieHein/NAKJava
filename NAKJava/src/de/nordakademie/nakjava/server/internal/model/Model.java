@@ -13,6 +13,17 @@ public class Model {
 	private PlayerState opponent;
 	private SimulationModel simulationModel;
 
+	public Model(PlayerState playerState) {
+		self = playerState;
+	}
+
+	public void addPlayerState(PlayerState playerState) {
+		if (self != null) {
+			opponent = self;
+		}
+		self = playerState;
+	}
+
 	public WinStrategy getStrategy() {
 		return strategy;
 	}

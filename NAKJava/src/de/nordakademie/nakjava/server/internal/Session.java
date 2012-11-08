@@ -1,5 +1,6 @@
 package de.nordakademie.nakjava.server.internal;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -7,7 +8,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
-import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
+import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
 public class Session {
@@ -16,25 +17,29 @@ public class Session {
 	private Map<Player, PlayerState> playerToPlayerState = new HashMap<>();
 	private Model model;
 	private Player actionInvoker;
-	private long sessionId;
+	private Batch batch;
 
 	private Lock lock = new ReentrantLock(true);
 
 	public void commit() {
-		for (Player player : getIteratorOfPlayers()) {
-			if (!modeUnique || player == actionInvoker) {
-				player.triggerChangeEvent();
-			}
+		for (Player player : getSetOfPlayers()) {
+			// TODO dirtyBits to be set correctly
+			// if (!modeUnique || player == actionInvoker) {
+			player.triggerChangeEvent();
+			// }
 		}
 		lock.unlock();
 	}
 
 	public Session(Player player) {
-		players.add(player);
-		// TODO state not to be set here!!!
-		player.getGamelogicPlayer().setState(State.NEXT);
+
+		actionInvoker = player;
+		batch = new Batch();
+		// TODO where to get initial artifacts
+		PlayerState playerState = new PlayerState(new ArrayList<>());
+		model = new Model(playerState);
+		playerToPlayerState.put(player, playerState);
 		furtherAllowedNumberOfPlayers--;
-		// TODO set of currentPlayer necessary??
 	}
 
 	public boolean isActionInvokerCurrentPlayer() {
@@ -42,7 +47,7 @@ public class Session {
 	}
 
 	public boolean verify(ServerAction serverAction) {
-		for (Player player : players) {
+		for (Player player : getSetOfPlayers()) {
 			if (player.getState().getActions().contains(serverAction)) {
 				// TODO works because commit(), that unlocks the lock is called
 				// from a single-threaded context (ActionBroker->lock)
@@ -63,11 +68,13 @@ public class Session {
 		return false;
 	}
 
-	public Session addPlayer(long sessionId, Player player) {
+	public Session addPlayer(Player player) {
 		if (furtherAllowedNumberOfPlayers > 0) {
-			playerToPlayerState.put(player, null);
+			actionInvoker = player;
+			PlayerState playerState = new PlayerState(new ArrayList<>());
+			playerToPlayerState.put(player, playerState);
+			model.addPlayerState(playerState);
 			furtherAllowedNumberOfPlayers--;
-			this.sessionId = sessionId;
 			// TODO questionable whether to set modeUnique or do it with an
 			// action (+create a playercontrol message??)
 			return this;
@@ -75,12 +82,17 @@ public class Session {
 		return new Session(player);
 	}
 
-	public Set<Player> getSetOfPlayers() {
-		return playerToPlayerState.keySet();
+	public Player getOneOtherPlayer(Player player) {
+		for (Player otherPlayer : playerToPlayerState.keySet()) {
+			if (player != otherPlayer) {
+				return otherPlayer;
+			}
+		}
+		return null;
 	}
 
-	public Map<Player, PlayerState> getPlayerToStateMap() {
-		return playerToPlayerState;
+	public PlayerState getPlayerStateForPlayer(Player player) {
+		return playerToPlayerState.get(player);
 	}
 
 	public boolean isStillRoom() {
@@ -95,16 +107,16 @@ public class Session {
 		this.actionInvoker = actionInvoker;
 	}
 
-	public long getSessionId() {
-		return sessionId;
-	}
-
-	public void setSessionId(int sessionId) {
-		this.sessionId = sessionId;
-	}
-
 	public Model getModel() {
 		return model;
+	}
+
+	public Batch getBatch() {
+		return batch;
+	}
+
+	public Set<Player> getSetOfPlayers() {
+		return playerToPlayerState.keySet();
 	}
 
 }

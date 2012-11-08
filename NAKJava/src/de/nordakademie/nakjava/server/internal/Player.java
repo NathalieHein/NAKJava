@@ -14,7 +14,7 @@ public class Player {
 	private PlayerState state;
 	private PlayerControl control;
 	// TODO name and savedDecks should go into another entity
-	private String name;
+	private String name = "";
 	// TODO savedDecks include StandardDeck
 	private Map<String, CardSet> savedDecks;
 
@@ -27,9 +27,6 @@ public class Player {
 			e.printStackTrace();
 		}
 		state = new PlayerState(stateListener);
-		long sessionId = Sessions.getInstance().addPlayer(this);
-		state.initialize(sessionId);
-
 	}
 
 	public PlayerState getState() {

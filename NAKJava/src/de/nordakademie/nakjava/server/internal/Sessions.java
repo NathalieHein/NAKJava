@@ -31,7 +31,7 @@ public class Sessions {
 			// this check is in this class because Model does not know that
 			// there is a session context
 			if (session.isStillRoom()) {
-				session.addPlayer(nextSessionId, player);
+				session.addPlayer(player);
 				return nextSessionId;
 			}
 		}
@@ -40,7 +40,7 @@ public class Sessions {
 		return nextSessionId;
 	}
 
-	public Map<Long, Session> getSessionMap() {
-		return sessions;
+	public Session getSession(long sessionId) {
+		return sessions.get(sessionId);
 	}
 }

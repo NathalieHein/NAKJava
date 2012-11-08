@@ -1,6 +1,5 @@
 package de.nordakademie.nakjava.server.internal;
 
-import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.PlayerModel;
 
@@ -12,23 +11,16 @@ import de.nordakademie.nakjava.server.shared.serial.PlayerModel;
  * 
  */
 public class Batch {
-	private static long batch = 0;
+	private long batch = 0;
 
-	/**
-	 * Does not need to be synchronized because it is called from a single
-	 * threaded context in {@link ActionAbstractImpl}
-	 * 
-	 * --> this is not true anymore TODO ausrechnen Überlauf
-	 */
+	// TODO ausrechnen Überlauf
 
-	/*
-	 * public static void increaseBatchNr() { batch++; }
-	 * 
-	 * public static long getCurrentBatchNr() { return batch; }
-	 */
-
-	public synchronized static long increaseAndGetBatchNr() {
+	public void increaseBatchNr() {
 		batch++;
+	}
+
+	public long getCurrentBatchNr() {
 		return batch;
 	}
+
 }
