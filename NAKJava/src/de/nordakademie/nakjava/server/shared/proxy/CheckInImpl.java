@@ -11,7 +11,6 @@ import de.nordakademie.nakjava.client.shared.PlayerControlListener;
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
 import de.nordakademie.nakjava.server.internal.Player;
 import de.nordakademie.nakjava.server.shared.proxy.actions.InitAction;
-import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class CheckInImpl extends UnicastRemoteObject implements CheckIn {
@@ -26,7 +25,7 @@ public class CheckInImpl extends UnicastRemoteObject implements CheckIn {
 			PlayerStateListener stateListener) throws RemoteException {
 		Player player = new Player(controlListener, stateListener);
 		// TODO this is not fine yet
-		ActionContext initAction = new InitAction(player);
+		ServerAction initAction = new InitAction(player);
 		initAction.perform();
 	}
 

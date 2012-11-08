@@ -31,6 +31,15 @@ public class Session {
 		lock.unlock();
 	}
 
+	public void commitWithOutLock() {
+		for (Player player : getSetOfPlayers()) {
+			// TODO dirtyBits to be set correctly
+			// if (!modeUnique || player == actionInvoker) {
+			player.triggerChangeEvent();
+			// }
+		}
+	}
+
 	public Session(Player player) {
 
 		actionInvoker = player;
