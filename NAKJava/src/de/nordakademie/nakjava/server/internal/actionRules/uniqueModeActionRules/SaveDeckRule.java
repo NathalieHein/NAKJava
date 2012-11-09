@@ -5,8 +5,6 @@ import java.util.List;
 
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.Player;
-import de.nordakademie.nakjava.server.internal.Session;
-import de.nordakademie.nakjava.server.internal.Sessions;
 import de.nordakademie.nakjava.server.internal.actionRules.NonSimulationStateRule;
 import de.nordakademie.nakjava.server.internal.model.EditDeckSpecificModel;
 import de.nordakademie.nakjava.server.shared.proxy.actions.editdeck.SaveDeckAction;
@@ -17,17 +15,14 @@ public class SaveDeckRule extends NonSimulationStateRule {
 	@Override
 	public List<ActionContext> applyRule(long sessionId, Player player) {
 		List<ActionContext> actions = new ArrayList<>();
-		Session session = Sessions.getInstance().getSession(sessionId);
-		long batch = session.getBatch().getCurrentBatchNr();
-		actions.add(new SaveDeckAction(batch, sessionId));
+		actions.add(new SaveDeckAction(getBatch(sessionId), sessionId));
 		return actions;
 	}
 
 	@Override
-	protected boolean isRuleApplicableImpl(Session session, Player player) {
-		EditDeckSpecificModel model = (EditDeckSpecificModel) session
-				.getPlayerStateForPlayer(player).getStateSpecificModel();
-		String currentPartOfDeckName = model.getCurrentPartOfDeckName();
+	protected boolean isRuleApplicableImpl(long sessionId, Player player) {
+		String currentPartOfDeckName = ((EditDeckSpecificModel) getStateSpecificModel(
+				sessionId, player)).getCurrentPartOfDeckName();
 		return currentPartOfDeckName != ""
 				&& currentPartOfDeckName != "StandardDeck";
 	}

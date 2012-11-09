@@ -16,7 +16,7 @@ public class AdjustCardHandRule extends AlternatingStateRule {
 	public List<ActionContext> applyRule(long sessionId, Player player) {
 		List<ActionContext> actions = new ArrayList<>();
 		Session session = Sessions.getInstance().getSession(sessionId);
-		long batch = session.getBatch().getCurrentBatchNr();
+		long batch = getBatch(sessionId);
 		for (String cardName : session.getPlayerStateForPlayer(player)
 				.getCards().getCardsOnHand()) {
 			actions.add(new WithdrawCardAction(cardName, batch, sessionId));

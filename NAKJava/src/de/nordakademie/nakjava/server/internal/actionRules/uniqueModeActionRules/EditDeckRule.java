@@ -5,8 +5,6 @@ import java.util.List;
 
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.Player;
-import de.nordakademie.nakjava.server.internal.Session;
-import de.nordakademie.nakjava.server.internal.Sessions;
 import de.nordakademie.nakjava.server.internal.actionRules.Alphabet;
 import de.nordakademie.nakjava.server.internal.actionRules.NonSimulationStateRule;
 import de.nordakademie.nakjava.server.internal.model.EditDeckSpecificModel;
@@ -21,10 +19,9 @@ public class EditDeckRule extends NonSimulationStateRule {
 	@Override
 	public List<ActionContext> applyRule(long sessionId, Player player) {
 		List<ActionContext> actions = new ArrayList<>();
-		Session session = Sessions.getInstance().getSession(sessionId);
-		EditDeckSpecificModel model = (EditDeckSpecificModel) session
-				.getPlayerStateForPlayer(player).getStateSpecificModel();
-		long batch = session.getBatch().getCurrentBatchNr();
+		EditDeckSpecificModel model = (EditDeckSpecificModel) getStateSpecificModel(
+				sessionId, player);
+		long batch = getBatch(sessionId);
 		for (String card : model.getChosenCards().keySet()) {
 			actions.add(new SelectCardForDeckAction(card, batch, sessionId));
 		}

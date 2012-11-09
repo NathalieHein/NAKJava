@@ -7,9 +7,15 @@ public class Alphabet {
 			'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
 			'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G',
 			'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-			'U', 'V', 'W', 'X', 'Y', 'Z', '\n', '\b' };
+			'U', 'V', 'W', 'X', 'Y', 'Z' };
+
+	private static final char[] notAtTheBeginningLetters = { '\b', '\n' };
 
 	public static char[] getLetters() {
 		return letters;
+	}
+
+	public static char[] getNotAtTheBeginningLetters() {
+		return notAtTheBeginningLetters;
 	}
 }

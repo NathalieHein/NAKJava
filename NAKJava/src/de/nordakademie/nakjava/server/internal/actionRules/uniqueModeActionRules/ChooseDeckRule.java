@@ -5,7 +5,6 @@ import java.util.List;
 
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.Player;
-import de.nordakademie.nakjava.server.internal.Sessions;
 import de.nordakademie.nakjava.server.internal.actionRules.NonSimulationStateRule;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.CreateNewDeckAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.EditDeckAction;
@@ -17,8 +16,7 @@ public class ChooseDeckRule extends NonSimulationStateRule {
 	@Override
 	public List<ActionContext> applyRule(long sessionId, Player player) {
 		List<ActionContext> actions = new ArrayList<>();
-		long batch = Sessions.getInstance().getSession(sessionId).getBatch()
-				.getCurrentBatchNr();
+		long batch = getBatch(sessionId);
 		for (String savedDeckName : player.getSavedDecks().keySet()) {
 			actions.add(new EditDeckAction(savedDeckName, batch, sessionId));
 			actions.add(new SelectDeckAction(savedDeckName, batch, sessionId));
