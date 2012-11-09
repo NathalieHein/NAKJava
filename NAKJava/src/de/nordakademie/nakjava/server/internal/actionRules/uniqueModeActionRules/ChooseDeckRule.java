@@ -23,6 +23,7 @@ public class ChooseDeckRule extends NonSimulationStateRule {
 			actions.add(new EditDeckAction(savedDeckName, batch, sessionId));
 			actions.add(new SelectDeckAction(savedDeckName, batch, sessionId));
 		}
+		actions.add(new SelectDeckAction("StandardDeck", batch, sessionId));
 		actions.add(new CreateNewDeckAction(batch, sessionId));
 		return actions;
 	}

@@ -1,16 +1,17 @@
-package de.nordakademie.nakjava.server.shared.proxy.actions.editdeck;
+package de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame;
 
 import java.rmi.RemoteException;
 
 import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
-import de.nordakademie.nakjava.server.shared.proxy.actions.SelectAction;
+import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
-public class DeselectCardForDeckAction extends SelectAction {
+public class FinishConfiguringAction extends ActionContext {
 
-	public DeselectCardForDeckAction(String value, long batch, long sessionNr) {
-		super(value, batch, sessionNr);
+	protected FinishConfiguringAction(long batch, long sessionNr) {
+		super(batch, sessionNr);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override

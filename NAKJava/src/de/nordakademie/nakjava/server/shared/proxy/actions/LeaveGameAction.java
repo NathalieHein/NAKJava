@@ -10,7 +10,7 @@ import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public class LeaveGameAction extends ActionContext {
 
-	protected LeaveGameAction(long batch, long sessionNr) {
+	public LeaveGameAction(long batch, long sessionNr) {
 		super(batch, sessionNr);
 	}
 

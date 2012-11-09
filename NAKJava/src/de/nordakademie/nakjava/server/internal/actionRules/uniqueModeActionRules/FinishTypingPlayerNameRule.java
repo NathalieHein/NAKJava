@@ -18,7 +18,14 @@ public class FinishTypingPlayerNameRule extends NonSimulationStateRule {
 	protected boolean isRuleApplicableImpl(Session session, Player player) {
 		LoginSpecificModel model = (LoginSpecificModel) session
 				.getPlayerStateForPlayer(player).getStateSpecificModel();
-		return model.getCurrentPartOfName() != null;
+		for (Player differentPlayer : session.getSetOfPlayers()) {
+			if (differentPlayer != player
+					&& differentPlayer.getName() == model
+							.getCurrentPartOfName()) {
+				return false;
+			}
+		}
+		return model.getCurrentPartOfName() != "";
 	}
 
 	@Override
