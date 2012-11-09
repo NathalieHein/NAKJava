@@ -6,6 +6,7 @@ import java.util.Map;
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
+import de.nordakademie.nakjava.server.internal.model.LoginSpecificModel;
 import de.nordakademie.nakjava.server.shared.serial.PlayerModel;
 
 public class VisibleModelUpdater {
@@ -35,7 +36,8 @@ public class VisibleModelUpdater {
 		 * playerModel.setCardHand(cards);
 		 */
 		Map<Target, String> targetToName = new HashMap<>();
-		targetToName.put(Target.SELF, player.getName());
+		targetToName.put(Target.SELF, ((LoginSpecificModel) self
+				.getStateSpecificModel()).getCurrentPartOfName());
 		Map<Target, State> targetToState = new HashMap<>();
 		targetToState.put(Target.SELF, self.getState());
 		if (session.getOneOtherPlayer(player) != null) {

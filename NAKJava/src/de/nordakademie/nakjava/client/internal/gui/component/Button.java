@@ -16,12 +16,14 @@ public class Button extends JButton implements ActionListener,
 
 	private ActionContext actionContext;
 	private ActionContextSelector selector;
+	private long currentBatch;
 
 	private boolean initialized = false;
 
 	public Button(String text, ActionContextSelector selector,
 			boolean autoRegister) {
 		super(text);
+		currentBatch = Long.MIN_VALUE;
 		this.selector = selector;
 
 		if (actionContext == null) {
@@ -90,12 +92,13 @@ public class Button extends JButton implements ActionListener,
 	@Override
 	public void setActionContextSelector(ActionContextSelector selector) {
 		this.selector = selector;
-
 	}
 
 	@Override
 	public void revokeActionContext(long batch) {
-		removeActionContext();
+		if (batch >= currentBatch) {
+			removeActionContext();
+		}
 	}
 
 	@Override

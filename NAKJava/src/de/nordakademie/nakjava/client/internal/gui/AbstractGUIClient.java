@@ -1,5 +1,6 @@
 package de.nordakademie.nakjava.client.internal.gui;
 
+import java.awt.Component;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
@@ -37,6 +38,7 @@ public abstract class AbstractGUIClient extends Client {
 	@Override
 	protected void preCheckin() {
 		JFrame frame = new JFrame();
+		frame.setResizable(false);
 		delegator = ActionContextDelegator.getInstance();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -88,8 +90,11 @@ public abstract class AbstractGUIClient extends Client {
 			@Override
 			public void run() {
 				lock.lock();
-				getFrame().removeAll();
+				getFrame().getContentPane().removeAll();
 				runnable.run();
+				for (Component comp : getFrame().getComponents()) {
+					comp.revalidate();
+				}
 				getFrame().pack();
 				condition.signal();
 				lock.unlock();

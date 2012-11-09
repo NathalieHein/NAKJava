@@ -42,6 +42,7 @@ public class TextField extends JTextField implements ActionContextHolder {
 		setActionMap(actionMap);
 		this.setPreferredSize(new Dimension(100, 25));
 		ActionContextDelegator.getInstance().registerActionContextHolder(this);
+		setHighlighter(null);
 	}
 
 	@Override
@@ -60,8 +61,7 @@ public class TextField extends JTextField implements ActionContextHolder {
 			return;
 		}
 
-		inputMap.put(KeyStroke.getKeyStroke(action.getKey(), 0), action
-				.getKey());
+		inputMap.put(KeyStroke.getKeyStroke(action.getKey()), action.getKey());
 		actionMap.put(action.getKey(), new ActionAdapter(action));
 		setEditable(true);
 	}
@@ -86,11 +86,9 @@ public class TextField extends JTextField implements ActionContextHolder {
 
 	@Override
 	public void revokeActionContext(long batch) {
-		if (currentBatch == batch) {
-			actionMap.clear();
-			inputMap.clear();
+		if (currentBatch <= batch) {
+			noActionContextAvailable();
 		}
-
 	}
 
 	@Override
@@ -142,6 +140,12 @@ public class TextField extends JTextField implements ActionContextHolder {
 		public void setEnabled(boolean b) {
 		}
 
+	}
+
+	@Override
+	public void setText(String string) {
+		super.setText(string);
+		setCaretPosition(string.length());
 	}
 
 	public static void main(String[] args) {

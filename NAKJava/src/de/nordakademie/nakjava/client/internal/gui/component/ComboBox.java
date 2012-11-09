@@ -88,10 +88,8 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder {
 
 	@Override
 	public void revokeActionContext(long batch) {
-		if (batch == currentBatch) {
-			removeAllItems();
-			actions.clear();
-			setEnabled(false);
+		if (batch >= currentBatch) {
+			noActionContextAvailable();
 		}
 	}
 

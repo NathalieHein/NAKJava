@@ -29,6 +29,7 @@ public class LoginPanel extends JPanel {
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(new LoginPanel());
+		System.out.println(frame.getComponents().length);
 		frame.pack();
 		frame.setVisible(true);
 	}

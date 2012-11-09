@@ -15,9 +15,11 @@ public class CheckBox extends JCheckBox implements ActionContextHolder {
 
 	private ActionContextSelector selector;
 	private ActionContext context;
+	private long currentBatch;
 
 	public CheckBox(ActionContextSelector selector) {
 		super();
+		currentBatch = Long.MIN_VALUE;
 		this.selector = selector;
 		this.setEnabled(false);
 
@@ -39,6 +41,14 @@ public class CheckBox extends JCheckBox implements ActionContextHolder {
 
 	@Override
 	public void setActionContext(ActionContext actionContext) {
+		if (currentBatch < actionContext.getBatch()) {
+			currentBatch = actionContext.getBatch();
+		}
+
+		if (currentBatch > actionContext.getBatch()) {
+			return;
+		}
+
 		this.context = actionContext;
 		this.setEnabled(true);
 
@@ -61,8 +71,10 @@ public class CheckBox extends JCheckBox implements ActionContextHolder {
 
 	@Override
 	public void revokeActionContext(long batch) {
-		this.selector = null;
-		this.setEnabled(false);
+		if (batch >= currentBatch) {
+			this.setEnabled(false);
+		}
+
 	}
 
 	@Override
