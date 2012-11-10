@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
@@ -90,6 +91,10 @@ public class PlayerState {
 
 	public CardSet getCards() {
 		return cards;
+	}
+
+	public void setCards(Set<String> cardNames) {
+		cards = new CardSet(cardNames);
 	}
 
 	public State getState() {

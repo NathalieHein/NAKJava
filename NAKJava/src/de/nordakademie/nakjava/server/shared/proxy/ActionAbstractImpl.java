@@ -84,7 +84,7 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 		}
 	}
 
-	protected abstract void performImpl(Session model);
+	protected abstract void performImpl(Session session);
 
 	public long getSessionNr() {
 		return sessionId;

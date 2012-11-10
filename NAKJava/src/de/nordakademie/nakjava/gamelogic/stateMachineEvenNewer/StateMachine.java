@@ -8,6 +8,7 @@ import java.util.Map;
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.AdjustCardhand;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.ConfigureGameAction;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.Postaction;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.Preaction;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.ReadyToStartAction;
@@ -24,6 +25,7 @@ public class StateMachine {
 	// otherwise needs to be an object and needs to pass around reference to
 	// itself
 	private StateMachine() {
+		stateToAction = new HashMap<>();
 		initialize();
 	}
 
@@ -35,6 +37,7 @@ public class StateMachine {
 	}
 
 	private void initialize() {
+		stateToAction.put(State.CONFIGUREGAME, new ConfigureGameAction());
 		stateToAction.put(State.PREACTIONSTATE, new Preaction());
 		stateToAction.put(State.POSTACTIONSTATE, new Postaction());
 		stateToAction.put(State.ADJUSTCARDHANDSTATE, new AdjustCardhand());
@@ -47,6 +50,13 @@ public class StateMachine {
 		model.getSelf().setState(nextState);
 		if (stateToAction.containsKey(nextState)) {
 			stateToAction.get(nextState).perform(model);
+		}
+	}
+
+	public void runCurrentState(Model model) {
+		State state = model.getSelf().getState();
+		if (stateToAction.containsKey(state)) {
+			stateToAction.get(state).perform(model);
 		}
 	}
 

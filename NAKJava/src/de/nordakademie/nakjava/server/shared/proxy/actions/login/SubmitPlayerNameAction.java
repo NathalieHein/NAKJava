@@ -30,8 +30,6 @@ public class SubmitPlayerNameAction extends ActionContext {
 						.getStateSpecificModel();
 				session.getActionInvoker()
 						.setName(model.getCurrentPartOfName());
-				self.setStateSpecificModel(null);
-				// TODO getPlayersDecks
 				StateMachine.getInstance().run(session.getModel());
 			}
 		};

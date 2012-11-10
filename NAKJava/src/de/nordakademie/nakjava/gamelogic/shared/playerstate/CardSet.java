@@ -3,6 +3,7 @@ package de.nordakademie.nakjava.gamelogic.shared.playerstate;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class CardSet implements Serializable {
 
@@ -20,7 +21,7 @@ public class CardSet implements Serializable {
 
 	}
 
-	public CardSet(List<String> cards) {
+	public CardSet(Set<String> cards) {
 		deck.addAll(cards);
 	}
 
@@ -28,7 +29,7 @@ public class CardSet implements Serializable {
 		deck.add(card);
 	}
 
-	public void addAllCards(List<String> cards) {
+	public void addAllCards(Set<String> cards) {
 		deck.addAll(cards);
 	}
 

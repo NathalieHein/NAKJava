@@ -9,6 +9,7 @@ import de.nordakademie.nakjava.server.internal.actionRules.NonSimulationStateRul
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.CreateNewDeckAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.EditDeckAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.SelectDeckAction;
+import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.SelectStandardDeckAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public class ChooseDeckRule extends NonSimulationStateRule {
@@ -21,7 +22,8 @@ public class ChooseDeckRule extends NonSimulationStateRule {
 			actions.add(new EditDeckAction(savedDeckName, batch, sessionId));
 			actions.add(new SelectDeckAction(savedDeckName, batch, sessionId));
 		}
-		actions.add(new SelectDeckAction("StandardDeck", batch, sessionId));
+		actions.add(new SelectStandardDeckAction("StandardDeck", batch,
+				sessionId));
 		actions.add(new CreateNewDeckAction(batch, sessionId));
 		return actions;
 	}

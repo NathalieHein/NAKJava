@@ -2,8 +2,11 @@ package de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame;
 
 import java.rmi.RemoteException;
 
+import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.Session;
+import de.nordakademie.nakjava.server.internal.model.EditDeckSpecificModel;
+import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
@@ -20,12 +23,14 @@ public class CreateNewDeckAction extends ActionContext {
 
 			@Override
 			protected void performImpl(Session session) {
-				// TODO add new empty deck
+				Model model = session.getModel();
 				if (!session.isActionInvokerCurrentPlayer()) {
-					session.getModel().changeSelfAndOpponent();
+					model.changeSelfAndOpponent();
 				}
-				session.getModel().getSelf().setState(State.EDITDECK);
-
+				PlayerState self = model.getSelf();
+				self.setState(State.EDITDECK);
+				model.getSelf().setStateSpecificModel(
+						new EditDeckSpecificModel(null));
 			}
 		};
 	}

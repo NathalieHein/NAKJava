@@ -1,6 +1,5 @@
 package de.nordakademie.nakjava.server.internal.model;
 
-
 public class LoginSpecificModel implements StateSpecificModel {
 	private String currentPartOfName = "";
 
@@ -9,7 +8,11 @@ public class LoginSpecificModel implements StateSpecificModel {
 	}
 
 	public void appendPartOfName(char character) {
-		currentPartOfName = currentPartOfName + character;
+		if (character != '\b') {
+			currentPartOfName = currentPartOfName + character;
+		} else {
+			currentPartOfName = currentPartOfName.substring(0,
+					currentPartOfName.length() - 1);
+		}
 	}
-
 }

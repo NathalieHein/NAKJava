@@ -26,10 +26,8 @@ public class WithdrawCardAction extends AbstractCardAction {
 					throw new IllegalStateException(
 							"Card to be discarded is not in cardhand");
 				}
-				if (self.getState() == State.ADJUSTCARDHANDSTATE) {
-					self.setState(State.POSTACTIONSTATE);
-				}
-				StateMachine.getInstance().run(session.getModel());
+				self.setState(State.ADJUSTCARDHANDSTATE);
+				StateMachine.getInstance().runCurrentState(session.getModel());
 
 			}
 		};

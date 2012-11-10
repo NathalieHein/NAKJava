@@ -2,18 +2,17 @@ package de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame;
 
 import java.rmi.RemoteException;
 
+import de.nordakademie.nakjava.gamelogic.cards.impl.CardLibrary;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
-import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.Session;
-import de.nordakademie.nakjava.server.internal.model.EditDeckSpecificModel;
+import de.nordakademie.nakjava.server.internal.model.ConfigureGameSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
-import de.nordakademie.nakjava.server.shared.proxy.actions.SelectAction;
 
-public class EditDeckAction extends SelectAction {
+public class SelectStandardDeckAction extends SelectDeckAction {
 
-	public EditDeckAction(String value, long batch, long sessionNr) {
+	public SelectStandardDeckAction(String value, long batch, long sessionNr) {
 		super(value, batch, sessionNr);
 	}
 
@@ -28,10 +27,10 @@ public class EditDeckAction extends SelectAction {
 					model.changeSelfAndOpponent();
 				}
 				PlayerState self = model.getSelf();
-				self.setState(State.EDITDECK);
-				self.setStateSpecificModel(new EditDeckSpecificModel(session
-						.getActionInvoker().getSavedDecks().get(getValue())));
+				((ConfigureGameSpecificModel) self.getStateSpecificModel())
+						.setChosenDeck(CardLibrary.get().getCards().keySet());
 			}
 		};
 	}
+
 }

@@ -1,9 +1,14 @@
 package de.nordakademie.nakjava.server.shared.proxy.actions.editdeck;
 
 import java.rmi.RemoteException;
+import java.util.HashSet;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
 import de.nordakademie.nakjava.server.internal.Session;
+import de.nordakademie.nakjava.server.internal.model.EditDeckSpecificModel;
+import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
@@ -20,16 +25,23 @@ public class SaveDeckAction extends ActionContext {
 
 			@Override
 			protected void performImpl(Session session) {
-				// TODO save deck accordingly
+				Model model = session.getModel();
 				if (!session.isActionInvokerCurrentPlayer()) {
-					session.getModel().changeSelfAndOpponent();
+					model.changeSelfAndOpponent();
 				}
-				// TODO to return to choosedeck (right now) or shall we assume
-				// that saved
-				// deck was selected as well
+				EditDeckSpecificModel specificModel = (EditDeckSpecificModel) model
+						.getSelf().getStateSpecificModel();
+				Set<String> cards = new HashSet<>();
+				for (Entry<String, Boolean> entry : specificModel
+						.getChosenCards().entrySet()) {
+					if (entry.getValue()) {
+						cards.add(entry.getKey());
+					}
+				}
+				session.getActionInvoker().addDeck(
+						specificModel.getCurrentPartOfDeckName(), cards);
 				StateMachine.getInstance().run(session.getModel());
 			}
 		};
 	}
-
 }

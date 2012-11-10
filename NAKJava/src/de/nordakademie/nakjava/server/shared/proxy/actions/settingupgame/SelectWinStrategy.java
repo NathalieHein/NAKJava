@@ -2,9 +2,10 @@ package de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame;
 
 import java.rmi.RemoteException;
 
-import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
-import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategies;
+import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.server.internal.Session;
+import de.nordakademie.nakjava.server.internal.model.ConfigureGameSpecificModel;
+import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.SelectAction;
@@ -21,13 +22,13 @@ public class SelectWinStrategy extends SelectAction {
 
 			@Override
 			protected void performImpl(Session session) {
-				session.getModel().setStrategy(
-						WinStrategies.getInstance().getStrategyForName(
-								getValue()));
+				Model model = session.getModel();
 				if (!session.isActionInvokerCurrentPlayer()) {
-					session.getModel().changeSelfAndOpponent();
+					model.changeSelfAndOpponent();
 				}
-				StateMachine.getInstance().run(session.getModel());
+				PlayerState self = model.getSelf();
+				((ConfigureGameSpecificModel) self.getStateSpecificModel())
+						.setWinStrategy(getValue());
 			}
 		};
 	}

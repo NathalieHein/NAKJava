@@ -21,7 +21,8 @@ public class DiscardDeckEditAction extends ActionContext {
 
 			@Override
 			protected void performImpl(Session session) {
-				// TODO delete modifications
+				// TODO at the moment: all previously chosen Decks/Strategies
+				// are forgotten
 				if (!session.isActionInvokerCurrentPlayer()) {
 					session.getModel().changeSelfAndOpponent();
 				}
