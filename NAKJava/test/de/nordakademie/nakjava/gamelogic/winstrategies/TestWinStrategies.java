@@ -21,6 +21,7 @@ import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.WinStrategy;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.RoundResult;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategies;
+import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class TestWinStrategies {
 
@@ -28,8 +29,7 @@ public class TestWinStrategies {
 
 	@Before
 	public void setup() {
-		WinStrategies.loadWinStrategies();
-		neutralModel = new EnumMap<>(Target.class);
+		ClasspathScanner.lookupAnnotatedScanners();		neutralModel = new EnumMap<>(Target.class);
 
 		List<Artifact> artifacts = new LinkedList<>();
 		Ziegel ziegel = new Ziegel();

@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.nordakademie.nakjava.gamelogic.cards.impl.AbstractCard;
-import de.nordakademie.nakjava.gamelogic.cards.impl.CardGenerator;
 import de.nordakademie.nakjava.gamelogic.cards.impl.CardLibrary;
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
@@ -23,6 +22,7 @@ import de.nordakademie.nakjava.gamelogic.shared.artifacts.ressources.Monster;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.ressources.Ziegel;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
+import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class CardTest {
 
@@ -64,7 +64,7 @@ public class CardTest {
 
 	@Test
 	public void test() {
-		CardGenerator.generateCards();
+		ClasspathScanner.lookupAnnotatedScanners();
 		CardLibrary library = CardLibrary.get();
 
 		CardInformation information = library.getCardInformation().get(
