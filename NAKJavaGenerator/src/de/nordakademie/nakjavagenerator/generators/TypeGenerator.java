@@ -46,10 +46,9 @@ public class TypeGenerator extends AbstractProcessor {
 						element.getEnclosingElement().asType().toString() + "."
 								+ element.getSimpleName()));
 			}
-		}
 
-		if (roundEnv.processingOver()) {
 			finish();
+
 		}
 
 		// TODO Auto-generated method stub

@@ -13,4 +13,7 @@ public @interface VisibleField {
 	public de.nordakademie.nakjava.gamelogic.cards.impl.Target[] targets();
 
 	public State[] states();
+
+	public Class<? extends Transformator<?, ?>> transformer();
+
 }
