@@ -1,6 +1,8 @@
 package de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies;
 
-public class WinStrategyInformation {
+import java.io.Serializable;
+
+public class WinStrategyInformation implements Serializable {
 	private String name;
 	private String description;
 
