@@ -31,8 +31,8 @@ public class TypeSpecialCharactersForPlayerNameRule extends
 
 	@Override
 	protected boolean isRuleApplicableImpl(long sessionId, Player player) {
-		return ((LoginSpecificModel) getStateSpecificModel(sessionId, player))
-				.getCurrentPartOfName() != "";
+		return !((LoginSpecificModel) getStateSpecificModel(sessionId, player))
+				.getCurrentPartOfName().equals("");
 	}
 
 }

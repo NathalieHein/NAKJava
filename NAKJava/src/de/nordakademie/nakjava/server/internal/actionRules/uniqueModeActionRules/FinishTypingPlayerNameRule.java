@@ -18,11 +18,11 @@ public class FinishTypingPlayerNameRule extends NonSimulationStateRule {
 				sessionId, player)).getCurrentPartOfName();
 		for (Player differentPlayer : getSession(sessionId).getSetOfPlayers()) {
 			if (differentPlayer != player
-					&& differentPlayer.getName() == currentPartOfName) {
+					&& differentPlayer.getName().equals(currentPartOfName)) {
 				return false;
 			}
 		}
-		return currentPartOfName != "";
+		return !currentPartOfName.equals("");
 	}
 
 	@Override

@@ -23,8 +23,8 @@ public class SaveDeckRule extends NonSimulationStateRule {
 	protected boolean isRuleApplicableImpl(long sessionId, Player player) {
 		String currentPartOfDeckName = ((EditDeckSpecificModel) getStateSpecificModel(
 				sessionId, player)).getCurrentPartOfDeckName();
-		return currentPartOfDeckName != ""
-				&& currentPartOfDeckName != "StandardDeck";
+		return !currentPartOfDeckName.equals("")
+				&& !currentPartOfDeckName.equals("StandardDeck");
 	}
 
 	@Override
