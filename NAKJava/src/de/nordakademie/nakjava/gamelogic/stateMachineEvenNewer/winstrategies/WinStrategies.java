@@ -14,14 +14,28 @@ import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class WinStrategies {
 	private Map<String, WinStrategy> strategies;
+	private Map<String, WinStrategyInformation> strategyInformation;
 
 	private static WinStrategies instance;
 
 	private WinStrategies(List<AbstractWinStrategy> strategies) {
-		this.strategies = new HashMap();
+		this.strategies = new HashMap<>();
+		this.strategyInformation = new HashMap<>();
 
 		for (AbstractWinStrategy strategy : strategies) {
-			this.strategies.put(strategy.getClass().getSimpleName(), strategy);
+			String strategyName = strategy.getClass().getSimpleName();
+			this.strategies.put(strategyName, strategy);
+
+			StringBuffer description = new StringBuffer();
+			description.append("Du hast gewonnen wenn:\n");
+			for (WinCheck check : strategy.getChecks()) {
+				description.append("- " + check.getDescription() + "\n");
+			}
+
+			this.strategyInformation.put(strategyName,
+					new WinStrategyInformation(strategyName, description
+							.toString(), strategy.getChecks().toArray(
+							new WinCheck[strategy.getChecks().size()])));
 		}
 	}
 
@@ -31,6 +45,10 @@ public class WinStrategies {
 
 	public WinStrategy getStrategyForName(String name) {
 		return strategies.get(name);
+	}
+
+	public WinStrategyInformation getStrategyInformationForName(String name) {
+		return strategyInformation.get(name);
 	}
 
 	public static WinStrategies getInstance() {
