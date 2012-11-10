@@ -7,11 +7,11 @@ import java.util.Set;
 
 import de.nordakademie.nakjava.gamelogic.cards.impl.CardLibrary;
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
-import de.nordakademie.nakjava.gamelogic.shared.WinStrategyInformation;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategies;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategyInformation;
 import de.nordakademie.nakjava.server.internal.model.ConfigureGameSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.EditDeckSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.LoginSpecificModel;
@@ -72,7 +72,9 @@ public class VisibleModelUpdater {
 			Map<String, WinStrategyInformation> strategyDescription = new HashMap<>();
 			for (String strategyName : WinStrategies.getInstance()
 					.getStrategies()) {
-				strategyDescription.put(strategyName, null);
+				strategyDescription.put(strategyName, WinStrategies
+						.getInstance().getStrategyInformationForName(
+								strategyName));
 			}
 			playerModel
 					.setStateSpecificInfos(new ConfigurationSpecificInformation(

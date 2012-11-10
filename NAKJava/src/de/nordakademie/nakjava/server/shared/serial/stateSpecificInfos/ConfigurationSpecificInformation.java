@@ -2,7 +2,7 @@ package de.nordakademie.nakjava.server.shared.serial.stateSpecificInfos;
 
 import java.util.Map;
 
-import de.nordakademie.nakjava.gamelogic.shared.WinStrategyInformation;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategyInformation;
 
 public class ConfigurationSpecificInformation implements
 		StateSpecificInformation {
