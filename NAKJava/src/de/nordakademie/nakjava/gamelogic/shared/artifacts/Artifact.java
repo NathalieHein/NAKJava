@@ -42,4 +42,5 @@ public abstract class Artifact {
 			this.count = getMinimalValue();
 		}
 	}
+
 }

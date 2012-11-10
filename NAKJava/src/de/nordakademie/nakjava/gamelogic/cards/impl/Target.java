@@ -2,15 +2,21 @@ package de.nordakademie.nakjava.gamelogic.cards.impl;
 
 public enum Target {
 
-	SELF("dich"), OPPONENT("Gegner");
+	SELF("du", "dich"), OPPONENT("dein Gegner", "Gegner");
 
-	private String description;
+	private String nominativDescription;
+	private String dativDescription;
 
-	private Target(String description) {
-		this.description = description;
+	private Target(String nominativDescription, String dativDescription) {
+		this.nominativDescription = nominativDescription;
+		this.dativDescription = dativDescription;
 	}
 
-	public String description() {
-		return description;
+	public String getDativDescription() {
+		return dativDescription;
+	}
+
+	public String getNominativDescription() {
+		return nominativDescription;
 	}
 }

@@ -12,6 +12,7 @@ import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.RoundResult;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinCheck;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.genericRoundCheckers.Comparator;
+import de.nordakademie.nakjava.util.StringUtilities;
 
 public class ArtifactChecker implements WinCheck, Serializable {
 
@@ -111,6 +112,20 @@ public class ArtifactChecker implements WinCheck, Serializable {
 
 	public boolean getOperator() {
 		return and;
+	}
+
+	@Override
+	public String getDescription() {
+
+		List<String> artifacts = new LinkedList<>();
+		for (Class<? extends Artifact> artifactClazz : this.artifacts) {
+			artifacts.add(artifactClazz.getSimpleName());
+		}
+
+		return target.getNominativDescription() + " "
+				+ comparator.getDescription() + " " + count
+				+ (and ? "je " : " ")
+				+ StringUtilities.concatWithDelimiter(artifacts, ", ");
 	}
 
 }

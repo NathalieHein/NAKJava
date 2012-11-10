@@ -14,4 +14,6 @@ public interface WinCheck {
 	 * @return
 	 */
 	public RoundResult check(Map<Target, PlayerState> states);
+
+	public String getDescription();
 }
