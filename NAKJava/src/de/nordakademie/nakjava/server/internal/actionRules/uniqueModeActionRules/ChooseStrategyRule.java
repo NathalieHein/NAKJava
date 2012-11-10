@@ -14,7 +14,7 @@ public class ChooseStrategyRule extends NonSimulationStateRule {
 
 	@Override
 	protected boolean isRuleApplicableImpl(long sessionId, Player player) {
-		return getSession(sessionId).getModel().getStrategy() != null;
+		return getSession(sessionId).getModel().getStrategy() == null;
 	}
 
 	@Override
