@@ -1,4 +1,4 @@
-package test.genericBeans;
+package de.nordakademie.nakjava.server.internal;
 
 import java.util.Map;
 

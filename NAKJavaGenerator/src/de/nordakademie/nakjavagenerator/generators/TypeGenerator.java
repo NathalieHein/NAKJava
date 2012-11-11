@@ -1,6 +1,7 @@
 package de.nordakademie.nakjavagenerator.generators;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +12,7 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -48,22 +50,33 @@ public class TypeGenerator extends AbstractProcessor {
 				String transformatorTypeString = null;
 				List<String> targets = new LinkedList<>();
 
-				for (AnnotationMirror annotationMirrors : element
+				for (AnnotationMirror annotationMirror : element
 						.getAnnotationMirrors()) {
-					for (ExecutableElement valueKey : annotationMirrors
+					for (ExecutableElement valueKey : annotationMirror
 							.getElementValues().keySet()) {
 						if (valueKey.getSimpleName().contentEquals("targets")) {
-							List targetValues = ((List) annotationMirrors
+							List targetValues = ((List) annotationMirror
 									.getElementValues().get(valueKey)
 									.getValue());
 							for (Object target : targetValues) {
-								targets.add(target.toString());
+								AnnotationMirror targetAnnotation = (AnnotationMirror) (((AnnotationValue) target)
+										.getValue());
+								for (ExecutableElement targetAnnotationValue : targetAnnotation
+										.getElementValues().keySet()) {
+									if (targetAnnotationValue.getSimpleName()
+											.contentEquals("target")) {
+										targets.add(targetAnnotation
+												.getElementValues().get(
+														targetAnnotationValue)
+												.toString());
+									}
+								}
 							}
 						}
 
 						if (valueKey.getSimpleName().contentEquals(
 								"transformer")) {
-							TypeElement transformer = (TypeElement) ((DeclaredType) annotationMirrors
+							TypeElement transformer = (TypeElement) ((DeclaredType) annotationMirror
 									.getElementValues().get(valueKey)
 									.getValue()).asElement();
 							for (TypeMirror interfacce : transformer
@@ -113,7 +126,9 @@ public class TypeGenerator extends AbstractProcessor {
 			JavaFileObject file = filer.createSourceFile(
 					"de/nordakademie/nakjava/generated/VisibleModelFields",
 					null);
-			file.openWriter().append(sourceClass.getSourceContent()).close();
+			Writer writer = file.openWriter();
+			writer.write(sourceClass.getSourceContent());
+			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

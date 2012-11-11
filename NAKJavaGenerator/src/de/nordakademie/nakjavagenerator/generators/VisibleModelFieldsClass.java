@@ -14,7 +14,7 @@ public class VisibleModelFieldsClass {
 
 	public VisibleModelFieldsClass() {
 		imports = new HashSet<>();
-		imports.add("test.genericBeans.VisibleModelField");
+		imports.add("de.nordakademie.nakjava.server.internal.VisibleModelField");
 		visibleModelFields = new LinkedList<>();
 	}
 

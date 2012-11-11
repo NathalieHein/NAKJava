@@ -1,5 +1,9 @@
 package de.nordakademie.nakjava.server.internal;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,7 +18,13 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.Win
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategyInformation;
 import de.nordakademie.nakjava.server.internal.model.ConfigureGameSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.EditDeckSpecificModel;
+import de.nordakademie.nakjava.server.internal.model.IdentityTransformator;
+import de.nordakademie.nakjava.server.internal.model.LeaveOutVisibleCheck;
 import de.nordakademie.nakjava.server.internal.model.LoginSpecificModel;
+import de.nordakademie.nakjava.server.internal.model.Model;
+import de.nordakademie.nakjava.server.internal.model.Transformator;
+import de.nordakademie.nakjava.server.internal.model.VisibleField;
+import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 import de.nordakademie.nakjava.server.shared.serial.PlayerModel;
 import de.nordakademie.nakjava.server.shared.serial.stateSpecificInfos.ConfigurationSpecificInformation;
 import de.nordakademie.nakjava.server.shared.serial.stateSpecificInfos.EditDeckSpecificInformation;
@@ -28,11 +38,19 @@ public class VisibleModelUpdater {
 
 	private static <V> void updatePlayerModel(Player player, long sessionId) {
 		// TODO ErrorHandling: how are we doing it?
-		PlayerModel playerModel = player.getState().getModel();
+		PlayerModel currentPlayerTransferModel = player.getState().getModel();
+
 		Session session = Sessions.getInstance().getSession(sessionId);
 		PlayerState self = session.getPlayerStateForPlayer(player);
 		PlayerState opponent = session.getPlayerStateForPlayer(session
 				.getOneOtherPlayer(player));
+		Model global = session.getModel();
+
+		flatScan(global, currentPlayerTransferModel, self.getState());
+		deepScan(self, currentPlayerTransferModel, Target.SELF, self.getState());
+		deepScan(opponent, currentPlayerTransferModel, Target.OPPONENT, self
+				.getState());
+
 		// TODO create something like "ActionRules"
 		// TODO insert StateSpecificInfos
 		// TODO setting of dirtyBit via "ActionRules"
@@ -76,7 +94,7 @@ public class VisibleModelUpdater {
 						.getInstance().getStrategyInformationForName(
 								strategyName));
 			}
-			playerModel
+			currentPlayerTransferModel
 					.setStateSpecificInfos(new ConfigurationSpecificInformation(
 							strategyDescription, configSpecificModel
 									.getWinStrategy(), deckName));
@@ -94,9 +112,10 @@ public class VisibleModelUpdater {
 					}
 				}
 			}
-			playerModel.setStateSpecificInfos(new EditDeckSpecificInformation(
-					chosenCards, editDeckSpecificModel
-							.getCurrentPartOfDeckName()));
+			currentPlayerTransferModel
+					.setStateSpecificInfos(new EditDeckSpecificInformation(
+							chosenCards, editDeckSpecificModel
+									.getCurrentPartOfDeckName()));
 			break;
 		case PLAYCARDSTATE:
 			break;
@@ -115,8 +134,143 @@ public class VisibleModelUpdater {
 			}
 			targetToState.put(Target.OPPONENT, opponent.getState());
 		}
-		playerModel.setTargetToState(targetToState);
-		playerModel.setTargetToName(targetToName);
+		currentPlayerTransferModel.setTargetToState(targetToState);
+		currentPlayerTransferModel.setTargetToName(targetToName);
+	}
+
+	/**
+	 * Scans a passed object for fields, which are annotated with
+	 * {@link VisibleField}. If so, values of these fields are extracted and put
+	 * in the {@link PlayerModel}. Fields which are not explicitly excluded (
+	 * {@link LeaveOutVisibleCheck}) and which are not complex types as arrays
+	 * or lists will also be scanned.
+	 * 
+	 * @param obj
+	 *            Object which fields to scan (also private!)
+	 * @param transfer
+	 *            the values will be added to this transfer object
+	 * @param target
+	 *            only annotations with this target will be considered
+	 * @param state
+	 *            only annotation with this state will be considered
+	 */
+	private static void deepScan(Object obj, PlayerModel transfer,
+			Target target, State state) {
+		if (obj == null) {
+			return;
+		}
+		for (Field field : obj.getClass().getDeclaredFields()) {
+			if (field.isAnnotationPresent(VisibleField.class)) {
+
+				VisibleField annotation = field
+						.getAnnotation(VisibleField.class);
+
+				for (TargetInState tis : annotation.targets()) {
+					if (tis.target() == target
+							&& Arrays.asList(tis.states()).contains(state)) {
+						transfer.putGenericTransferObject(generateName(field,
+								obj, target), extractObject(field, obj,
+								annotation));
+					}
+				}
+
+			} else if (!field.isAnnotationPresent(LeaveOutVisibleCheck.class)) {
+				if (!field.getType().isArray()
+						&& !Collection.class.isAssignableFrom(field.getType())
+						&& !Map.class.isAssignableFrom(field.getType())) {
+					field.setAccessible(true);
+					try {
+						deepScan(field.get(obj), transfer, target, state);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Scans the object for fields, which are annotated with
+	 * {@link VisibleField} annotations. Only {@link Target}.SELF should be used
+	 * in that case. Only the first target is considered.
+	 * 
+	 * @param obj
+	 *            object to flat scan for annotated fields
+	 * @param transfer
+	 *            the results of this fields will be added here
+	 * @param state
+	 *            this state must be in the annotation to consider this field
+	 */
+	private static void flatScan(Object obj, PlayerModel transfer, State state) {
+
+		for (Field field : obj.getClass().getDeclaredFields()) {
+
+			if (field.isAnnotationPresent(VisibleField.class)) {
+				VisibleField annotation = field
+						.getAnnotation(VisibleField.class);
+
+				for (TargetInState tis : annotation.targets()) {
+					if (Arrays.asList(tis.states()).contains(state)) {
+						transfer.putGenericTransferObject(generateName(field,
+								obj, tis.target()), extractObject(field, obj,
+								annotation));
+					}
+				}
+
+			}
+		}
+	}
+
+	/**
+	 * Extracts the value from the annotated field. If a {@link Transformator}
+	 * class is mentioned in the annotation this class is instantiated and
+	 * transform() is invoked. Due to Generic Issues, this needs to be done via
+	 * reflection.
+	 * 
+	 * @param field
+	 * @param from
+	 * @param annotation
+	 * @return
+	 */
+	private static Object extractObject(Field field, Object from,
+			VisibleField annotation) {
+		field.setAccessible(true);
+		try {
+			Object value = field.get(from);
+			if (annotation.transformer() != IdentityTransformator.class) {
+				value = Transformator.class
+						.getMethod("transform", Object.class).invoke(
+								annotation.transformer().newInstance(), value);
+			}
+
+			return value;
+
+		} catch (IllegalArgumentException e) {
+			// TODO
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	private static String generateName(Field field, Object from, Target target) {
+		return from.getClass().getName() + "." + field.getName() + "." + target;
 	}
 
 	public static void update(long sessionId) {

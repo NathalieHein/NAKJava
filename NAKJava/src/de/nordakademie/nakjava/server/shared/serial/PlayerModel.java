@@ -1,6 +1,7 @@
 package de.nordakademie.nakjava.server.shared.serial;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
@@ -11,6 +12,19 @@ public class PlayerModel implements Serializable {
 	private Map<Target, State> targetToState;
 	private Map<Target, String> targetToName;
 	private StateSpecificInformation stateSpecificInfos;
+	private Map<String, Object> genericTransfer;
+
+	public PlayerModel() {
+		genericTransfer = new HashMap<>();
+	}
+
+	public Map<String, Object> getGenericTransfer() {
+		return genericTransfer;
+	}
+
+	public void putGenericTransferObject(String id, Object obj) {
+		genericTransfer.put(id, obj);
+	}
 
 	public Map<Target, State> getTargetToState() {
 		return targetToState;
@@ -32,7 +46,8 @@ public class PlayerModel implements Serializable {
 		return stateSpecificInfos;
 	}
 
-	public void setStateSpecificInfos(StateSpecificInformation stateSpecificInfos) {
+	public void setStateSpecificInfos(
+			StateSpecificInformation stateSpecificInfos) {
 		this.stateSpecificInfos = stateSpecificInfos;
 	}
 

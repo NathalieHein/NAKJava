@@ -10,10 +10,13 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 @Target(value = { ElementType.FIELD })
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface VisibleField {
-	public de.nordakademie.nakjava.gamelogic.cards.impl.Target[] targets();
-
-	public State[] states();
+	public TargetInState[] targets();
 
 	public Class<? extends Transformator<?, ?>> transformer() default IdentityTransformator.class;
 
+	public @interface TargetInState {
+		public de.nordakademie.nakjava.gamelogic.cards.impl.Target target();
+
+		public State[] states();
+	}
 }
