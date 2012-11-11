@@ -33,7 +33,7 @@ public class VisibleModelFieldsClass {
 			content.append("\tpublic static final VisibleModelField<"
 					+ field.getType() + "> " + field.getName()
 					+ " = new VisibleModelField<>(\"" + field.getIdentifier()
-					+ "\",\"" + field.getRawType() + "\");\n");
+					+ "\");\n");
 		}
 
 		content.append("\n}");

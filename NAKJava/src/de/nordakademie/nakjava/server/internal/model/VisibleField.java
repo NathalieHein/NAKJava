@@ -14,6 +14,6 @@ public @interface VisibleField {
 
 	public State[] states();
 
-	public Class<? extends Transformator<?, ?>> transformer();
+	public Class<? extends Transformator<?, ?>> transformer() default IdentityTransformator.class;
 
 }

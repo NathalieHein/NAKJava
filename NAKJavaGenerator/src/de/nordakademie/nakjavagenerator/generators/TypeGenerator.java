@@ -8,8 +8,12 @@ import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeMirror;
 import javax.tools.JavaFileObject;
 
 @SupportedAnnotationTypes(value = { "de.nordakademie.nakjava.server.internal.model.VisibleField" })
@@ -32,19 +36,52 @@ public class TypeGenerator extends AbstractProcessor {
 
 		TypeElement annotation;
 
+		// TODO is still a little bit dirty :-)
 		if (annotations.size() == 1) {
 			annotation = annotations.iterator().next();
 
 			for (Element element : roundEnv
 					.getElementsAnnotatedWith(annotation)) {
 
-				sourceClass.addField(new VisibleModelField(element.asType()
-						.toString(), element.getEnclosingElement()
-						.getSimpleName().toString().toUpperCase()
-						+ "_"
-						+ element.getSimpleName().toString().toUpperCase(),
-						element.getEnclosingElement().asType().toString() + "."
-								+ element.getSimpleName()));
+				String transformatorTypeString = null;
+
+				for (AnnotationMirror annotationMirror : element
+						.getAnnotationMirrors()) {
+					for (ExecutableElement valueKey : annotationMirror
+							.getElementValues().keySet()) {
+						if (valueKey.getSimpleName().contentEquals(
+								"transformer")) {
+							TypeElement transformer = (TypeElement) ((DeclaredType) annotationMirror
+									.getElementValues().get(valueKey)
+									.getValue()).asElement();
+							for (TypeMirror interfacce : transformer
+									.getInterfaces()) {
+								if (interfacce instanceof DeclaredType) {
+									DeclaredType interfaceType = (DeclaredType) interfacce;
+									if (interfaceType.asElement()
+											.getSimpleName().contentEquals(
+													"Transformator")) {
+										transformatorTypeString = interfaceType
+												.getTypeArguments().get(1)
+												.toString();
+									}
+								}
+							}
+						}
+
+					}
+				}
+
+				sourceClass.addField(new VisibleModelField(
+						transformatorTypeString == null ? element.asType()
+								.toString() : transformatorTypeString, element
+								.getEnclosingElement().getSimpleName()
+								.toString().toUpperCase()
+								+ "_"
+								+ element.getSimpleName().toString()
+										.toUpperCase(), element
+								.getEnclosingElement().asType().toString()
+								+ "." + element.getSimpleName()));
 			}
 
 			finish();
