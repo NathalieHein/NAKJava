@@ -1,6 +1,8 @@
 package de.nordakademie.nakjavagenerator.generators;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -44,14 +46,24 @@ public class TypeGenerator extends AbstractProcessor {
 					.getElementsAnnotatedWith(annotation)) {
 
 				String transformatorTypeString = null;
+				List<String> targets = new LinkedList<>();
 
-				for (AnnotationMirror annotationMirror : element
+				for (AnnotationMirror annotationMirrors : element
 						.getAnnotationMirrors()) {
-					for (ExecutableElement valueKey : annotationMirror
+					for (ExecutableElement valueKey : annotationMirrors
 							.getElementValues().keySet()) {
+						if (valueKey.getSimpleName().contentEquals("targets")) {
+							List targetValues = ((List) annotationMirrors
+									.getElementValues().get(valueKey)
+									.getValue());
+							for (Object target : targetValues) {
+								targets.add(target.toString());
+							}
+						}
+
 						if (valueKey.getSimpleName().contentEquals(
 								"transformer")) {
-							TypeElement transformer = (TypeElement) ((DeclaredType) annotationMirror
+							TypeElement transformer = (TypeElement) ((DeclaredType) annotationMirrors
 									.getElementValues().get(valueKey)
 									.getValue()).asElement();
 							for (TypeMirror interfacce : transformer
@@ -72,16 +84,20 @@ public class TypeGenerator extends AbstractProcessor {
 					}
 				}
 
-				sourceClass.addField(new VisibleModelField(
-						transformatorTypeString == null ? element.asType()
-								.toString() : transformatorTypeString, element
-								.getEnclosingElement().getSimpleName()
-								.toString().toUpperCase()
-								+ "_"
-								+ element.getSimpleName().toString()
-										.toUpperCase(), element
-								.getEnclosingElement().asType().toString()
-								+ "." + element.getSimpleName()));
+				for (String target : targets) {
+					sourceClass.addField(new VisibleModelField(
+							transformatorTypeString == null ? element.asType()
+									.toString() : transformatorTypeString,
+							element.getEnclosingElement().getSimpleName()
+									.toString().toUpperCase()
+									+ "_"
+									+ element.getSimpleName().toString()
+											.toUpperCase() + "_" + target,
+							element.getEnclosingElement().asType().toString()
+									+ "." + element.getSimpleName() + "."
+									+ target));
+				}
+
 			}
 
 			finish();
