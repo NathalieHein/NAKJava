@@ -168,7 +168,8 @@ public class VisibleModelUpdater {
 			} else if (!field.isAnnotationPresent(LeaveOutVisibleCheck.class)) {
 				if (!field.getType().isArray()
 						&& !Collection.class.isAssignableFrom(field.getType())
-						&& !Map.class.isAssignableFrom(field.getType())) {
+						&& !Map.class.isAssignableFrom(field.getType())
+						&& !isPrimitiveType(field.getType())) {
 					field.setAccessible(true);
 					try {
 						deepScan(field.get(obj), transfer, target, state);
@@ -179,6 +180,17 @@ public class VisibleModelUpdater {
 				}
 			}
 		}
+	}
+
+	private static boolean isPrimitiveType(Class<?> clazz) {
+
+		final String[] primitiveTypes = new String[] { "String", "Integer",
+				"int", "Float", "float", "Double", "double", "Long", "long",
+				"Character", "char", "Short", "short", "Boolean", "boolean",
+				"Byte", "byte" };
+
+		return Arrays.asList(primitiveTypes).contains(clazz.getSimpleName());
+
 	}
 
 	/**
