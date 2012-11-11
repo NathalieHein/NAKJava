@@ -3,11 +3,8 @@ package de.nordakademie.nakjava.client.game;
 import java.rmi.RemoteException;
 
 import de.nordakademie.nakjava.client.internal.gui.AbstractGUIClient;
-import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 
 public class Client extends AbstractGUIClient {
-
-	private State oldState;
 
 	protected Client() throws RemoteException {
 		super();

@@ -34,7 +34,7 @@ public class CardHandPanel extends JPanel {
 		for (String knownCard : this.cards.keySet()) {
 			if (!newCardNames.contains(knownCard)) {
 				remove(this.cards.get(knownCard));
-				cards.remove(knownCard);
+				this.cards.remove(knownCard);
 			}
 		}
 

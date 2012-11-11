@@ -99,13 +99,13 @@ public abstract class AbstractGUIClient extends Client {
 		delegator.revokeActionContexts(batch);
 	}
 
-	protected void updateFrame(final Runnable runnable) {
+	private void updateFrame(final Runnable runnable) {
 
 		final Lock lock = new ReentrantLock();
 		lock.lock();
 		final Condition condition = lock.newCondition();
 
-		// invokeLater + Condition => synchroneous call
+		// invokeLater + Condition => synchronous call
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
@@ -126,7 +126,9 @@ public abstract class AbstractGUIClient extends Client {
 			condition.await();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		} finally {
+			lock.unlock();
 		}
-		lock.unlock();
+
 	}
 }

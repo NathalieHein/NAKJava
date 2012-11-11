@@ -1,6 +1,6 @@
 package de.nordakademie.nakjava.server.internal.actionRules;
 
-public class Alphabet {
+public abstract class Alphabet {
 	// '/n' means space
 	// '/b' means backspace
 	private static final char[] letters = { 'a', 'b', 'c', 'd', 'e', 'f', 'g',

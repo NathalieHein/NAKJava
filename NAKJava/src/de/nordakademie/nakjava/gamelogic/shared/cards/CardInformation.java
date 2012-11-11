@@ -10,10 +10,10 @@ import de.nordakademie.nakjava.gamelogic.cards.impl.Card;
  * 
  */
 public class CardInformation implements Serializable {
-	private String title;
-	private String information;
-	private String cost;
-	private CardType type;
+	private final String title;
+	private final String information;
+	private final String cost;
+	private final CardType type;
 
 	/**
 	 * @param title
@@ -39,6 +39,10 @@ public class CardInformation implements Serializable {
 
 	public String getCost() {
 		return cost;
+	}
+
+	public CardType getType() {
+		return type;
 	}
 
 }
