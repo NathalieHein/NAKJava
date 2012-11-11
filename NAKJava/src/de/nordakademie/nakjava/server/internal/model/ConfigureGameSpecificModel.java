@@ -6,6 +6,11 @@ public class ConfigureGameSpecificModel implements StateSpecificModel {
 	private Set<String> chosenDeck;
 	private String winStrategy;
 
+	public ConfigureGameSpecificModel(Set<String> chosenDeck, String winStrategy) {
+		this.chosenDeck = chosenDeck;
+		this.winStrategy = winStrategy;
+	}
+
 	public Set<String> getChosenDeck() {
 		return chosenDeck;
 	}
