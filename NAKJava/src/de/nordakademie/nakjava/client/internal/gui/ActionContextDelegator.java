@@ -43,15 +43,19 @@ public class ActionContextDelegator {
 		List<ActionContextHolder> notMatched = new LinkedList<>(holders);
 		toBeDistributed = new LinkedList<>();
 
+		List<ActionContextHolder> toRemove = new LinkedList<>();
+
 		for (ActionContextHolder holder : holders) {
 			holder.revokeActionContext(currentBatch);
 			if (careTaking) {
 				if (!holder.isDisposed()) {
-					holders.remove(holder);
+					toRemove.add(holder);
 				}
 			}
 
 		}
+
+		holders.removeAll(toRemove);
 
 		if (actionContexts.size() != 0) {
 			currentBatch = actionContexts.get(0).getBatch();

@@ -1,25 +1,27 @@
 package de.nordakademie.nakjava.client.internal.gui.component;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
 import java.rmi.RemoteException;
+import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.ComponentInputMap;
-import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
 import de.nordakademie.nakjava.client.internal.gui.ActionContextDelegator;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextHolder;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextSelector;
+import de.nordakademie.nakjava.client.internal.gui.ValueHolder;
+import de.nordakademie.nakjava.server.internal.VisibleModelField;
 import de.nordakademie.nakjava.server.shared.proxy.actions.KeyAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
-public class TextField extends JTextField implements ActionContextHolder {
+public class TextField extends JTextField implements ActionContextHolder,
+		ValueHolder {
 
 	private ComponentInputMap inputMap;
 	private ActionMap actionMap;
@@ -27,9 +29,12 @@ public class TextField extends JTextField implements ActionContextHolder {
 	private Class<? extends KeyAction> desiredAction;
 
 	private long currentBatch = Long.MIN_VALUE;
+	private VisibleModelField<String> value;
 
-	public TextField(Class<? extends KeyAction> desiredAction) {
+	public TextField(Class<? extends KeyAction> desiredAction,
+			VisibleModelField<String> desiredValue) {
 		this.desiredAction = desiredAction;
+		this.value = desiredValue;
 		this.setEditable(false);
 		setInputMap(WHEN_IN_FOCUSED_WINDOW, null);
 		setInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, null);
@@ -148,12 +153,8 @@ public class TextField extends JTextField implements ActionContextHolder {
 		setCaretPosition(string.length());
 	}
 
-	public static void main(String[] args) {
-		JFrame frame = new JFrame("Test");
-
-		frame.setLayout(new BorderLayout());
-		frame.add(new TextField(null));
-
-		frame.setVisible(true);
+	@Override
+	public void pickValue(Map<String, Object> genericValues) {
+		setText(value.getValue(genericValues));
 	}
 }

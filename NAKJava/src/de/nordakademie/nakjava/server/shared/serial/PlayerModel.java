@@ -4,13 +4,12 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.shared.serial.stateSpecificInfos.StateSpecificInformation;
 
 public class PlayerModel implements Serializable {
-	private Map<Target, State> targetToState;
-	private Map<Target, String> targetToName;
+	private State state;
+	private String name;
 	private StateSpecificInformation stateSpecificInfos;
 	private Map<String, Object> genericTransfer;
 
@@ -26,20 +25,20 @@ public class PlayerModel implements Serializable {
 		genericTransfer.put(id, obj);
 	}
 
-	public Map<Target, State> getTargetToState() {
-		return targetToState;
+	public State getState() {
+		return state;
 	}
 
-	public void setTargetToState(Map<Target, State> targetToState) {
-		this.targetToState = targetToState;
+	public void setState(State state) {
+		this.state = state;
 	}
 
-	public Map<Target, String> getTargetToName() {
-		return targetToName;
+	public String getName() {
+		return name;
 	}
 
-	public void setTargetToName(Map<Target, String> targetToName) {
-		this.targetToName = targetToName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public StateSpecificInformation getStateSpecificInfos() {

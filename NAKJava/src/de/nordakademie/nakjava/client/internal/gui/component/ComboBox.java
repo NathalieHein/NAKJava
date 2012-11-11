@@ -1,7 +1,7 @@
 package de.nordakademie.nakjava.client.internal.gui.component;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,8 +19,13 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder {
 	private long currentBatch;
 	private ActionContextSelector selector;
 	private Map<String, SelectAction> actions;
+	private boolean listenerActive = true;
+
+	private String currentSelection;
 
 	public ComboBox(final Class<? extends SelectAction> selectAction) {
+		currentSelection = "";
+
 		selector = new ActionContextSelector() {
 
 			@Override
@@ -29,22 +34,45 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder {
 			}
 		};
 
-		addItemListener(new ItemListener() {
+		addActionListener(new ActionListener() {
 
 			@Override
-			public void itemStateChanged(ItemEvent arg0) {
-				String item = (String) getSelectedItem();
-				try {
-					actions.get(item).perform();
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			public void actionPerformed(ActionEvent arg0) {
+				if (listenerActive) {
+					String item = (String) getSelectedItem();
+					try {
+						actions.get(item).perform();
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
+
 			}
 		});
+
 		setEnabled(false);
 		actions = new HashMap<String, SelectAction>();
 		ActionContextDelegator.getInstance().registerActionContextHolder(this);
+	}
+
+	@Override
+	public void setSelectedIndex(int anIndex) {
+		listenerActive = false;
+		super.setSelectedIndex(anIndex);
+		currentSelection = (String) getSelectedItem();
+		listenerActive = true;
+	}
+
+	@Override
+	public void setSelectedItem(Object anObject) {
+		listenerActive = false;
+		currentSelection = (String) anObject;
+		if (actions.get(anObject) == null) {
+			addItem((String) anObject);
+		}
+		super.setSelectedItem(anObject);
+		listenerActive = true;
 	}
 
 	@Override
@@ -64,6 +92,12 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder {
 		}
 
 		actions.put(action.getValue(), action);
+		listenerActive = false;
+		addItem(action.getValue());
+		if (action.getValue().equals(currentSelection)) {
+			setSelectedItem(currentSelection);
+		}
+		listenerActive = true;
 		setEnabled(true);
 
 	}

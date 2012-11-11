@@ -4,30 +4,18 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
-import de.nordakademie.nakjava.gamelogic.cards.impl.CardLibrary;
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
-import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
-import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategies;
-import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategyInformation;
-import de.nordakademie.nakjava.server.internal.model.ConfigureGameSpecificModel;
-import de.nordakademie.nakjava.server.internal.model.EditDeckSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.IdentityTransformator;
 import de.nordakademie.nakjava.server.internal.model.LeaveOutVisibleCheck;
-import de.nordakademie.nakjava.server.internal.model.LoginSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.internal.model.Transformator;
 import de.nordakademie.nakjava.server.internal.model.VisibleField;
 import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 import de.nordakademie.nakjava.server.shared.serial.PlayerModel;
-import de.nordakademie.nakjava.server.shared.serial.stateSpecificInfos.ConfigurationSpecificInformation;
-import de.nordakademie.nakjava.server.shared.serial.stateSpecificInfos.EditDeckSpecificInformation;
 
 public class VisibleModelUpdater {
 
@@ -64,78 +52,81 @@ public class VisibleModelUpdater {
 		 * playerModel.setCardHand(cards);
 		 */
 
-		Map<Target, String> targetToName = new HashMap<>();
-		targetToName.put(Target.SELF, player.getName());
-		switch (self.getState()) {
-		case LOGIN:
-			targetToName.put(Target.SELF, ((LoginSpecificModel) self
-					.getStateSpecificModel()).getCurrentPartOfName());
-			break;
-		case CONFIGUREGAME:
-			ConfigureGameSpecificModel configSpecificModel = (ConfigureGameSpecificModel) self
-					.getStateSpecificModel();
-			String deckName;
-			if (configSpecificModel.getChosenDeck() == null) {
-				deckName = null;
-			} else {
-				deckName = "StandardDeck";
-
-				for (Entry<String, Set<String>> entry : player.getSavedDecks()
-						.entrySet()) {
-					if (entry.getValue() == configSpecificModel.getChosenDeck()) {
-						deckName = entry.getKey();
-					}
-				}
-			}
-			Map<String, WinStrategyInformation> strategyDescription = new HashMap<>();
-			for (String strategyName : WinStrategies.getInstance()
-					.getStrategies()) {
-				strategyDescription.put(strategyName, WinStrategies
-						.getInstance().getStrategyInformationForName(
-								strategyName));
-			}
-			currentPlayerTransferModel
-					.setStateSpecificInfos(new ConfigurationSpecificInformation(
-							strategyDescription, configSpecificModel
-									.getWinStrategy(), deckName));
-			break;
-		case EDITDECK:
-			EditDeckSpecificModel editDeckSpecificModel = (EditDeckSpecificModel) self
-					.getStateSpecificModel();
-			Map<CardInformation, Boolean> chosenCards = new HashMap<>();
-			for (Entry<String, Boolean> card : editDeckSpecificModel
-					.getChosenCards().entrySet()) {
-				for (Entry<String, CardInformation> cardInfo : CardLibrary
-						.get().getCardInformation().entrySet()) {
-					if (cardInfo.getKey() == card.getKey()) {
-						chosenCards.put(cardInfo.getValue(), card.getValue());
-					}
-				}
-			}
-			currentPlayerTransferModel
-					.setStateSpecificInfos(new EditDeckSpecificInformation(
-							chosenCards, editDeckSpecificModel
-									.getCurrentPartOfDeckName()));
-			break;
-		case PLAYCARDSTATE:
-			break;
-		}
-
-		Map<Target, State> targetToState = new HashMap<>();
-		targetToState.put(Target.SELF, self.getState());
-		Player otherPlayer = session.getOneOtherPlayer(player);
-		if (otherPlayer != null) {
-			if (opponent.getState() == State.LOGIN) {
-				targetToName.put(Target.OPPONENT,
-						((LoginSpecificModel) opponent.getStateSpecificModel())
-								.getCurrentPartOfName());
-			} else {
-				targetToName.put(Target.OPPONENT, otherPlayer.getName());
-			}
-			targetToState.put(Target.OPPONENT, opponent.getState());
-		}
-		currentPlayerTransferModel.setTargetToState(targetToState);
-		currentPlayerTransferModel.setTargetToName(targetToName);
+		// Map<Target, String> targetToName = new HashMap<>();
+		// targetToName.put(Target.SELF, player.getName());
+		// switch (self.getState()) {
+		// case LOGIN:
+		// targetToName.put(Target.SELF, ((LoginSpecificModel) self
+		// .getStateSpecificModel()).getCurrentPartOfName());
+		// break;
+		// case CONFIGUREGAME:
+		// ConfigureGameSpecificModel configSpecificModel =
+		// (ConfigureGameSpecificModel) self
+		// .getStateSpecificModel();
+		// String deckName;
+		// if (configSpecificModel.getChosenDeck() == null) {
+		// deckName = null;
+		// } else {
+		// deckName = "StandardDeck";
+		//
+		// for (Entry<String, Set<String>> entry : player.getSavedDecks()
+		// .entrySet()) {
+		// if (entry.getValue() == configSpecificModel.getChosenDeck()) {
+		// deckName = entry.getKey();
+		// }
+		// }
+		// }
+		// Map<String, WinStrategyInformation> strategyDescription = new
+		// HashMap<>();
+		// for (String strategyName : WinStrategies.getInstance()
+		// .getStrategies()) {
+		// strategyDescription.put(strategyName, WinStrategies
+		// .getInstance().getStrategyInformationForName(
+		// strategyName));
+		// }
+		// currentPlayerTransferModel
+		// .setStateSpecificInfos(new ConfigurationSpecificInformation(
+		// strategyDescription, configSpecificModel
+		// .getWinStrategy(), deckName));
+		// break;
+		// case EDITDECK:
+		// EditDeckSpecificModel editDeckSpecificModel = (EditDeckSpecificModel)
+		// self
+		// .getStateSpecificModel();
+		// Map<CardInformation, Boolean> chosenCards = new HashMap<>();
+		// for (Entry<String, Boolean> card : editDeckSpecificModel
+		// .getChosenCards().entrySet()) {
+		// for (Entry<String, CardInformation> cardInfo : CardLibrary
+		// .get().getCardInformation().entrySet()) {
+		// if (cardInfo.getKey() == card.getKey()) {
+		// chosenCards.put(cardInfo.getValue(), card.getValue());
+		// }
+		// }
+		// }
+		// currentPlayerTransferModel
+		// .setStateSpecificInfos(new EditDeckSpecificInformation(
+		// chosenCards, editDeckSpecificModel
+		// .getCurrentPartOfDeckName()));
+		// break;
+		// case PLAYCARDSTATE:
+		// break;
+		// }
+		//
+		// Map<Target, State> targetToState = new HashMap<>();
+		// targetToState.put(Target.SELF, self.getState());
+		// Player otherPlayer = session.getOneOtherPlayer(player);
+		// if (otherPlayer != null) {
+		// if (opponent.getState() == State.LOGIN) {
+		// targetToName.put(Target.OPPONENT,
+		// ((LoginSpecificModel) opponent.getStateSpecificModel())
+		// .getCurrentPartOfName());
+		// } else {
+		// targetToName.put(Target.OPPONENT, otherPlayer.getName());
+		// }
+		// targetToState.put(Target.OPPONENT, opponent.getState());
+		// }
+		// currentPlayerTransferModel.setTargetToState(targetToState);
+		// currentPlayerTransferModel.setTargetToName(targetToName);
 	}
 
 	/**

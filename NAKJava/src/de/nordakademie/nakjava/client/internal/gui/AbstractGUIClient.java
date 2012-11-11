@@ -11,7 +11,9 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import de.nordakademie.nakjava.client.internal.Client;
+import de.nordakademie.nakjava.client.internal.gui.component.Panel;
 import de.nordakademie.nakjava.client.shared.ClientAction;
+import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 import de.nordakademie.nakjava.server.shared.serial.PlayerModel;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
@@ -19,6 +21,7 @@ import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 public abstract class AbstractGUIClient extends Client {
 
 	protected ActionContextDelegator delegator;
+	protected PanelPicker panelPicker;
 
 	protected AbstractGUIClient() throws RemoteException {
 		super();
@@ -40,6 +43,7 @@ public abstract class AbstractGUIClient extends Client {
 		JFrame frame = new JFrame();
 		frame.setResizable(false);
 		delegator = ActionContextDelegator.getInstance();
+		panelPicker = new PanelPicker();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		preCheckinFinalValues.add(frame);
@@ -72,7 +76,24 @@ public abstract class AbstractGUIClient extends Client {
 		}
 	}
 
-	public abstract void playerModelChanged(PlayerModel model);
+	public void playerModelChanged(PlayerModel model) {
+		final Panel panel = panelPicker
+				.pickPanel(VisibleModelFields.PLAYERSTATE_STATE_SELF
+						.getValue(model.getGenericTransfer()));
+
+		if (panel != null) {
+			updateFrame(new Runnable() {
+
+				@Override
+				public void run() {
+					getFrame().add(panel);
+				}
+			});
+		}
+
+		panelPicker.getCurrentPanel().setModel(model);
+
+	}
 
 	public void revokeActionContexts(long batch) {
 		delegator.revokeActionContexts(batch);

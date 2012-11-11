@@ -6,15 +6,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.model.LoginSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.StateSpecificModel;
+import de.nordakademie.nakjava.server.internal.model.VisibleField;
+import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 
 public class PlayerState {
 
 	private List<? extends Artifact> artifacts;
 	private CardSet cards;
+	@VisibleField(targets = { @TargetInState(target = Target.SELF,
+			states = { State.LOGIN }) })
 	private State state;
 	private StateSpecificModel stateSpecificModel;
 
