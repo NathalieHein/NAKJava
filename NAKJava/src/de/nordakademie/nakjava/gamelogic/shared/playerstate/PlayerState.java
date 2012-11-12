@@ -19,7 +19,7 @@ public class PlayerState {
 	private List<? extends Artifact> artifacts;
 	private CardSet cards;
 	@VisibleField(targets = { @TargetInState(target = Target.SELF,
-			states = { State.LOGIN }) })
+			states = { State.LOGIN, State.CONFIGUREGAME }) })
 	private State state;
 	private StateSpecificModel stateSpecificModel;
 
