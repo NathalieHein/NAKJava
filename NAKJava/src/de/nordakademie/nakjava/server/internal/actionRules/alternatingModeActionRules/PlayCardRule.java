@@ -8,6 +8,7 @@ import de.nordakademie.nakjava.gamelogic.cards.impl.CardLibrary;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.Player;
 import de.nordakademie.nakjava.server.internal.Session;
+import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.PlayCardAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.SimulateCardAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.WithdrawCardAction;
@@ -20,8 +21,8 @@ public class PlayCardRule extends AlternatingStateRule {
 		List<ActionContext> actions = new ArrayList<>();
 		Session session = getSession(sessionId);
 		long batch = getBatch(sessionId);
-		for (String cardName : getPlayerState(sessionId, player).getCards()
-				.getCardsOnHand()) {
+		for (String cardName : ((InGameSpecificModel) getPlayerState(sessionId,
+				player).getStateSpecificModel()).getCards().getCardsOnHand()) {
 			AbstractCard card = CardLibrary.get().getCards().get(cardName);
 			if (card != null
 					&& card.checkPrerequirementsImpl(session.getModel()

@@ -12,6 +12,7 @@ import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.RoundResult;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinCheck;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.genericRoundCheckers.Comparator;
+import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 import de.nordakademie.nakjava.util.StringUtilities;
 
 public class ArtifactChecker implements WinCheck, Serializable {
@@ -46,9 +47,12 @@ public class ArtifactChecker implements WinCheck, Serializable {
 			List<Artifact> toCheck = new LinkedList<>();
 
 			if (Modifier.isAbstract(artifact.getModifiers())) {
-				toCheck.addAll(state.getTupelsForArtifactType(artifact));
+				toCheck.addAll(((InGameSpecificModel) state
+						.getStateSpecificModel())
+						.getTupelsForArtifactType(artifact));
 			} else {
-				toCheck.add(state.getTupelForClass(artifact));
+				toCheck.add(((InGameSpecificModel) state
+						.getStateSpecificModel()).getTupelForClass(artifact));
 			}
 
 			for (Artifact checkArtifact : toCheck) {

@@ -5,10 +5,16 @@ import java.util.Map;
 import java.util.Set;
 
 import de.nordakademie.nakjava.gamelogic.cards.impl.CardLibrary;
+import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
+import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
+import de.nordakademie.nakjava.server.internal.model.transformator.CardInformationTransformator;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class EditDeckSpecificModel implements StateSpecificModel {
+	@VisibleField(targets = { @TargetInState(states = { State.EDITDECK }, target = Target.SELF) }, transformer = CardInformationTransformator.class)
 	private Map<String, Boolean> chosenCards;
+	@VisibleField(targets = { @TargetInState(states = { State.EDITDECK }, target = Target.SELF) })
 	private String currentPartOfDeckName = "";
 
 	public EditDeckSpecificModel(Set<String> set) {
