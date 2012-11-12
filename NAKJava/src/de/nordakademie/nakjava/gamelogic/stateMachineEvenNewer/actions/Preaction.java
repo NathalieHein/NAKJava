@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
+import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.Model;
 
 public class Preaction implements StateAction {
@@ -13,13 +14,14 @@ public class Preaction implements StateAction {
 	public void perform(Model model) {
 		// TODO comment this thing!!!!
 		List<Artifact> producedArtifacts = new LinkedList<>();
-		for (Artifact factory : model.getSelf().getTupelsForArtifactType(
-				Artifact.class)) {
+		for (Artifact factory : ((InGameSpecificModel) model.getSelf()
+				.getStateSpecificModel())
+				.getTupelsForArtifactType(Artifact.class)) {
 			producedArtifacts.addAll(factory.prePlayAction());
 		}
 		for (Artifact artifact : producedArtifacts) {
-			model.getSelf().getTupelForClass(artifact.getClass())
-					.merge(artifact);
+			((InGameSpecificModel) model.getSelf().getStateSpecificModel())
+					.getTupelForClass(artifact.getClass()).merge(artifact);
 
 		}
 		StateMachine.getInstance().run(model);

@@ -7,6 +7,7 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.Player;
 import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.internal.Sessions;
+import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.WithdrawCardAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
@@ -17,7 +18,8 @@ public class AdjustCardHandRule extends AlternatingStateRule {
 		List<ActionContext> actions = new ArrayList<>();
 		Session session = Sessions.getInstance().getSession(sessionId);
 		long batch = getBatch(sessionId);
-		for (String cardName : session.getPlayerStateForPlayer(player)
+		for (String cardName : ((InGameSpecificModel) session
+				.getPlayerStateForPlayer(player).getStateSpecificModel())
 				.getCards().getCardsOnHand()) {
 			actions.add(new WithdrawCardAction(cardName, batch, sessionId));
 		}

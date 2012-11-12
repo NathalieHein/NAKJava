@@ -7,6 +7,7 @@ import java.util.Map;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.ArtifactFactory;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.infrastructure.Infrastructure;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
+import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 
 /**
  * Cards will be defined with annotations. In State enums vs. annotations and
@@ -34,7 +35,8 @@ public abstract class AbstractCard {
 
 	private final void performArtifactEffects(Map<Target, PlayerState> states) {
 		for (ArtifactEffect artifactEffect : annotation.artifactEffects()) {
-			states.get(artifactEffect.target()).getTupelForClass(
+			((InGameSpecificModel) states.get(artifactEffect.target())
+					.getStateSpecificModel()).getTupelForClass(
 					artifactEffect.artifact()).merge(
 					ArtifactFactory.createArtifact(artifactEffect.artifact(),
 							artifactEffect.count()));
@@ -43,9 +45,9 @@ public abstract class AbstractCard {
 
 	private final void performDamageEffects(Map<Target, PlayerState> states) {
 		for (DamageEffect damageEffect : annotation.damageEffects()) {
-			List<Infrastructure> infrastructure = states.get(
-					damageEffect.target()).getTupelsForArtifactType(
-					Infrastructure.class);
+			List<Infrastructure> infrastructure = ((InGameSpecificModel) states
+					.get(damageEffect.target()).getStateSpecificModel())
+					.getTupelsForArtifactType(Infrastructure.class);
 			Collections.sort(infrastructure);
 
 			int damageToDeal = damageEffect.count();
@@ -86,7 +88,8 @@ public abstract class AbstractCard {
 
 		for (Cost cost : annotation.costs()) {
 			result = result
-					&& states.get(Target.SELF).getTupelForClass(
+					&& ((InGameSpecificModel) states.get(Target.SELF)
+							.getStateSpecificModel()).getTupelForClass(
 							cost.ressource()).getCount() >= cost.amount();
 		}
 
@@ -107,9 +110,11 @@ public abstract class AbstractCard {
 	 */
 	public void payImpl(Map<Target, PlayerState> states) {
 		for (Cost cost : annotation.costs()) {
-			states.get(Target.SELF).getTupelForClass(cost.ressource()).merge(
-					ArtifactFactory.createArtifact(cost.ressource(), -cost
-							.amount()));
+			((InGameSpecificModel) states.get(Target.SELF)
+					.getStateSpecificModel())
+					.getTupelForClass(cost.ressource()).merge(
+							ArtifactFactory.createArtifact(cost.ressource(),
+									-cost.amount()));
 		}
 	}
 
