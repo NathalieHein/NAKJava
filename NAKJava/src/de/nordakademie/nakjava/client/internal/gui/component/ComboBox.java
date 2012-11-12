@@ -115,9 +115,11 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 
 	@Override
 	public void noActionContextAvailable() {
+		listenerActive = false;
 		actions.clear();
 		removeAllItems();
 		setEnabled(false);
+		listenerActive = true;
 
 	}
 
@@ -140,8 +142,9 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 
 	@Override
 	public void pickValue(Map<String, Object> genericValues) {
+		listenerActive = false;
 		setSelectedItem(currentSelectionField.getValue(genericValues));
-
+		listenerActive = true;
 	}
 
 }
