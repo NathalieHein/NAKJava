@@ -11,10 +11,13 @@ import javax.swing.JComboBox;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextDelegator;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextHolder;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextSelector;
+import de.nordakademie.nakjava.client.internal.gui.ValueHolder;
+import de.nordakademie.nakjava.server.internal.VisibleModelField;
 import de.nordakademie.nakjava.server.shared.proxy.actions.SelectAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
-public class ComboBox extends JComboBox<String> implements ActionContextHolder {
+public class ComboBox extends JComboBox<String> implements ActionContextHolder,
+		ValueHolder {
 
 	private long currentBatch;
 	private ActionContextSelector selector;
@@ -22,8 +25,11 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder {
 	private boolean listenerActive = true;
 
 	private String currentSelection;
+	private VisibleModelField<String> currentSelectionField;
 
-	public ComboBox(final Class<? extends SelectAction> selectAction) {
+	public ComboBox(final Class<? extends SelectAction> selectAction,
+			VisibleModelField<String> currentSelectionField) {
+		this.currentSelectionField = currentSelectionField;
 		currentSelection = "";
 
 		selector = new ActionContextSelector() {
@@ -130,6 +136,12 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder {
 	@Override
 	public boolean isDisposed() {
 		return this.isShowing();
+	}
+
+	@Override
+	public void pickValue(Map<String, Object> genericValues) {
+		setSelectedItem(currentSelectionField.getValue(genericValues));
+
 	}
 
 }

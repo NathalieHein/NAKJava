@@ -8,6 +8,7 @@ import de.nordakademie.nakjava.client.internal.gui.component.Button;
 import de.nordakademie.nakjava.client.internal.gui.component.ComboBox;
 import de.nordakademie.nakjava.client.internal.gui.component.Panel;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
+import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.CreateNewDeckAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.EditDeckAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.SelectDeckAction;
@@ -29,8 +30,12 @@ public class ConfigurationPanel extends Panel {
 		add(gameTypePanel);
 		add(selfPanel);
 
-		cardDecks = new ComboBox(SelectDeckAction.class);
-		winStrategies = new ComboBox(SelectWinStrategy.class);
+		cardDecks = new ComboBox(
+				SelectDeckAction.class,
+				VisibleModelFields.CONFIGURATIONSPECIFICINFORMATION_CURRENTLYCHOSENCARDDECK_SELF);
+		winStrategies = new ComboBox(
+				SelectWinStrategy.class,
+				VisibleModelFields.CONFIGURATIONSPECIFICINFORMATION_CURRENTLYCHOSENWINSTRATEGY_SELF);
 
 		gameTypePanel.add(new JLabel("Spielart:"));
 		gameTypePanel.add(winStrategies);
