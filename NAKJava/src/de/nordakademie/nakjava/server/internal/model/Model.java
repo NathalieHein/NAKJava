@@ -8,10 +8,10 @@ import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.WinStrategy;
 
 public class Model {
-	private WinStrategy strategy;
-	private PlayerState self;
-	private PlayerState opponent;
-	private SimulationModel simulationModel;
+	protected WinStrategy strategy;
+	protected PlayerState self;
+	protected PlayerState opponent;
+	protected SimulationModel simulationModel;
 
 	public Model(PlayerState playerState) {
 		self = playerState;
@@ -59,6 +59,10 @@ public class Model {
 
 	public void setSimulationModel(SimulationModel simulationModel) {
 		this.simulationModel = simulationModel;
+	}
+
+	public void createSimulationModel() {
+		simulationModel = new SimulationModel(this);
 	}
 
 }

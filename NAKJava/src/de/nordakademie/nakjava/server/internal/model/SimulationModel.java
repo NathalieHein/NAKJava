@@ -1,28 +1,26 @@
 package de.nordakademie.nakjava.server.internal.model;
 
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.WinStrategy;
 
-public class SimulationModel {
-	private PlayerState storedSelfDueToSimulation;
-	private PlayerState storedOpponentDueToSimulation;
+public class SimulationModel extends Model {
 	private int countRounds;
 
-	public SimulationModel(PlayerState self, PlayerState opponent) {
-		this.storedSelfDueToSimulation = new PlayerState(self);
-		this.storedOpponentDueToSimulation = new PlayerState(opponent);
+	public SimulationModel(PlayerState self, PlayerState opponent,
+			WinStrategy winStrategy) {
+		super(self);
+		this.opponent = opponent;
+		this.strategy = winStrategy;
 		countRounds = 0;
-	}
-
-	public PlayerState getStoredSelfDueToSimulation() {
-		return storedSelfDueToSimulation;
-	}
-
-	public PlayerState getStoredOpponentDueToSimulation() {
-		return storedOpponentDueToSimulation;
 	}
 
 	public int getCountRounds() {
 		return countRounds;
+	}
+
+	public SimulationModel(Model model) {
+		// TODO deepCopy via write/read of serializable Objects
+		this(model.getSelf(), model.getOpponent(), model.getStrategy());
 	}
 
 }
