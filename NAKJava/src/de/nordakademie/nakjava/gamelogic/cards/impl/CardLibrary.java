@@ -39,4 +39,12 @@ public class CardLibrary {
 		return cardInformation;
 	}
 
+	public CardInformation getCardInformationForName(String cardName) {
+		return cardInformation.get(cardName);
+	}
+
+	public AbstractCard getCardForName(String cardName) {
+		return cards.get(cardName);
+	}
+
 }
