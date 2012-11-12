@@ -21,6 +21,7 @@ import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.WinStrategy;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.RoundResult;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategies;
+import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class TestWinStrategies {
@@ -29,7 +30,8 @@ public class TestWinStrategies {
 
 	@Before
 	public void setup() {
-		ClasspathScanner.lookupAnnotatedScanners();		neutralModel = new EnumMap<>(Target.class);
+		ClasspathScanner.lookupAnnotatedScanners();
+		neutralModel = new EnumMap<>(Target.class);
 
 		List<Artifact> artifacts = new LinkedList<>();
 		Ziegel ziegel = new Ziegel();
@@ -49,7 +51,8 @@ public class TestWinStrategies {
 		artifacts.add(turm);
 		artifacts.add(mauer);
 
-		PlayerState state = new PlayerState(artifacts);
+		PlayerState state = new PlayerState();
+		state.setStateSpecificModel(new InGameSpecificModel(artifacts));
 
 		neutralModel.put(Target.SELF, state);
 
@@ -71,7 +74,8 @@ public class TestWinStrategies {
 		artifacts.add(turm);
 		artifacts.add(mauer);
 
-		state = new PlayerState(artifacts);
+		state = new PlayerState();
+		state.setStateSpecificModel(new InGameSpecificModel(artifacts));
 
 		neutralModel.put(Target.OPPONENT, state);
 	}
@@ -95,7 +99,8 @@ public class TestWinStrategies {
 		Assert.assertEquals(RoundResult.NEUTRAL, results.get(Target.SELF));
 		Assert.assertEquals(RoundResult.NEUTRAL, results.get(Target.OPPONENT));
 
-		neutralModel.get(Target.SELF).getTupelForClass(Turm.class)
+		((InGameSpecificModel) neutralModel.get(Target.SELF)
+				.getStateSpecificModel()).getTupelForClass(Turm.class)
 				.setCount(100);
 
 		results = strategy.getRoundResult(neutralModel);
@@ -116,14 +121,17 @@ public class TestWinStrategies {
 		Assert.assertEquals(RoundResult.NEUTRAL, results.get(Target.SELF));
 		Assert.assertEquals(RoundResult.NEUTRAL, results.get(Target.OPPONENT));
 
-		neutralModel.get(Target.SELF).getTupelForClass(Ziegel.class).setCount(
-				100);
+		((InGameSpecificModel) neutralModel.get(Target.SELF)
+				.getStateSpecificModel()).getTupelForClass(Ziegel.class)
+				.setCount(100);
 		results = strategy.getRoundResult(neutralModel);
 
 		Assert.assertEquals(RoundResult.WIN, results.get(Target.SELF));
 		Assert.assertEquals(RoundResult.LOST, results.get(Target.OPPONENT));
 
-		neutralModel.get(Target.SELF).getTupelForClass(Turm.class).setCount(0);
+		((InGameSpecificModel) neutralModel.get(Target.SELF)
+				.getStateSpecificModel()).getTupelForClass(Turm.class)
+				.setCount(0);
 		results = strategy.getRoundResult(neutralModel);
 
 		// TODO is this right?

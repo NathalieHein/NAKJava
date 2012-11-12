@@ -22,6 +22,7 @@ import de.nordakademie.nakjava.gamelogic.shared.artifacts.ressources.Monster;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.ressources.Ziegel;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
+import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class CardTest {
@@ -57,7 +58,8 @@ public class CardTest {
 		initialArtifacts.add(mauer);
 		initialArtifacts.add(turm);
 
-		PlayerState state = new PlayerState(initialArtifacts);
+		PlayerState state = new PlayerState();
+		state.setStateSpecificModel(new InGameSpecificModel(initialArtifacts));
 
 		model.put(Target.SELF, state);
 	}
@@ -81,8 +83,8 @@ public class CardTest {
 
 	private void testInformation(CardInformation information) {
 		assertEquals("TestKarte", information.getTitle());
-		assertEquals("-15 Monster für dich/zusätzlicherTest/", information
-				.getInformation());
+		assertEquals("-15 Monster für dich/zusätzlicherTest/",
+				information.getInformation());
 		assertEquals("15 Ziegel/30 Kristalle", information.getCost());
 	}
 
@@ -95,24 +97,30 @@ public class CardTest {
 		assertEquals(card.checkPrerequirementsImpl(model), true);
 
 		card.payImpl(model);
-		assertEquals(0, model.get(Target.SELF).getTupelForClass(Ziegel.class)
+		assertEquals(0, ((InGameSpecificModel) model.get(Target.SELF)
+				.getStateSpecificModel()).getTupelForClass(Ziegel.class)
 				.getCount());
-		assertEquals(5, model.get(Target.SELF)
-				.getTupelForClass(Kristalle.class).getCount());
+		assertEquals(5, ((InGameSpecificModel) model.get(Target.SELF)
+				.getStateSpecificModel()).getTupelForClass(Kristalle.class)
+				.getCount());
 
 		card.performActionImpl(model);
 
 		// Generic Perfom && minimal Value = 0
-		assertEquals(0, model.get(Target.SELF).getTupelForClass(Monster.class)
+		assertEquals(0, ((InGameSpecificModel) model.get(Target.SELF)
+				.getStateSpecificModel()).getTupelForClass(Monster.class)
 				.getCount());
 		// AdditionalAction
-		assertEquals(10, model.get(Target.SELF).getTupelForClass(
-				Kristalle.class).getCount());
+		assertEquals(10, ((InGameSpecificModel) model.get(Target.SELF)
+				.getStateSpecificModel()).getTupelForClass(Kristalle.class)
+				.getCount());
 
 		// TestDamage
-		assertEquals(0, model.get(Target.SELF).getTupelForClass(Mauer.class)
+		assertEquals(0, ((InGameSpecificModel) model.get(Target.SELF)
+				.getStateSpecificModel()).getTupelForClass(Mauer.class)
 				.getCount());
-		assertEquals(3, model.get(Target.SELF).getTupelForClass(Turm.class)
+		assertEquals(3, ((InGameSpecificModel) model.get(Target.SELF)
+				.getStateSpecificModel()).getTupelForClass(Turm.class)
 				.getCount());
 
 	}

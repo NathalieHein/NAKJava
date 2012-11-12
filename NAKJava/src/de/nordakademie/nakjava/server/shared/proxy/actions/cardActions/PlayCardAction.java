@@ -9,6 +9,7 @@ import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
 import de.nordakademie.nakjava.server.internal.Session;
+import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
@@ -33,8 +34,9 @@ public class PlayCardAction extends AbstractCardAction {
 							.getModel().getSelfOpponentMap();
 					card.payImpl(selfOpponentMap);
 					card.performActionImpl(selfOpponentMap);
-					if (!selfOpponentMap.get(Target.SELF).getCards()
-							.discardCardFromHand(cardName)) {
+					if (!((InGameSpecificModel) selfOpponentMap
+							.get(Target.SELF).getStateSpecificModel())
+							.getCards().discardCardFromHand(cardName)) {
 						throw new IllegalStateException(
 								"Card to be discarded is not in cardhand");
 					}
