@@ -6,8 +6,13 @@ import java.util.Map;
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.WinStrategy;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
+import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 
 public class Model {
+	@VisibleField(targets = { @TargetInState(states = { State.CONFIGUREGAME,
+			State.READYTOSTARTSTATE, State.PLAYCARDSTATE,
+			State.ADJUSTCARDHANDSTATE, State.STOP }, target = Target.SELF) })
 	protected WinStrategy strategy;
 	protected PlayerState self;
 	protected PlayerState opponent;
