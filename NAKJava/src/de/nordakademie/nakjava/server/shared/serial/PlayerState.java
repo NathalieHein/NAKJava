@@ -10,6 +10,7 @@ import de.nordakademie.nakjava.client.shared.PlayerStateListener;
 public class PlayerState implements Serializable {
 	private PlayerModel model;
 	private List<ActionContext> actions;
+	private long batch;
 	private PlayerStateListener stateListener;
 	private boolean dirty = false;
 
@@ -25,6 +26,10 @@ public class PlayerState implements Serializable {
 	public void setModel(PlayerModel model) {
 		this.model = model;
 		dirty = true;
+	}
+
+	public void setBatch(long batch) {
+		this.batch = batch;
 	}
 
 	public List<ActionContext> getActions() {

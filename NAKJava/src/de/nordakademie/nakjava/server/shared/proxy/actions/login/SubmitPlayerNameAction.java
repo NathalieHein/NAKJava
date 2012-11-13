@@ -12,8 +12,8 @@ import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public class SubmitPlayerNameAction extends ActionContext {
 
-	public SubmitPlayerNameAction(long batch, long sessionNr) {
-		super(batch, sessionNr);
+	public SubmitPlayerNameAction(long sessionNr) {
+		super(sessionNr);
 	}
 
 	@Override

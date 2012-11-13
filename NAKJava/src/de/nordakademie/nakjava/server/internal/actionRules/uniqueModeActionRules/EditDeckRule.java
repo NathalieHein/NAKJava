@@ -21,15 +21,14 @@ public class EditDeckRule extends NonSimulationStateRule {
 		List<ActionContext> actions = new ArrayList<>();
 		EditDeckSpecificModel model = (EditDeckSpecificModel) getStateSpecificModel(
 				sessionId, player);
-		long batch = getBatch(sessionId);
 		for (String card : model.getChosenCards().keySet()) {
-			actions.add(new SelectCardForDeckAction(card, batch, sessionId));
+			actions.add(new SelectCardForDeckAction(card, sessionId));
 		}
 		for (char character : Alphabet.getLetters()) {
-			actions.add(new TypeDeckNameAction(character, batch, sessionId));
+			actions.add(new TypeDeckNameAction(character, sessionId));
 		}
-		actions.add(new RemoveDeckAction(batch, sessionId));
-		actions.add(new DiscardDeckEditAction(batch, sessionId));
+		actions.add(new RemoveDeckAction(sessionId));
+		actions.add(new DiscardDeckEditAction(sessionId));
 		return actions;
 
 	}

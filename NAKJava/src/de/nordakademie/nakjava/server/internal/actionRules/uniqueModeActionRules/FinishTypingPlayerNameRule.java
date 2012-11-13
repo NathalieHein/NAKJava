@@ -28,7 +28,7 @@ public class FinishTypingPlayerNameRule extends NonSimulationStateRule {
 	@Override
 	public List<ActionContext> applyRule(long sessionId, Player player) {
 		List<ActionContext> actions = new ArrayList<>();
-		actions.add(new SubmitPlayerNameAction(getBatch(sessionId), sessionId));
+		actions.add(new SubmitPlayerNameAction(sessionId));
 		return actions;
 	}
 

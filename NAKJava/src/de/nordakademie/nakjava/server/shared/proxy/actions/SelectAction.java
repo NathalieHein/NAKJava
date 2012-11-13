@@ -6,8 +6,8 @@ public abstract class SelectAction extends ActionContext {
 	// TODO an Combo-Box dranhängen
 	private String value;
 
-	public SelectAction(String value, long batch, long sessionNr) {
-		super(batch, sessionNr);
+	public SelectAction(String value, long sessionNr) {
+		super(sessionNr);
 		this.value = value;
 	}
 

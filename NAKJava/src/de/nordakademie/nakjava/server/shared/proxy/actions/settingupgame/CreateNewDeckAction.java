@@ -13,8 +13,8 @@ import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public class CreateNewDeckAction extends ActionContext {
 
-	public CreateNewDeckAction(long batch, long sessionNr) {
-		super(batch, sessionNr);
+	public CreateNewDeckAction(long sessionNr) {
+		super(sessionNr);
 	}
 
 	@Override

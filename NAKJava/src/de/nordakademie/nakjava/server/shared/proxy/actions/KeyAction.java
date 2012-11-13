@@ -6,8 +6,8 @@ public abstract class KeyAction extends ActionContext {
 
 	private char key;
 
-	public KeyAction(char key, long batch, long sessionNr) {
-		super(batch, sessionNr);
+	public KeyAction(char key, long sessionNr) {
+		super(sessionNr);
 		this.key = key;
 	}
 

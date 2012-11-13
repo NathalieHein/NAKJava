@@ -13,8 +13,8 @@ import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
 public class SelectStandardDeckAction extends SelectDeckAction {
 
-	public SelectStandardDeckAction(String value, long batch, long sessionNr) {
-		super(value, batch, sessionNr);
+	public SelectStandardDeckAction(String value, long sessionNr) {
+		super(value, sessionNr);
 	}
 
 	@Override

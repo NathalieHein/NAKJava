@@ -8,8 +8,8 @@ import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
 public class SimulateCardAction extends AbstractCardAction {
 
-	public SimulateCardAction(String cardName, long batch, long sessionNr) {
-		super(cardName, batch, sessionNr);
+	public SimulateCardAction(String cardName, long sessionNr) {
+		super(cardName, sessionNr);
 	}
 
 	@Override

@@ -10,8 +10,8 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.KeyAction;
 
 public class TypePlayerNameAction extends KeyAction {
 
-	public TypePlayerNameAction(char key, long batch, long sessionNr) {
-		super(key, batch, sessionNr);
+	public TypePlayerNameAction(char key, long sessionNr) {
+		super(key, sessionNr);
 	}
 
 	@Override

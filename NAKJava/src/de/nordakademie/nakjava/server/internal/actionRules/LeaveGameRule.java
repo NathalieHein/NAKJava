@@ -21,7 +21,7 @@ public class LeaveGameRule implements ActionRule {
 		List<ActionContext> actions = new ArrayList<>();
 		long batch = Sessions.getInstance().getSession(sessionId).getBatch()
 				.getCurrentBatchNr();
-		actions.add(new LeaveGameAction(batch, sessionId));
+		actions.add(new LeaveGameAction(sessionId));
 		return actions;
 	}
 

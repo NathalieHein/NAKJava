@@ -15,8 +15,8 @@ import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
 public class PlayCardAction extends AbstractCardAction {
 
-	public PlayCardAction(String cardName, long batch, long sessionNr) {
-		super(cardName, batch, sessionNr);
+	public PlayCardAction(String cardName, long sessionNr) {
+		super(cardName, sessionNr);
 	}
 
 	@Override

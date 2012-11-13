@@ -18,8 +18,7 @@ public class TypeSpecialCharactersForPlayerNameRule extends
 	public List<ActionContext> applyRule(long sessionId, Player player) {
 		List<ActionContext> actions = new ArrayList<>();
 		for (char specialCharacter : Alphabet.getNotAtTheBeginningLetters()) {
-			actions.add(new TypePlayerNameAction(specialCharacter,
-					getBatch(sessionId), sessionId));
+			actions.add(new TypePlayerNameAction(specialCharacter, sessionId));
 		}
 		return actions;
 	}

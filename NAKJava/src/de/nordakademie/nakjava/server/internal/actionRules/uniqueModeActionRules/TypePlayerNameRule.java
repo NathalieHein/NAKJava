@@ -16,8 +16,7 @@ public class TypePlayerNameRule extends NonSimulationStateRule {
 	public List<ActionContext> applyRule(long sessionId, Player player) {
 		List<ActionContext> actions = new ArrayList<>();
 		for (char letter : Alphabet.getLetters()) {
-			actions.add(new TypePlayerNameAction(letter, getBatch(sessionId),
-					sessionId));
+			actions.add(new TypePlayerNameAction(letter, sessionId));
 		}
 		return actions;
 

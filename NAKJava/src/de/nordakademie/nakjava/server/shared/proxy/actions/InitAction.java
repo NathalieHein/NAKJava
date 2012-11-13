@@ -13,7 +13,7 @@ public class InitAction extends ActionContext {
 	private Player player;
 
 	public InitAction(Player player) throws RemoteException {
-		super(0, 0);
+		super(0);
 		this.player = player;
 	}
 

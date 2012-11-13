@@ -32,7 +32,9 @@ public class ActionRuleset {
 
 	public static void update(long sessionId) {
 		Session session = Sessions.getInstance().getSession(sessionId);
+		session.getBatch().increaseBatchNr();
 		for (Player player : session.getSetOfPlayers()) {
+			player.getState().setBatch(session.getBatch().getCurrentBatchNr());
 			updatePlayerActions(player, sessionId);
 		}
 	}

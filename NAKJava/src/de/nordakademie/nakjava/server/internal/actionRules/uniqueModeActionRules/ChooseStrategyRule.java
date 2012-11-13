@@ -20,9 +20,8 @@ public class ChooseStrategyRule extends NonSimulationStateRule {
 	@Override
 	public List<ActionContext> applyRule(long sessionId, Player player) {
 		List<ActionContext> actions = new ArrayList<>();
-		long batch = getBatch(sessionId);
 		for (String winstrategy : WinStrategies.getInstance().getStrategies()) {
-			actions.add(new SelectWinStrategy(winstrategy, batch, sessionId));
+			actions.add(new SelectWinStrategy(winstrategy, sessionId));
 		}
 		return actions;
 	}

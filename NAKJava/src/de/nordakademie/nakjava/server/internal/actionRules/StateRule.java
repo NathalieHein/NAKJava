@@ -23,10 +23,6 @@ public abstract class StateRule implements ActionRule {
 
 	public abstract State getState();
 
-	public long getBatch(long sessionId) {
-		return getSession(sessionId).getBatch().getCurrentBatchNr();
-	}
-
 	public StateSpecificModel getStateSpecificModel(long sessionId,
 			Player player) {
 		return getPlayerState(sessionId, player).getStateSpecificModel();

@@ -12,8 +12,8 @@ import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
 public class WithdrawCardAction extends AbstractCardAction {
 
-	public WithdrawCardAction(String cardName, long batch, long sessionNr) {
-		super(cardName, batch, sessionNr);
+	public WithdrawCardAction(String cardName, long sessionNr) {
+		super(cardName, sessionNr);
 	}
 
 	@Override

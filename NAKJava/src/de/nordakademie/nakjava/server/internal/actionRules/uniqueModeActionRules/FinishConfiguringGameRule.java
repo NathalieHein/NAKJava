@@ -15,7 +15,7 @@ public class FinishConfiguringGameRule extends NonSimulationStateRule {
 	@Override
 	public List<ActionContext> applyRule(long sessionId, Player player) {
 		List<ActionContext> actions = new ArrayList<>();
-		actions.add(new FinishConfiguringAction(getBatch(sessionId), sessionId));
+		actions.add(new FinishConfiguringAction(sessionId));
 		return actions;
 	}
 

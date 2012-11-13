@@ -20,17 +20,16 @@ public class PlayCardRule extends AlternatingStateRule {
 	public List<ActionContext> applyRule(long sessionId, Player player) {
 		List<ActionContext> actions = new ArrayList<>();
 		Session session = getSession(sessionId);
-		long batch = getBatch(sessionId);
 		for (String cardName : ((InGameSpecificModel) getPlayerState(sessionId,
 				player).getStateSpecificModel()).getCards().getCardsOnHand()) {
 			AbstractCard card = CardLibrary.get().getCards().get(cardName);
 			if (card != null
 					&& card.checkPrerequirementsImpl(session.getModel()
 							.getSelfOpponentMap())) {
-				actions.add(new PlayCardAction(cardName, batch, sessionId));
-				actions.add(new SimulateCardAction(cardName, batch, sessionId));
+				actions.add(new PlayCardAction(cardName, sessionId));
+				actions.add(new SimulateCardAction(cardName, sessionId));
 			}
-			actions.add(new WithdrawCardAction(cardName, batch, sessionId));
+			actions.add(new WithdrawCardAction(cardName, sessionId));
 		}
 		return actions;
 	}

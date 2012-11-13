@@ -12,8 +12,8 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.SelectAction;
 
 public class SelectWinStrategy extends SelectAction {
 
-	public SelectWinStrategy(String value, long batch, long sessionNr) {
-		super(value, batch, sessionNr);
+	public SelectWinStrategy(String value, long sessionNr) {
+		super(value, sessionNr);
 	}
 
 	@Override

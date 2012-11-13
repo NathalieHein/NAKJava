@@ -12,8 +12,8 @@ import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public class RemoveDeckAction extends ActionContext {
 
-	public RemoveDeckAction(long batch, long sessionNr) {
-		super(batch, sessionNr);
+	public RemoveDeckAction(long sessionNr) {
+		super(sessionNr);
 		// TODO Auto-generated constructor stub
 	}
 

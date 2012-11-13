@@ -15,8 +15,8 @@ import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public class SaveDeckAction extends ActionContext {
 
-	public SaveDeckAction(long batch, long sessionNr) {
-		super(batch, sessionNr);
+	public SaveDeckAction(long sessionNr) {
+		super(sessionNr);
 	}
 
 	@Override

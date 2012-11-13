@@ -11,8 +11,8 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.SelectAction;
 
 public class SelectCardForDeckAction extends SelectAction {
 
-	public SelectCardForDeckAction(String value, long batch, long sessionNr) {
-		super(value, batch, sessionNr);
+	public SelectCardForDeckAction(String value, long sessionNr) {
+		super(value, sessionNr);
 	}
 
 	@Override

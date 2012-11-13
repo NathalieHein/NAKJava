@@ -18,14 +18,12 @@ public class ChooseDeckRule extends NonSimulationStateRule {
 	@Override
 	public List<ActionContext> applyRule(long sessionId, Player player) {
 		List<ActionContext> actions = new ArrayList<>();
-		long batch = getBatch(sessionId);
 		for (Deck deck : player.getSavedDecks()) {
-			actions.add(new EditDeckAction(deck.getName(), batch, sessionId));
-			actions.add(new SelectDeckAction(deck.getName(), batch, sessionId));
+			actions.add(new EditDeckAction(deck.getName(), sessionId));
+			actions.add(new SelectDeckAction(deck.getName(), sessionId));
 		}
-		actions.add(new SelectStandardDeckAction("StandardDeck", batch,
-				sessionId));
-		actions.add(new CreateNewDeckAction(batch, sessionId));
+		actions.add(new SelectStandardDeckAction("StandardDeck", sessionId));
+		actions.add(new CreateNewDeckAction(sessionId));
 		return actions;
 	}
 

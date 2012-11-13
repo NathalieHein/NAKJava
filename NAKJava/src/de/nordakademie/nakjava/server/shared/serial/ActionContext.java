@@ -13,11 +13,9 @@ public abstract class ActionContext implements Serializable {
 
 	protected ServerAction serverAction;
 	private List<ClientAction> preClientActions;
-	private long batch;
 	private boolean possiblyStable = false;
 
-	protected ActionContext(long batch, long sessionNr) {
-		this.batch = batch;
+	protected ActionContext(long sessionNr) {
 		preClientActions = new LinkedList<>();
 		try {
 			serverAction = getAction(sessionNr);
@@ -48,10 +46,6 @@ public abstract class ActionContext implements Serializable {
 	@Override
 	public boolean equals(Object obj) {
 		return serverAction.equals(obj);
-	}
-
-	public long getBatch() {
-		return batch;
 	}
 
 	public boolean isPossiblyStable() {

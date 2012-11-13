@@ -11,8 +11,8 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.KeyAction;
 
 public class TypeDeckNameAction extends KeyAction {
 
-	public TypeDeckNameAction(char key, long batch, long sessionNr) {
-		super(key, batch, sessionNr);
+	public TypeDeckNameAction(char key, long sessionNr) {
+		super(key, sessionNr);
 	}
 
 	@Override

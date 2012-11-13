@@ -12,8 +12,8 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.SelectAction;
 
 public class SelectDeckAction extends SelectAction {
 
-	public SelectDeckAction(String value, long batch, long sessionNr) {
-		super(value, batch, sessionNr);
+	public SelectDeckAction(String value, long sessionNr) {
+		super(value, sessionNr);
 		// TODO Auto-generated constructor stub
 	}
 

@@ -13,8 +13,8 @@ import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public class FinishConfiguringAction extends ActionContext {
 
-	public FinishConfiguringAction(long batch, long sessionNr) {
-		super(batch, sessionNr);
+	public FinishConfiguringAction(long sessionNr) {
+		super(sessionNr);
 		// TODO Auto-generated constructor stub
 	}
 

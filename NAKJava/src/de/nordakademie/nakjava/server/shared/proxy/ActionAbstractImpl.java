@@ -45,7 +45,6 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 			Session session = Sessions.getInstance().getSession(sessionId);
 			performImpl(session);
 			session = Sessions.getInstance().getSession(sessionId);
-			session.getBatch().increaseBatchNr();
 			threadPool.execute(new Runnable() {
 
 				@Override

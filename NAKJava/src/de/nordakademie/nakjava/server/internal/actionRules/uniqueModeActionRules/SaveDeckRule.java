@@ -15,7 +15,7 @@ public class SaveDeckRule extends NonSimulationStateRule {
 	@Override
 	public List<ActionContext> applyRule(long sessionId, Player player) {
 		List<ActionContext> actions = new ArrayList<>();
-		actions.add(new SaveDeckAction(getBatch(sessionId), sessionId));
+		actions.add(new SaveDeckAction(sessionId));
 		return actions;
 	}
 

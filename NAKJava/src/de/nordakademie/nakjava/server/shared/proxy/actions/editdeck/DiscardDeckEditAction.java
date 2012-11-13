@@ -10,8 +10,8 @@ import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public class DiscardDeckEditAction extends ActionContext {
 
-	public DiscardDeckEditAction(long batch, long sessionNr) {
-		super(batch, sessionNr);
+	public DiscardDeckEditAction(long sessionNr) {
+		super(sessionNr);
 		// TODO Auto-generated constructor stub
 	}
 

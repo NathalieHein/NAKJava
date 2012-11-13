@@ -13,8 +13,8 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.SelectAction;
 
 public class EditDeckAction extends SelectAction {
 
-	public EditDeckAction(String value, long batch, long sessionNr) {
-		super(value, batch, sessionNr);
+	public EditDeckAction(String value, long sessionNr) {
+		super(value, sessionNr);
 	}
 
 	@Override

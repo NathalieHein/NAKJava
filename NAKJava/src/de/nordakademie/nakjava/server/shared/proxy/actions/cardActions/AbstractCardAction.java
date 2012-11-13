@@ -6,8 +6,8 @@ public abstract class AbstractCardAction extends ActionContext {
 
 	protected String cardName;
 
-	public AbstractCardAction(String cardName, long batch, long sessionNr) {
-		super(batch, sessionNr);
+	public AbstractCardAction(String cardName, long sessionNr) {
+		super(sessionNr);
 		this.cardName = cardName;
 	}
 
