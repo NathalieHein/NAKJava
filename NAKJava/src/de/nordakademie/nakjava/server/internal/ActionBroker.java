@@ -21,12 +21,8 @@ public class ActionBroker {
 	}
 
 	// TODO comment missing
-	public boolean verify(ActionAbstractImpl serverAction) {
-		lock.lock();
-		// TODO not nice -> maybe InitAction as ServerAction + validation via
-		// instanceof
+	public synchronized boolean verify(ActionAbstractImpl serverAction) {
 		if (serverAction.isServerInternal()) {
-			lock.unlock();
 			return true;
 		}
 		Session session = Sessions.getInstance().getSession(
@@ -42,7 +38,7 @@ public class ActionBroker {
 		return false;
 	}
 
-	public void commit(ActionAbstractImpl serverAction) {
+	public synchronized void commit(ActionAbstractImpl serverAction) {
 		// ensures that thread on Model.waitCondition has exclusive access for
 		// rest of its verify()-Process
 		lock.lock();
@@ -58,7 +54,9 @@ public class ActionBroker {
 		lock.unlock();
 	}
 
-	public void releaseLock() {
-		lock.unlock();
+	// TODO not working with sessionId anymore but only passing real reference
+	// around
+	public synchronized Session getSession(long sessionId) {
+		return Sessions.getInstance().getSession(sessionId);
 	}
 }

@@ -36,7 +36,12 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 
 	@Override
 	public void perform() throws RemoteException {
-		if (ActionBroker.getInstance().verify(this)) {
+		boolean verified = false;
+		synchronized (ActionBroker.getInstance()) {
+			verified = ActionBroker.getInstance().verify(this);
+			Session session = ActionBroker.getInstance().getSession(sessionId);
+		}
+		if (verified) {
 			Session session = Sessions.getInstance().getSession(sessionId);
 			performImpl(session);
 			session = Sessions.getInstance().getSession(sessionId);
