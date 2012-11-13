@@ -86,6 +86,10 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 
 	protected abstract void performImpl(Session session);
 
+	public boolean isServerInternal() {
+		return false;
+	}
+
 	public long getSessionNr() {
 		return sessionId;
 	}

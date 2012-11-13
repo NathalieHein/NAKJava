@@ -4,7 +4,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
-import de.nordakademie.nakjava.server.shared.proxy.actions.InitAction;
 
 public class ActionBroker {
 	private static ActionBroker instance;
@@ -26,7 +25,7 @@ public class ActionBroker {
 		lock.lock();
 		// TODO not nice -> maybe InitAction as ServerAction + validation via
 		// instanceof
-		if (serverAction instanceof InitAction) {
+		if (serverAction.isServerInternal()) {
 			lock.unlock();
 			return true;
 		}
@@ -49,7 +48,7 @@ public class ActionBroker {
 		lock.lock();
 		// TODO kann hier in der Zwischenzeit die Session gel�scht worden sein?
 		// Wenn ja, nochmal auf null �berpr�fen
-		if (serverAction instanceof InitAction) {
+		if (serverAction.isServerInternal()) {
 			Sessions.getInstance().getSession(serverAction.getSessionNr())
 					.commitWithOutLock();
 		} else {
