@@ -27,4 +27,9 @@ public class WinStrategyInformation implements Serializable {
 		return winChecks;
 	}
 
+	@Override
+	public String toString() {
+		return name;
+	}
+
 }
