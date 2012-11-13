@@ -4,6 +4,8 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import de.nordakademie.nakjava.client.shared.PlayerControlListener;
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
@@ -19,6 +21,8 @@ public class Player {
 	private String name = "";
 	// TODO savedDecks include StandardDeck
 	private List<Deck> savedDecks;
+
+	private static ExecutorService threadPool = Executors.newCachedThreadPool();
 
 	public Player(PlayerControlListener controlListener,
 			PlayerStateListener stateListener) {
@@ -42,9 +46,23 @@ public class Player {
 	}
 
 	public void triggerChangeEvent() {
-		// TODO is it here where Exceptions occur??
-		state.triggerChangeEvent();
-		control.triggerChangeEvent();
+		threadPool.execute(new Runnable() {
+
+			@Override
+			public void run() {
+				state.triggerChangeEvent();
+			}
+
+		});
+		threadPool.execute(new Runnable() {
+
+			@Override
+			public void run() {
+				control.triggerChangeEvent();
+			}
+
+		});
+
 	}
 
 	public String getName() {
