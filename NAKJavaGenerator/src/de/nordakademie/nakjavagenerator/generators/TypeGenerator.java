@@ -11,6 +11,8 @@ import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
+import javax.annotation.processing.SupportedSourceVersion;
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
@@ -20,6 +22,7 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.JavaFileObject;
 
+@SupportedSourceVersion(SourceVersion.RELEASE_7)
 @SupportedAnnotationTypes(value = { "de.nordakademie.nakjava.server.internal.model.VisibleField" })
 public class TypeGenerator extends AbstractProcessor {
 
