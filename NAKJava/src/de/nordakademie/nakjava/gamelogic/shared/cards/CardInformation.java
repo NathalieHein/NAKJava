@@ -9,7 +9,8 @@ import de.nordakademie.nakjava.gamelogic.cards.impl.Card;
  * from the {@link Card} annotation.
  * 
  */
-public class CardInformation implements Serializable {
+public class CardInformation implements Serializable,
+		Comparable<CardInformation> {
 	private final String title;
 	private final String information;
 	private final String cost;
@@ -43,6 +44,33 @@ public class CardInformation implements Serializable {
 
 	public CardType getType() {
 		return type;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (obj instanceof CardInformation) {
+			return ((CardInformation) obj).getTitle().equals(title);
+		}
+
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return title.hashCode();
+	}
+
+	@Override
+	public int compareTo(CardInformation o) {
+		if (this.type == o.type) {
+			return this.title.compareTo(o.title);
+		} else {
+			return this.type.compareTo(o.type);
+		}
 	}
 
 }
