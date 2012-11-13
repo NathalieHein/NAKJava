@@ -7,6 +7,7 @@ import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.internal.model.ConfigureGameSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.Model;
+import de.nordakademie.nakjava.server.persistence.Deck;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
@@ -28,7 +29,8 @@ public class SelectStandardDeckAction extends SelectDeckAction {
 				}
 				PlayerState self = model.getSelf();
 				((ConfigureGameSpecificModel) self.getStateSpecificModel())
-						.setChosenDeck(CardLibrary.get().getCards().keySet());
+						.setChosenDeck(new Deck("StandardDeck", CardLibrary
+								.get().getCards().keySet()));
 			}
 		};
 	}

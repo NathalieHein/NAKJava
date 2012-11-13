@@ -30,7 +30,8 @@ public class EditDeckAction extends SelectAction {
 				PlayerState self = model.getSelf();
 				self.setState(State.EDITDECK);
 				self.setStateSpecificModel(new EditDeckSpecificModel(session
-						.getActionInvoker().getSavedDecks().get(getValue())));
+						.getActionInvoker().getDeckWithName(getValue())
+						.getCards()));
 			}
 		};
 	}

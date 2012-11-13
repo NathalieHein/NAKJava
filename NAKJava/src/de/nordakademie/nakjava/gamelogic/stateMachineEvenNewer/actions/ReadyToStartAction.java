@@ -18,7 +18,7 @@ public class ReadyToStartAction implements StateAction {
 		ConfigureGameSpecificModel specificModel = (ConfigureGameSpecificModel) self
 				.getStateSpecificModel();
 		((InGameSpecificModel) self.getStateSpecificModel())
-				.setCards(specificModel.getChosenDeck());
+				.setCards(specificModel.getChosenDeck().getCards());
 		if (opponent.getState() == State.READYTOSTARTSTATE) {
 			opponent.setState(State.STOP);
 			self.setStateSpecificModel(new InGameSpecificModel(Artifacts

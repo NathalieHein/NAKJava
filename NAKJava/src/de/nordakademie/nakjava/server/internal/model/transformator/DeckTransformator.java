@@ -1,0 +1,13 @@
+package de.nordakademie.nakjava.server.internal.model.transformator;
+
+import de.nordakademie.nakjava.server.internal.model.Transformator;
+import de.nordakademie.nakjava.server.persistence.Deck;
+
+public class DeckTransformator implements Transformator<Deck, String> {
+
+	@Override
+	public String transform(Deck input) {
+		return input.getName();
+	}
+
+}
