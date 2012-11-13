@@ -29,8 +29,9 @@ public abstract class AbstractGUIClient extends Client {
 
 	@Override
 	public void stateChanged(PlayerState state) throws RemoteException {
-		playerActionsChanged(state.getActions());
 		playerModelChanged(state.getModel());
+		playerActionsChanged(state.getActions());
+		getFrame().pack();
 	}
 
 	private void playerActionsChanged(List<ActionContext> actions) {
@@ -92,8 +93,6 @@ public abstract class AbstractGUIClient extends Client {
 		}
 
 		panelPicker.getCurrentPanel().setModel(model);
-		getFrame().pack();
-
 	}
 
 	public void revokeActionContexts(long batch) {
@@ -117,7 +116,6 @@ public abstract class AbstractGUIClient extends Client {
 				for (Component comp : getFrame().getComponents()) {
 					comp.revalidate();
 				}
-				getFrame().pack();
 				condition.signal();
 				lock.unlock();
 			}

@@ -20,8 +20,6 @@ public class Button extends JButton implements ActionListener,
 	private ActionContextSelector selector;
 	private long currentBatch;
 
-	private boolean initialized = false;
-
 	public Button(String text, ActionContextSelector selector,
 			boolean autoRegister) {
 		super(text);
@@ -50,15 +48,12 @@ public class Button extends JButton implements ActionListener,
 	@Override
 	public void setActionContext(ActionContext actionContext) {
 
-		if (!this.isEnabled()) {
-			this.setEnabled(true);
-		}
+		this.setEnabled(true);
 
 		this.actionContext = actionContext;
-		if (!initialized) {
-			this.addActionListener(this);
-			initialized = true;
-		}
+		this.removeActionListener(this);
+		this.addActionListener(this);
+
 	}
 
 	@Override
@@ -130,6 +125,7 @@ public class Button extends JButton implements ActionListener,
 	private void removeActionContext() {
 		this.setEnabled(false);
 		actionContext = null;
+		removeActionListener(this);
 	}
 
 }

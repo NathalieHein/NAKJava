@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,8 +34,12 @@ public class CardSelectionPanel extends Panel {
 	private JPanel cardOverview;
 	private JPanel controlPanel;
 
+	private Set<CardInformation> oldCardInformation;
+	private Map<CardInformation, CardSelector> cache;
+
 	public CardSelectionPanel() {
 		setLayout(new BorderLayout());
+		cache = new HashMap<>();
 		cardOverview = new JPanel();
 		cardOverview.setLayout(new GridLayout(0, 6));
 		// cardOverview.setMinimumSize(new Dimension(1024, 600));
@@ -74,16 +79,29 @@ public class CardSelectionPanel extends Panel {
 	}
 
 	public void setCards(Map<CardInformation, Boolean> cards) {
-		cardOverview.removeAll();
-
-		for (CardInformation card : cards.keySet()) {
-			cardOverview.add(new CardSelector(card, cards.get(card)));
+		if (oldCardInformation != null) {
+			if (oldCardInformation.equals(cards.keySet())) {
+				for (CardInformation info : cards.keySet()) {
+					cache.get(info).setSelected(cards.get(info));
+				}
+			}
+		} else {
+			cache = new HashMap<>();
+			for (CardInformation card : cards.keySet()) {
+				CardSelector selector = new CardSelector(card, cards.get(card));
+				cardOverview.add(selector);
+				cache.put(card, selector);
+			}
 		}
 
-		this.revalidate();
+		oldCardInformation = cards.keySet();
+
+		// this.revalidate();
 	}
 
 	private class CardSelector extends JPanel {
+
+		private Button button;
 
 		private CardSelector(final CardInformation card, boolean selected) {
 			this.setLayout(new GridBagLayout());
@@ -92,7 +110,7 @@ public class CardSelectionPanel extends Panel {
 			constraints.gridy = 0;
 
 			add(new CardInformationPanel(card), constraints);
-			Button button = new Button(selected ? "abwählen" : "auswählen",
+			button = new Button(selected ? "abwählen" : "auswählen",
 					new ActionContextSelector() {
 
 						@Override
@@ -106,16 +124,22 @@ public class CardSelectionPanel extends Panel {
 							return false;
 						}
 					}, true);
-			if (selected) {
-				button.setBackground(Color.green);
-			} else {
-				button.setBackground(Color.gray);
-			}
+			setSelected(selected);
 
 			constraints.gridy = 1;
 
 			add(button, constraints);
 
+		}
+
+		public void setSelected(boolean enabled) {
+			if (enabled) {
+				button.setBackground(Color.green);
+				button.setText("abwählen");
+			} else {
+				button.setBackground(Color.gray);
+				button.setText("auswählen");
+			}
 		}
 	}
 
