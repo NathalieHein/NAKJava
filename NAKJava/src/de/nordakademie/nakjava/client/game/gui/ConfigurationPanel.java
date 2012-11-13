@@ -30,12 +30,10 @@ public class ConfigurationPanel extends Panel {
 		add(gameTypePanel);
 		add(selfPanel);
 
-		cardDecks = new ComboBox(
-				SelectDeckAction.class,
-				VisibleModelFields.CONFIGURATIONSPECIFICINFORMATION_CURRENTLYCHOSENCARDDECK_SELF);
-		winStrategies = new ComboBox(
-				SelectWinStrategy.class,
-				VisibleModelFields.CONFIGURATIONSPECIFICINFORMATION_CURRENTLYCHOSENWINSTRATEGY_SELF);
+		cardDecks = new ComboBox(SelectDeckAction.class,
+				VisibleModelFields.CONFIGUREGAMESPECIFICMODEL_CHOSENDECK_SELF);
+		winStrategies = new ComboBox(SelectWinStrategy.class,
+				VisibleModelFields.CONFIGUREGAMESPECIFICMODEL_WINSTRATEGY_SELF);
 
 		gameTypePanel.add(new JLabel("Spielart:"));
 		gameTypePanel.add(winStrategies);

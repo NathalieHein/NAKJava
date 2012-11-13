@@ -9,7 +9,7 @@ public abstract class Alphabet {
 			'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
 			'U', 'V', 'W', 'X', 'Y', 'Z' };
 
-	private static final char[] notAtTheBeginningLetters = { '\b', '\n' };
+	private static final char[] notAtTheBeginningLetters = { '\b', ' ' };
 
 	public static char[] getLetters() {
 		return letters;

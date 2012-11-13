@@ -10,12 +10,15 @@ import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 public class PlayerState {
 
 	@VisibleField(targets = {
-			@TargetInState(target = Target.SELF, states = { State.LOGIN,
-					State.CONFIGUREGAME, State.READYTOSTARTSTATE,
-					State.PLAYCARDSTATE, State.ADJUSTCARDHANDSTATE, State.STOP }),
-			@TargetInState(target = Target.OPPONENT, states = { State.LOGIN,
-					State.CONFIGUREGAME, State.READYTOSTARTSTATE,
-					State.PLAYCARDSTATE, State.ADJUSTCARDHANDSTATE, State.STOP }) })
+			@TargetInState(target = Target.SELF,
+					states = { State.LOGIN, State.CONFIGUREGAME,
+							State.READYTOSTARTSTATE, State.PLAYCARDSTATE,
+							State.ADJUSTCARDHANDSTATE, State.STOP,
+							State.EDITDECK }),
+			@TargetInState(target = Target.OPPONENT,
+					states = { State.LOGIN, State.CONFIGUREGAME,
+							State.READYTOSTARTSTATE, State.PLAYCARDSTATE,
+							State.ADJUSTCARDHANDSTATE, State.STOP }) })
 	private State state;
 	private StateSpecificModel stateSpecificModel;
 

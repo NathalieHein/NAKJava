@@ -25,10 +25,10 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 	private boolean listenerActive = true;
 
 	private String currentSelection;
-	private VisibleModelField<String> currentSelectionField;
+	private VisibleModelField<? extends Object> currentSelectionField;
 
 	public ComboBox(final Class<? extends SelectAction> selectAction,
-			VisibleModelField<String> currentSelectionField) {
+			VisibleModelField<? extends Object> currentSelectionField) {
 		this.currentSelectionField = currentSelectionField;
 		currentSelection = "";
 
@@ -143,7 +143,8 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 	@Override
 	public void pickValue(Map<String, Object> genericValues) {
 		listenerActive = false;
-		setSelectedItem(currentSelectionField.getValue(genericValues));
+		setSelectedItem(currentSelectionField.getValue(genericValues)
+				.toString());
 		listenerActive = true;
 	}
 

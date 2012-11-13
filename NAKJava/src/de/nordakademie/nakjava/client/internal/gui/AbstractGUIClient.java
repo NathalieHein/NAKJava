@@ -92,6 +92,7 @@ public abstract class AbstractGUIClient extends Client {
 		}
 
 		panelPicker.getCurrentPanel().setModel(model);
+		getFrame().pack();
 
 	}
 

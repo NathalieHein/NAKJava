@@ -16,7 +16,14 @@ public abstract class Panel extends JPanel {
 
 	public abstract State[] getStates();
 
-	public void setModel(PlayerModel model) {
+	/**
+	 * This method is called on the actual panel by the client to set a
+	 * playermodel. Its genericTransfer Map will be selected and passed to each
+	 * containing value holder.
+	 * 
+	 * @param model
+	 */
+	public final void setModel(PlayerModel model) {
 		setModelImpl(model.getGenericTransfer());
 		for (ValueHolder holder : getAllComponentsOfType(ValueHolder.class,
 				this)) {
@@ -24,6 +31,11 @@ public abstract class Panel extends JPanel {
 		}
 	}
 
+	/**
+	 * To add additional behaviour clients may override this method.
+	 * 
+	 * @param values
+	 */
 	protected void setModelImpl(Map<String, Object> values) {
 	}
 
