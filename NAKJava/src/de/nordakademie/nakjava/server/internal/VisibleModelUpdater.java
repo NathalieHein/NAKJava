@@ -26,7 +26,9 @@ public class VisibleModelUpdater {
 
 	private static <V> void updatePlayerModel(Player player, long sessionId) {
 		// TODO ErrorHandling: how are we doing it?
-		PlayerModel currentPlayerTransferModel = player.getState().getModel();
+		// TODO needs state to somehow indicate dirtiness of PlayerModel
+		PlayerModel currentPlayerTransferModel = new PlayerModel();
+		player.getState().setModel(currentPlayerTransferModel);
 
 		Session session = Sessions.getInstance().getSession(sessionId);
 		PlayerState self = session.getPlayerStateForPlayer(player);
@@ -36,8 +38,8 @@ public class VisibleModelUpdater {
 
 		flatScan(global, currentPlayerTransferModel, self.getState());
 		deepScan(self, currentPlayerTransferModel, Target.SELF, self.getState());
-		deepScan(opponent, currentPlayerTransferModel, Target.OPPONENT, self
-				.getState());
+		deepScan(opponent, currentPlayerTransferModel, Target.OPPONENT,
+				self.getState());
 
 		// TODO create something like "ActionRules"
 		// TODO insert StateSpecificInfos
@@ -159,9 +161,9 @@ public class VisibleModelUpdater {
 				for (TargetInState tis : annotation.targets()) {
 					if (tis.target() == target
 							&& Arrays.asList(tis.states()).contains(state)) {
-						transfer.putGenericTransferObject(generateName(field,
-								obj, target), extractObject(field, obj,
-								annotation));
+						transfer.putGenericTransferObject(
+								generateName(field, obj, target),
+								extractObject(field, obj, annotation));
 					}
 				}
 
@@ -215,9 +217,9 @@ public class VisibleModelUpdater {
 
 				for (TargetInState tis : annotation.targets()) {
 					if (Arrays.asList(tis.states()).contains(state)) {
-						transfer.putGenericTransferObject(generateName(field,
-								obj, tis.target()), extractObject(field, obj,
-								annotation));
+						transfer.putGenericTransferObject(
+								generateName(field, obj, tis.target()),
+								extractObject(field, obj, annotation));
 					}
 				}
 

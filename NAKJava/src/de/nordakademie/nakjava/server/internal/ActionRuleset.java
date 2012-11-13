@@ -24,7 +24,9 @@ public class ActionRuleset {
 				actions.addAll(actionRule.applyRule(sessionId, player));
 			}
 		}
-		player.getState().setActions(actions);
+		if (!actions.isEmpty()) {
+			player.getState().setActions(actions);
+		}
 
 	}
 
