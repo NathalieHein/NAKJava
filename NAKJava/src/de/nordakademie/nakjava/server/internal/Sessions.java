@@ -2,6 +2,10 @@ package de.nordakademie.nakjava.server.internal;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
@@ -9,6 +13,10 @@ public class Sessions {
 	private static Sessions instance;
 	private Map<Long, Session> sessions = new HashMap<>();
 	private long nextSessionId = 1;
+	private final ReadWriteLock rwlock = new ReentrantReadWriteLock(true);
+	private final Lock readLock = rwlock.readLock();
+	private final Lock writeLock = rwlock.writeLock();
+	private final Condition writeCondition = writeLock.newCondition();
 
 	private Sessions() {
 	}
@@ -19,7 +27,7 @@ public class Sessions {
 	 * 
 	 * @return
 	 */
-	public static Sessions getInstance() {
+	public synchronized static Sessions getInstance() {
 		if (instance == null) {
 			instance = new Sessions();
 		}
@@ -27,20 +35,49 @@ public class Sessions {
 	}
 
 	public long addPlayer(Player player) {
-		for (Session session : sessions.values()) {
-			// this check is in this class because Model does not know that
-			// there is a session context
-			if (session.isStillRoom()) {
-				session.addPlayer(player);
-				return nextSessionId;
+		writeLock.lock();
+		try {
+			for (Session session : sessions.values()) {
+				if (session.isStillRoom()) {
+					session.addPlayer(player);
+					return nextSessionId;
+				}
 			}
+			nextSessionId++;
+			sessions.put(nextSessionId, new Session(player));
+			return nextSessionId;
+		} finally {
+			writeLock.unlock();
 		}
-		nextSessionId++;
-		sessions.put(nextSessionId, new Session(player));
-		return nextSessionId;
+	}
+
+	// this method can NOT be called from Action.performImpl() ->
+	// VisibleModelUpdater + ActionRuleSet rely on Session to exist
+	public void deleteSession(long sessionId) {
+		// no check for null necessary because session cannot be deleted before
+		Session session = getSession(sessionId);
+		writeLock.lock();
+		try {
+			while (!session.tryLock()) {
+				writeCondition.await();
+			}
+			sessions.remove(session);
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			writeCondition.signal();
+			writeLock.unlock();
+		}
 	}
 
 	public Session getSession(long sessionId) {
-		return sessions.get(sessionId);
+		readLock.lock();
+		try {
+			return sessions.get(sessionId);
+		} finally {
+			readLock.unlock();
+		}
 	}
 }

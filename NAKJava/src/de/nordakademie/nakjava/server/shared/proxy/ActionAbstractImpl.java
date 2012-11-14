@@ -39,12 +39,10 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 		boolean verified = false;
 		synchronized (ActionBroker.getInstance()) {
 			verified = ActionBroker.getInstance().verify(this);
-			Session session = ActionBroker.getInstance().getSession(sessionId);
 		}
 		if (verified) {
 			Session session = Sessions.getInstance().getSession(sessionId);
 			performImpl(session);
-			session = Sessions.getInstance().getSession(sessionId);
 			threadPool.execute(new Runnable() {
 
 				@Override
@@ -70,9 +68,9 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 				waitCondition.await();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+			} finally {
+				lock.unlock();
 			}
-			lock.unlock();
-
 			ActionBroker.getInstance().commit(this);
 
 		}
@@ -83,8 +81,11 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 		threadCount--;
 		if (threadCount == 0) {
 			lock.lock();
-			waitCondition.signal();
-			lock.unlock();
+			try {
+				waitCondition.signal();
+			} finally {
+				lock.unlock();
+			}
 		}
 	}
 

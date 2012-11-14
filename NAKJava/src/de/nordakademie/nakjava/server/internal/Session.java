@@ -3,6 +3,7 @@ package de.nordakademie.nakjava.server.internal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -10,6 +11,7 @@ import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
+//No need for synchronization because Action Broker ensures that all Session-methods are called either from a single-threaded context or are only read operations 
 public class Session {
 	private int furtherAllowedNumberOfPlayers = 2;
 
@@ -18,19 +20,32 @@ public class Session {
 	private Player actionInvoker;
 	private Batch batch;
 
-	private Lock lock = new ReentrantLock(true);
+	private final Lock lock = new ReentrantLock();
+	private final Condition sessionLocked = lock.newCondition();
+	private boolean toBeDeleted;
 
-	public void commit() {
-		for (Player player : getSetOfPlayers()) {
-			// TODO dirtyBits to be set correctly
-			// if (!modeUnique || player == actionInvoker) {
-			player.triggerChangeEvent();
-			// }
-		}
+	public boolean tryLock() {
+		return lock.tryLock();
+	}
+
+	public void releaseLock() {
 		lock.unlock();
 	}
 
-	public void commitWithOutLock() {
+	public void await() {
+		try {
+			sessionLocked.await();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public void signal() {
+		sessionLocked.signal();
+	}
+
+	public void commit() {
 		for (Player player : getSetOfPlayers()) {
 			// TODO dirtyBits to be set correctly
 			// if (!modeUnique || player == actionInvoker) {
@@ -43,11 +58,11 @@ public class Session {
 
 		actionInvoker = player;
 		batch = new Batch();
-		// TODO where to get initial artifacts
 		PlayerState playerState = new PlayerState();
 		model = new Model(playerState);
 		playerToPlayerState.put(player, playerState);
 		furtherAllowedNumberOfPlayers--;
+		setToBeDeleted(false);
 	}
 
 	public boolean isActionInvokerCurrentPlayer() {
@@ -57,18 +72,6 @@ public class Session {
 	public boolean verify(ServerAction serverAction) {
 		for (Player player : getSetOfPlayers()) {
 			if (player.getState().getActions().contains(serverAction)) {
-				// TODO works because commit(), that unlocks the lock is called
-				// from a single-threaded context (ActionBroker->lock)
-				if (!lock.tryLock()) {
-					// TODO really NOT acceptable solution -> Model should not
-					// know the ActionBroker
-					// TODO releaseLock()+lock.lock() (->fall asleep) should be
-					// one transaction: or making verify() synchronized???
-					ActionBroker.getInstance().releaseLock();
-					lock.lock();
-					// TODO needs to go back to Action.perform() here
-
-				}
 				actionInvoker = player;
 				return true;
 			}
@@ -125,6 +128,14 @@ public class Session {
 
 	public Set<Player> getSetOfPlayers() {
 		return playerToPlayerState.keySet();
+	}
+
+	public boolean isToBeDeleted() {
+		return toBeDeleted;
+	}
+
+	public void setToBeDeleted(boolean toBeDeleted) {
+		this.toBeDeleted = toBeDeleted;
 	}
 
 }
