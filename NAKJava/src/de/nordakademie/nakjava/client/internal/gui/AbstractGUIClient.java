@@ -23,8 +23,13 @@ public abstract class AbstractGUIClient extends Client {
 	protected ActionContextDelegator delegator;
 	protected PanelPicker panelPicker;
 
+	private Lock updatePanelLock;
+	private Condition updatePanelCondition;
+
 	protected AbstractGUIClient() throws RemoteException {
 		super();
+		updatePanelLock = new ReentrantLock();
+		updatePanelCondition = updatePanelLock.newCondition();
 	}
 
 	@Override
@@ -99,34 +104,41 @@ public abstract class AbstractGUIClient extends Client {
 		delegator.revokeActionContexts(batch);
 	}
 
+	/**
+	 * Synchronous call for updating a panel. Changing a Panel needs to switch
+	 * to the AWT-Event thread, which can only be done by invokeLater. By using
+	 * a lock, invoke-later is made synchronous. We can not use invokeAndWait,
+	 * because a button might be pressed and needs to be released. With invoke
+	 * later we ensure to invoke that action after the button is released :-).
+	 * 
+	 * @param runnable
+	 */
 	private void updateFrame(final Runnable runnable) {
 
-		final Lock lock = new ReentrantLock();
-		lock.lock();
-		final Condition condition = lock.newCondition();
+		updatePanelLock.lock();
 
 		// invokeLater + Condition => synchronous call
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
 			public void run() {
-				lock.lock();
+				updatePanelLock.lock();
 				getFrame().getContentPane().removeAll();
 				runnable.run();
 				for (Component comp : getFrame().getComponents()) {
 					comp.revalidate();
 				}
-				condition.signal();
-				lock.unlock();
+				updatePanelCondition.signal();
+				updatePanelLock.unlock();
 			}
 		});
 
 		try {
-			condition.await();
+			updatePanelCondition.await();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
-			lock.unlock();
+			updatePanelLock.unlock();
 		}
 
 	}
