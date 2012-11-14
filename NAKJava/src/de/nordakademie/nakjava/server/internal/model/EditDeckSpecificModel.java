@@ -50,6 +50,16 @@ public class EditDeckSpecificModel implements StateSpecificModel {
 		}
 	}
 
+	public int getNumberOfSelectedCards() {
+		int count = 0;
+		for (Boolean cardSelected : chosenCards.values()) {
+			if (cardSelected) {
+				count++;
+			}
+		}
+		return count;
+	}
+
 	public static void main(String[] args) {
 		ClasspathScanner.lookupAnnotatedScanners();
 		EditDeckSpecificModel mod = new EditDeckSpecificModel(null);
@@ -58,10 +68,15 @@ public class EditDeckSpecificModel implements StateSpecificModel {
 			System.out.println("something wron");
 		}
 		System.out.println("CardCount: " + mod.getChosenCards().size());
+		System.out.println(mod.getNumberOfSelectedCards());
 		System.out.println(card + " , " + mod.getChosenCards().get(card));
 		mod.reverseSelectionOfCard(card);
+		System.out.println(mod.getNumberOfSelectedCards());
+
 		System.out.println(card + " , " + mod.getChosenCards().get(card));
 		mod.reverseSelectionOfCard(card);
+		System.out.println(mod.getNumberOfSelectedCards());
+
 		System.out.println(card + " , " + mod.getChosenCards().get(card));
 	}
 }

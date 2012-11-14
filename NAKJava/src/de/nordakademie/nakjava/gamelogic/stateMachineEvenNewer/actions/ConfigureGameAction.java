@@ -10,12 +10,11 @@ public class ConfigureGameAction implements StateAction {
 
 	@Override
 	public void perform(Model model) {
-		// TODO needed?
-		// TODO StateMachine model oder session -> could make transformation
-		model.getSelf().setStateSpecificModel(
-				new ConfigureGameSpecificModel(new Deck("StandardDeck",
-						CardLibrary.get().getCards().keySet()),
-						(String) WinStrategies.getInstance().getStrategies()
-								.toArray()[0]));
+		// TODO looks ugly: utility-methods in WinStrategies and CardLibrary??
+		ConfigureGameSpecificModel configureModel = new ConfigureGameSpecificModel(
+				new Deck("StandardDeck", CardLibrary.get().getCards().keySet()),
+				(String) WinStrategies.getInstance().getStrategies().toArray()[0]);
+		model.getSelf().setStateSpecificModel(configureModel);
+
 	}
 }

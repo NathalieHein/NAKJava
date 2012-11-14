@@ -21,10 +21,12 @@ public class SaveDeckRule extends NonSimulationStateRule {
 
 	@Override
 	protected boolean isRuleApplicableImpl(long sessionId, Player player) {
-		String currentPartOfDeckName = ((EditDeckSpecificModel) getStateSpecificModel(
-				sessionId, player)).getCurrentPartOfDeckName();
+		EditDeckSpecificModel specificModel = (EditDeckSpecificModel) getStateSpecificModel(
+				sessionId, player);
+		String currentPartOfDeckName = specificModel.getCurrentPartOfDeckName();
 		return !currentPartOfDeckName.equals("")
-				&& !currentPartOfDeckName.equals("StandardDeck");
+				&& !currentPartOfDeckName.equals("StandardDeck")
+				&& specificModel.getNumberOfSelectedCards() >= 50;
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
+import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
@@ -22,14 +23,18 @@ public class WithdrawCardAction extends AbstractCardAction {
 
 			@Override
 			protected void performImpl(Session session) {
-				PlayerState self = session.getModel().getSelf();
+				Model model = session.getModel();
+				if (!session.isActionInvokerCurrentPlayer()) {
+					model.changeSelfAndOpponent();
+				}
+				PlayerState self = model.getSelf();
 				if (!((InGameSpecificModel) self.getStateSpecificModel())
 						.getCards().discardCardFromHand(cardName)) {
 					throw new IllegalStateException(
 							"Card to be discarded is not in cardhand");
 				}
 				self.setState(State.ADJUSTCARDHANDSTATE);
-				StateMachine.getInstance().runCurrentState(session.getModel());
+				StateMachine.getInstance().runCurrentState(model);
 
 			}
 		};

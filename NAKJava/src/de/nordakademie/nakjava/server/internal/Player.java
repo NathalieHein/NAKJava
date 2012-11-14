@@ -81,8 +81,10 @@ public class Player {
 		this.savedDecks = savedDecks;
 	}
 
-	public void addDeck(String name, Set<String> cards) {
-		savedDecks.add(new Deck(name, cards));
+	public Deck addDeck(String name, Set<String> cards) {
+		Deck deck = new Deck(name, cards);
+		savedDecks.add(deck);
+		return deck;
 	}
 
 	public Deck getDeckWithName(String name) {

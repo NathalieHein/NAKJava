@@ -10,6 +10,7 @@ import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
 import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
+import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
@@ -30,8 +31,12 @@ public class PlayCardAction extends AbstractCardAction {
 				// action would not be verified otherwise
 
 				if (card != null) {
-					Map<Target, PlayerState> selfOpponentMap = session
-							.getModel().getSelfOpponentMap();
+					Model model = session.getModel();
+					if (!session.isActionInvokerCurrentPlayer()) {
+						model.changeSelfAndOpponent();
+					}
+					Map<Target, PlayerState> selfOpponentMap = model
+							.getSelfOpponentMap();
 					card.payImpl(selfOpponentMap);
 					card.performActionImpl(selfOpponentMap);
 					if (!((InGameSpecificModel) selfOpponentMap
@@ -42,7 +47,7 @@ public class PlayCardAction extends AbstractCardAction {
 					}
 					// if card states: "Play again" than state must be set to
 					// "PREACTION"
-					StateMachine.getInstance().run(session.getModel());
+					StateMachine.getInstance().run(model);
 				} else {
 					// TODO what if card not found
 					// --> should be nothing because should go back to trigger
