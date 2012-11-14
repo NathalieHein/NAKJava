@@ -32,6 +32,10 @@ public class PlayerState implements Serializable {
 		this.batch = batch;
 	}
 
+	public long getBatch() {
+		return batch;
+	}
+
 	public List<ActionContext> getActions() {
 		return new ArrayList<ActionContext>(actions);
 	}

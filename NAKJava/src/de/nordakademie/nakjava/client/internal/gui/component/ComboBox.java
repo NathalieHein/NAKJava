@@ -2,7 +2,6 @@ package de.nordakademie.nakjava.client.internal.gui.component;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,12 +45,9 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 			public void actionPerformed(ActionEvent arg0) {
 				if (listenerActive) {
 					String item = (String) getSelectedItem();
-					try {
-						actions.get(item).perform();
-					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+
+					actions.get(item).perform();
+
 				}
 
 			}
@@ -82,18 +78,18 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 	}
 
 	@Override
-	public void setActionContext(ActionContext actionContext) {
+	public void setActionContext(ActionContext actionContext, long batch) {
 		if (!(actionContext instanceof SelectAction)) {
 			return;
 		}
 
 		SelectAction action = (SelectAction) actionContext;
 
-		if (actionContext.getBatch() > currentBatch) {
-			currentBatch = actionContext.getBatch();
+		if (batch > currentBatch) {
+			currentBatch = batch;
 			actions.clear();
 			removeAllItems();
-		} else if (actionContext.getBatch() < currentBatch) {
+		} else if (batch < currentBatch) {
 			return;
 		}
 

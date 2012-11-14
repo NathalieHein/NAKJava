@@ -32,11 +32,25 @@ public abstract class ActionContext implements Serializable {
 	protected abstract ServerAction getAction(long sessionNr)
 			throws RemoteException;
 
-	public void perform() throws RemoteException {
+	public void perform() {
 		for (ClientAction action : preClientActions) {
 			action.perform();
 		}
-		serverAction.perform();
+		// TODO perhaps we could add a client ThreadPool in here...
+		// TODO exception Handling -> asynchronous Feedback
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				try {
+					serverAction.perform();
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+
+			}
+		}).start();
+
 	}
 
 	public void addPreClientAction(ClientAction action) {

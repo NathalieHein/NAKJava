@@ -1,7 +1,5 @@
 package de.nordakademie.nakjava.client.internal.gui.component;
 
-import java.rmi.RemoteException;
-
 import javax.swing.JCheckBox;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -27,12 +25,8 @@ public class CheckBox extends JCheckBox implements ActionContextHolder {
 
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
-				try {
-					context.perform();
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+
+				context.perform();
 
 			}
 		});
@@ -40,12 +34,12 @@ public class CheckBox extends JCheckBox implements ActionContextHolder {
 	}
 
 	@Override
-	public void setActionContext(ActionContext actionContext) {
-		if (currentBatch < actionContext.getBatch()) {
-			currentBatch = actionContext.getBatch();
+	public void setActionContext(ActionContext actionContext, long batch) {
+		if (currentBatch < batch) {
+			currentBatch = batch;
 		}
 
-		if (currentBatch > actionContext.getBatch()) {
+		if (currentBatch > batch) {
 			return;
 		}
 

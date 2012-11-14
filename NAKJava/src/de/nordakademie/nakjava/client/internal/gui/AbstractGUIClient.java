@@ -28,15 +28,15 @@ public abstract class AbstractGUIClient extends Client {
 	}
 
 	@Override
-	public void stateChanged(PlayerState state) throws RemoteException {
+	public void stateChange(PlayerState state) {
 		playerModelChanged(state.getModel());
-		playerActionsChanged(state.getActions());
+		playerActionsChanged(state.getActions(), state.getBatch());
 		getFrame().pack();
 	}
 
-	private void playerActionsChanged(List<ActionContext> actions) {
-		extendActionContext(actions);
-		delegator.delegateActionContexts(actions, true);
+	private void playerActionsChanged(List<ActionContext> actions, long batch) {
+		extendActionContext(actions, batch);
+		delegator.delegateActionContexts(actions, batch, true);
 	}
 
 	@Override
@@ -65,13 +65,13 @@ public abstract class AbstractGUIClient extends Client {
 	 * 
 	 * @param actions
 	 */
-	private void extendActionContext(List<ActionContext> actions) {
+	private void extendActionContext(List<ActionContext> actions,
+			final long batch) {
 		for (final ActionContext actionContext : actions) {
 			actionContext.addPreClientAction(new ClientAction() {
 				@Override
 				public void perform() {
-					AbstractGUIClient.this.revokeActionContexts(actionContext
-							.getBatch());
+					AbstractGUIClient.this.revokeActionContexts(batch);
 				}
 			});
 		}

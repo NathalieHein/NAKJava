@@ -3,7 +3,6 @@ package de.nordakademie.nakjava.client.internal.gui.component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeListener;
-import java.rmi.RemoteException;
 import java.util.Map;
 
 import javax.swing.Action;
@@ -51,18 +50,18 @@ public class TextField extends JTextField implements ActionContextHolder,
 	}
 
 	@Override
-	public void setActionContext(ActionContext actionContext) {
+	public void setActionContext(ActionContext actionContext, long batch) {
 		if (!(actionContext instanceof KeyAction)) {
 			return;
 		}
 
 		KeyAction action = (KeyAction) actionContext;
 
-		if (actionContext.getBatch() > currentBatch) {
-			currentBatch = actionContext.getBatch();
+		if (batch > currentBatch) {
+			currentBatch = batch;
 			actionMap.clear();
 			inputMap.clear();
-		} else if (actionContext.getBatch() < currentBatch) {
+		} else if (batch < currentBatch) {
 			return;
 		}
 
@@ -111,12 +110,9 @@ public class TextField extends JTextField implements ActionContextHolder,
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			try {
-				action.perform();
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+			action.perform();
+
 		}
 
 		@Override

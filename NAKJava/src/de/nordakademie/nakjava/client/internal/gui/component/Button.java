@@ -2,7 +2,6 @@ package de.nordakademie.nakjava.client.internal.gui.component;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -46,9 +45,10 @@ public class Button extends JButton implements ActionListener,
 	}
 
 	@Override
-	public void setActionContext(ActionContext actionContext) {
+	public void setActionContext(ActionContext actionContext, long batch) {
 
 		this.setEnabled(true);
+		currentBatch = batch;
 
 		this.actionContext = actionContext;
 		this.removeActionListener(this);
@@ -69,14 +69,11 @@ public class Button extends JButton implements ActionListener,
 				lock.lock();
 				try {
 					if (actionContext != null) {
-						try {
-							Button.this.setEnabled(false);
-							actionContext.perform();
-							actionContext = null;
-						} catch (RemoteException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+
+						Button.this.setEnabled(false);
+						actionContext.perform();
+						actionContext = null;
+
 					}
 				} finally {
 					lock.unlock();

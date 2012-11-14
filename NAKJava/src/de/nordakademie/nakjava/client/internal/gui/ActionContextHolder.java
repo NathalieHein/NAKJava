@@ -3,7 +3,7 @@ package de.nordakademie.nakjava.client.internal.gui;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public interface ActionContextHolder {
-	public void setActionContext(ActionContext actionContext);
+	public void setActionContext(ActionContext actionContext, long batch);
 
 	public boolean isActionContextApplicable(ActionContext context);
 

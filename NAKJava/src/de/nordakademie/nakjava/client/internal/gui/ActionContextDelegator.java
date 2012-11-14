@@ -9,9 +9,9 @@ public class ActionContextDelegator {
 
 	private static ActionContextDelegator instance;
 	private List<ActionContextHolder> holders;
-	private long currentBatch;
 
 	private List<ActionContext> toBeDistributed;
+	private long currentBatch;
 
 	public static synchronized ActionContextDelegator getInstance() {
 		if (instance == null) {
@@ -33,20 +33,21 @@ public class ActionContextDelegator {
 
 		for (ActionContext context : toBeDistributed) {
 			if (actionContextHolder.isActionContextApplicable(context)) {
-				actionContextHolder.setActionContext(context);
+				actionContextHolder.setActionContext(context, currentBatch);
 			}
 		}
 	}
 
 	public void delegateActionContexts(List<ActionContext> actionContexts,
-			boolean careTaking) {
+			long batch, boolean careTaking) {
 		List<ActionContextHolder> notMatched = new LinkedList<>(holders);
 		toBeDistributed = new LinkedList<>();
+		currentBatch = batch;
 
 		List<ActionContextHolder> toRemove = new LinkedList<>();
 
 		for (ActionContextHolder holder : holders) {
-			holder.revokeActionContext(currentBatch);
+			holder.revokeActionContext(batch - 1);
 			if (careTaking) {
 				if (!holder.isDisposed()) {
 					toRemove.add(holder);
@@ -58,14 +59,13 @@ public class ActionContextDelegator {
 		holders.removeAll(toRemove);
 
 		if (actionContexts.size() != 0) {
-			currentBatch = actionContexts.get(0).getBatch();
 			for (ActionContext context : actionContexts) {
 
 				boolean matched = false;
 
 				for (ActionContextHolder holder : holders) {
 					if (holder.isActionContextApplicable(context)) {
-						holder.setActionContext(context);
+						holder.setActionContext(context, batch);
 						notMatched.remove(holder);
 						matched = true;
 						break;
