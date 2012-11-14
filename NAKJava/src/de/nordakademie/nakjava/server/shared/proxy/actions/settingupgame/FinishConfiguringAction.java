@@ -31,10 +31,11 @@ public class FinishConfiguringAction extends ActionContext {
 				PlayerState self = model.getSelf();
 				ConfigureGameSpecificModel specificModel = (ConfigureGameSpecificModel) self
 						.getStateSpecificModel();
-				if (specificModel.getWinStrategy() != null
-						&& specificModel.getChosenDeck() != null) {
-					StateMachine.getInstance().run(model);
-				}
+				// not necessary because otherwise Finish would not be possible
+				// if (specificModel.getWinStrategy() != null
+				// && specificModel.getChosenDeck() != null) {
+				StateMachine.getInstance().run(model);
+				// }
 			}
 		};
 	}
