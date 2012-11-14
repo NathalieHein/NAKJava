@@ -5,21 +5,25 @@ import java.util.Map;
 
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
-import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.WinStrategy;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategies;
 import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
+import de.nordakademie.nakjava.server.internal.model.transformator.WinStrategyTransformator;
 
 public class Model {
 	@VisibleField(targets = { @TargetInState(states = { State.CONFIGUREGAME,
 			State.READYTOSTARTSTATE, State.PLAYCARDSTATE,
-			State.ADJUSTCARDHANDSTATE, State.STOP }, target = Target.SELF) })
-	protected WinStrategy strategy;
+			State.ADJUSTCARDHANDSTATE, State.STOP }, target = Target.SELF) }, transformer = WinStrategyTransformator.class)
+	protected String strategy;
 	protected PlayerState self;
 	protected PlayerState opponent;
 	protected SimulationModel simulationModel;
 
 	public Model(PlayerState playerState) {
 		self = playerState;
+		// TODO this really doesn't look good
+		strategy = (String) WinStrategies.getInstance().getStrategies()
+				.toArray()[0];
 	}
 
 	public void addPlayerState(PlayerState playerState) {
@@ -29,11 +33,11 @@ public class Model {
 		self = playerState;
 	}
 
-	public WinStrategy getStrategy() {
+	public String getStrategy() {
 		return strategy;
 	}
 
-	public void setStrategy(WinStrategy strategy) {
+	public void setStrategy(String strategy) {
 		this.strategy = strategy;
 	}
 

@@ -32,7 +32,8 @@ public class WinStrategies {
 				description.append("- " + check.getDescription() + "\n");
 			}
 
-			this.strategyInformation.put(strategyName,
+			this.strategyInformation.put(
+					strategyName,
 					new WinStrategyInformation(strategyName, description
 							.toString(), strategy.getChecks().toArray(
 							new WinCheck[strategy.getChecks().size()])));

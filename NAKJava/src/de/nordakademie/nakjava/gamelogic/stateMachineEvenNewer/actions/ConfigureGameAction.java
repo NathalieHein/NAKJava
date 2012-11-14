@@ -12,8 +12,7 @@ public class ConfigureGameAction implements StateAction {
 	public void perform(Model model) {
 		// TODO looks ugly: utility-methods in WinStrategies and CardLibrary??
 		ConfigureGameSpecificModel configureModel = new ConfigureGameSpecificModel(
-				new Deck("StandardDeck", CardLibrary.get().getCards().keySet()),
-				(String) WinStrategies.getInstance().getStrategies().toArray()[0]);
+				new Deck("StandardDeck", CardLibrary.get().getCards().keySet()));
 		model.getSelf().setStateSpecificModel(configureModel);
 
 	}

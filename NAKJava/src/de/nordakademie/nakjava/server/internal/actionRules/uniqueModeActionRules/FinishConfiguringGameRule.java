@@ -28,8 +28,8 @@ public class FinishConfiguringGameRule extends NonSimulationStateRule {
 	protected boolean isRuleApplicableImpl(long sessionId, Player player) {
 		ConfigureGameSpecificModel specificModel = (ConfigureGameSpecificModel) getPlayerState(
 				sessionId, player).getStateSpecificModel();
-		return specificModel.getChosenDeck() != null
-				&& specificModel.getWinStrategy() != null;
+		// TODO still necessary?
+		return specificModel.getChosenDeck() != null;
 	}
 
 }

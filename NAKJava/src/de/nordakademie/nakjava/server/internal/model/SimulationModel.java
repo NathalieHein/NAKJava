@@ -1,13 +1,12 @@
 package de.nordakademie.nakjava.server.internal.model;
 
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
-import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.WinStrategy;
 
 public class SimulationModel extends Model {
 	private int countRounds;
 
 	public SimulationModel(PlayerState self, PlayerState opponent,
-			WinStrategy winStrategy) {
+			String winStrategy) {
 		super(self);
 		this.opponent = opponent;
 		this.strategy = winStrategy;
