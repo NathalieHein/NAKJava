@@ -36,44 +36,53 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 
 	@Override
 	public void perform() throws RemoteException {
-		boolean verified = false;
-		synchronized (ActionBroker.getInstance()) {
-			verified = ActionBroker.getInstance().verify(this);
-		}
-		if (verified) {
-			Session session = Sessions.getInstance().getSession(sessionId);
-			performImpl(session);
-			threadPool.execute(new Runnable() {
+		new Thread(new Runnable() {
 
-				@Override
-				public void run() {
-					ActionRuleset.update(sessionId);
-					finishThread();
+			@Override
+			public void run() {
+				boolean verified = false;
+				synchronized (ActionBroker.getInstance()) {
+					verified = ActionBroker.getInstance().verify(
+							ActionAbstractImpl.this);
 				}
-			});
-			threadPool.execute(new Runnable() {
-				@Override
-				public void run() {
-					VisibleModelUpdater.update(sessionId);
-					finishThread();
-				}
-			});
+				if (verified) {
+					Session session = Sessions.getInstance().getSession(
+							sessionId);
+					performImpl(session);
+					threadPool.execute(new Runnable() {
 
-			// Needs to be done for changing the thread context back
-			// to the thread that holds the lock in the ActionBroker
-			// TODO this is easier if using thread.join()
-			waitCondition = lock.newCondition();
-			lock.lock();
-			try {
-				waitCondition.await();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} finally {
-				lock.unlock();
+						@Override
+						public void run() {
+							ActionRuleset.update(sessionId);
+							finishThread();
+						}
+					});
+					threadPool.execute(new Runnable() {
+						@Override
+						public void run() {
+							VisibleModelUpdater.update(sessionId);
+							finishThread();
+						}
+					});
+
+					// Needs to be done for changing the thread context back
+					// to the thread that holds the lock in the ActionBroker
+					// TODO this is easier if using thread.join()
+					waitCondition = lock.newCondition();
+					lock.lock();
+					try {
+						waitCondition.await();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					} finally {
+						lock.unlock();
+					}
+					ActionBroker.getInstance().commit(ActionAbstractImpl.this);
+
+				}
+
 			}
-			ActionBroker.getInstance().commit(this);
-
-		}
+		}).start();
 
 	}
 
