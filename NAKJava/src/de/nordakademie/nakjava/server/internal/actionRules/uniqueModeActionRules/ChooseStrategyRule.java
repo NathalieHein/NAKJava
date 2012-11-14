@@ -3,6 +3,7 @@ package de.nordakademie.nakjava.server.internal.actionRules.uniqueModeActionRule
 import java.util.ArrayList;
 import java.util.List;
 
+import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategies;
 import de.nordakademie.nakjava.server.internal.Player;
@@ -14,17 +15,16 @@ public class ChooseStrategyRule extends NonSimulationStateRule {
 
 	@Override
 	protected boolean isRuleApplicableImpl(long sessionId, Player player) {
-		return getSession(sessionId).getModel().getStrategy() == null;
+		PlayerState opponent = getSession(sessionId).getModel().getOpponent();
+		return opponent != null
+				&& opponent.getState() != State.READYTOSTARTSTATE;
 	}
 
 	@Override
 	public List<ActionContext> applyRule(long sessionId, Player player) {
 		List<ActionContext> actions = new ArrayList<>();
-		if (getSession(sessionId).getModel().getOpponent().getState() != State.READYTOSTARTSTATE) {
-			for (String winstrategy : WinStrategies.getInstance()
-					.getStrategies()) {
-				actions.add(new SelectWinStrategy(winstrategy, sessionId));
-			}
+		for (String winstrategy : WinStrategies.getInstance().getStrategies()) {
+			actions.add(new SelectWinStrategy(winstrategy, sessionId));
 		}
 		return actions;
 	}
