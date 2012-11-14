@@ -1,6 +1,7 @@
 package de.nordakademie.nakjava.client.internal.gui;
 
 import java.awt.Component;
+import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
@@ -33,10 +34,22 @@ public abstract class AbstractGUIClient extends Client {
 	}
 
 	@Override
-	public void stateChange(PlayerState state) {
-		playerModelChanged(state.getModel());
-		playerActionsChanged(state.getActions(), state.getBatch());
-		getFrame().pack();
+	public void stateChange(final PlayerState state) {
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+
+				@Override
+				public void run() {
+					playerModelChanged(state.getModel());
+					playerActionsChanged(state.getActions(), state.getBatch());
+					getFrame().pack();
+				}
+			});
+		} catch (InvocationTargetException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	private void playerActionsChanged(List<ActionContext> actions, long batch) {
@@ -115,30 +128,10 @@ public abstract class AbstractGUIClient extends Client {
 	 */
 	private void updateFrame(final Runnable runnable) {
 
-		updatePanelLock.lock();
-
-		// invokeLater + Condition => synchronous call
-		SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				updatePanelLock.lock();
-				getFrame().getContentPane().removeAll();
-				runnable.run();
-				for (Component comp : getFrame().getComponents()) {
-					comp.revalidate();
-				}
-				updatePanelCondition.signal();
-				updatePanelLock.unlock();
-			}
-		});
-
-		try {
-			updatePanelCondition.await();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} finally {
-			updatePanelLock.unlock();
+		getFrame().getContentPane().removeAll();
+		runnable.run();
+		for (Component comp : getFrame().getComponents()) {
+			comp.revalidate();
 		}
 
 	}
