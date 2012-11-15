@@ -7,6 +7,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
 public class Sessions {
@@ -61,6 +62,12 @@ public class Sessions {
 			while (!session.tryLock()) {
 				writeCondition.await();
 			}
+			// TODO This is not nice because Sessions should know nothing about
+			// model self/opponent
+			Model model = session.getModel();
+			Players.getInstance().removePlayerName(model.getSelf().getName());
+			Players.getInstance().removePlayerName(
+					model.getOpponent().getName());
 			sessions.remove(session);
 
 		} catch (InterruptedException e) {

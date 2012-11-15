@@ -3,6 +3,7 @@ package de.nordakademie.nakjava.server.internal.actionRules.uniqueModeActionRule
 import java.util.ArrayList;
 import java.util.List;
 
+import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.Player;
 import de.nordakademie.nakjava.server.internal.actionRules.NonSimulationStateRule;
@@ -18,7 +19,9 @@ public class ChooseDeckRule extends NonSimulationStateRule {
 	@Override
 	public List<ActionContext> applyRule(long sessionId, Player player) {
 		List<ActionContext> actions = new ArrayList<>();
-		for (Deck deck : player.getSavedDecks()) {
+		PlayerState self = getSession(sessionId)
+				.getPlayerStateForPlayer(player);
+		for (Deck deck : self.getSavedDecks()) {
 			actions.add(new EditDeckAction(deck.getName(), sessionId));
 			actions.add(new SelectDeckAction(deck.getName(), sessionId));
 		}

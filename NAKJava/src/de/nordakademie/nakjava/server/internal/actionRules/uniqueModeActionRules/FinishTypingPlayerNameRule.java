@@ -5,6 +5,7 @@ import java.util.List;
 
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.Player;
+import de.nordakademie.nakjava.server.internal.Players;
 import de.nordakademie.nakjava.server.internal.actionRules.NonSimulationStateRule;
 import de.nordakademie.nakjava.server.internal.model.LoginSpecificModel;
 import de.nordakademie.nakjava.server.shared.proxy.actions.login.SubmitPlayerNameAction;
@@ -16,9 +17,8 @@ public class FinishTypingPlayerNameRule extends NonSimulationStateRule {
 	protected boolean isRuleApplicableImpl(long sessionId, Player player) {
 		String currentPartOfName = ((LoginSpecificModel) getStateSpecificModel(
 				sessionId, player)).getCurrentPartOfName();
-		for (Player differentPlayer : getSession(sessionId).getSetOfPlayers()) {
-			if (differentPlayer != player
-					&& differentPlayer.getName().equals(currentPartOfName)) {
+		for (String otherName : Players.getInstance().getPlayerNames()) {
+			if (otherName.equals(currentPartOfName)) {
 				return false;
 			}
 		}

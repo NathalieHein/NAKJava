@@ -5,17 +5,32 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
-import de.nordakademie.nakjava.server.internal.Player;
 import de.nordakademie.nakjava.server.internal.Session;
+import de.nordakademie.nakjava.server.internal.actionRules.uniqueModeActionRules.SaveDeckRule;
 import de.nordakademie.nakjava.server.internal.model.EditDeckSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.persistence.Deck;
-import de.nordakademie.nakjava.server.persistence.DeckPersister;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * SaveDeckAction works as follows:
+ * 
+ * - previous name of edited deck is not current name --> new {@link Deck} will
+ * be created and saved
+ * 
+ * - previous name of edited deck is same as current name --> deck will be
+ * overwritten
+ * 
+ * - current name already in use for other than currently edited deck --> no
+ * {@link SaveDeckAction} will be allowed (s. {@link SaveDeckRule}
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class SaveDeckAction extends ActionContext {
 
 	public SaveDeckAction(long sessionNr) {
@@ -32,8 +47,9 @@ public class SaveDeckAction extends ActionContext {
 				if (!session.isActionInvokerCurrentPlayer()) {
 					model.changeSelfAndOpponent();
 				}
-				EditDeckSpecificModel specificModel = (EditDeckSpecificModel) model
-						.getSelf().getStateSpecificModel();
+				PlayerState self = model.getSelf();
+				EditDeckSpecificModel specificModel = (EditDeckSpecificModel) self
+						.getStateSpecificModel();
 				Set<String> cards = new HashSet<>();
 				for (Entry<String, Boolean> entry : specificModel
 						.getChosenCards().entrySet()) {
@@ -41,10 +57,8 @@ public class SaveDeckAction extends ActionContext {
 						cards.add(entry.getKey());
 					}
 				}
-				Player player = session.getActionInvoker();
-				Deck deck = player.addDeck(
+				Deck deck = self.addDeck(
 						specificModel.getCurrentPartOfDeckName(), cards);
-				DeckPersister.saveDeck(deck, player);
 				StateMachine.getInstance().run(session.getModel());
 			}
 		};

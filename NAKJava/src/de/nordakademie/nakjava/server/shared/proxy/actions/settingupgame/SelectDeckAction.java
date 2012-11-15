@@ -29,8 +29,7 @@ public class SelectDeckAction extends SelectAction {
 				}
 				PlayerState self = model.getSelf();
 				((ConfigureGameSpecificModel) self.getStateSpecificModel())
-						.setChosenDeck(session.getActionInvoker()
-								.getDeckWithName(getValue()));
+						.setChosenDeck(self.getDeckWithName(getValue()));
 
 			}
 		};

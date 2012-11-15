@@ -9,6 +9,7 @@ import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 import de.nordakademie.nakjava.server.internal.model.transformator.CardInformationTransformator;
+import de.nordakademie.nakjava.server.persistence.Deck;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class EditDeckSpecificModel implements StateSpecificModel {
@@ -16,14 +17,17 @@ public class EditDeckSpecificModel implements StateSpecificModel {
 	private Map<String, Boolean> chosenCards;
 	@VisibleField(targets = { @TargetInState(states = { State.EDITDECK }, target = Target.SELF) })
 	private String currentPartOfDeckName = "";
+	private Deck deck;
 
-	public EditDeckSpecificModel(Set<String> set) {
+	public EditDeckSpecificModel(Deck deck) {
+		this.deck = deck;
+		Set<String> cardNames = deck.getCards();
 		chosenCards = new HashMap<>();
 		for (String cardName : CardLibrary.get().getCardInformation().keySet()) {
 			chosenCards.put(cardName, false);
 		}
-		if (set != null) {
-			for (String cardName : set) {
+		if (cardNames != null) {
+			for (String cardName : cardNames) {
 				chosenCards.put(cardName, true);
 			}
 		}
@@ -78,5 +82,9 @@ public class EditDeckSpecificModel implements StateSpecificModel {
 		System.out.println(mod.getNumberOfSelectedCards());
 
 		System.out.println(card + " , " + mod.getChosenCards().get(card));
+	}
+
+	public Deck getDeck() {
+		return deck;
 	}
 }

@@ -2,6 +2,7 @@ package de.nordakademie.nakjava.server.shared.proxy.actions.editdeck;
 
 import java.rmi.RemoteException;
 
+import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
 import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.internal.model.EditDeckSpecificModel;
@@ -27,12 +28,10 @@ public class RemoveDeckAction extends ActionContext {
 				if (!session.isActionInvokerCurrentPlayer()) {
 					model.changeSelfAndOpponent();
 				}
-				EditDeckSpecificModel specificModel = (EditDeckSpecificModel) model
-						.getSelf().getStateSpecificModel();
-				// TODO if deckName was changed, then the deck can not been
-				// removed
-				session.getActionInvoker().getSavedDecks()
-						.remove(specificModel.getCurrentPartOfDeckName());
+				PlayerState self = model.getSelf();
+				EditDeckSpecificModel specificModel = (EditDeckSpecificModel) self
+						.getStateSpecificModel();
+				self.removeDeck(specificModel.getDeck());
 				StateMachine.getInstance().run(session.getModel());
 
 			}
