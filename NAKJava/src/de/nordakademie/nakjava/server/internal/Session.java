@@ -18,6 +18,7 @@ public class Session {
 	private Model model;
 	private Player actionInvoker;
 	private Batch batch;
+	private long sessionId;
 
 	private final Lock lock = new ReentrantLock();
 	private boolean toBeDeleted;
@@ -39,7 +40,7 @@ public class Session {
 		}
 	}
 
-	public Session(Player player) {
+	public Session(Player player, long sessionId) {
 
 		actionInvoker = player;
 		batch = new Batch();
@@ -48,6 +49,7 @@ public class Session {
 		playerToPlayerState.put(player, playerState);
 		furtherAllowedNumberOfPlayers--;
 		setToBeDeleted(false);
+		this.sessionId = sessionId;
 	}
 
 	public boolean isActionInvokerCurrentPlayer() {
@@ -64,7 +66,7 @@ public class Session {
 		return false;
 	}
 
-	public Session addPlayer(Player player) {
+	public boolean addPlayer(Player player) {
 		if (furtherAllowedNumberOfPlayers > 0) {
 			actionInvoker = player;
 			PlayerState playerState = new PlayerState();
@@ -73,9 +75,9 @@ public class Session {
 			furtherAllowedNumberOfPlayers--;
 			// TODO questionable whether to set modeUnique or do it with an
 			// action (+create a playercontrol message??)
-			return this;
+			return true;
 		}
-		return new Session(player);
+		return false;
 	}
 
 	public Player getOneOtherPlayer(Player player) {
@@ -89,10 +91,6 @@ public class Session {
 
 	public PlayerState getPlayerStateForPlayer(Player player) {
 		return playerToPlayerState.get(player);
-	}
-
-	public boolean isStillRoom() {
-		return furtherAllowedNumberOfPlayers > 0;
 	}
 
 	public Player getActionInvoker() {
@@ -109,6 +107,10 @@ public class Session {
 
 	public Batch getBatch() {
 		return batch;
+	}
+
+	public long getSessionId() {
+		return sessionId;
 	}
 
 	public Set<Player> getSetOfPlayers() {

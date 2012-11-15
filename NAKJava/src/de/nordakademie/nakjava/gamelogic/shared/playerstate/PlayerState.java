@@ -21,8 +21,9 @@ public class PlayerState {
 					State.PLAYCARDSTATE, State.ADJUSTCARDHANDSTATE, State.STOP,
 					State.EDITDECK }),
 			@TargetInState(target = Target.OPPONENT, states = { State.LOGIN,
-					State.CONFIGUREGAME, State.READYTOSTARTSTATE,
-					State.PLAYCARDSTATE, State.ADJUSTCARDHANDSTATE, State.STOP }) })
+					State.CONFIGUREGAME, State.EDITDECK,
+					State.READYTOSTARTSTATE, State.PLAYCARDSTATE,
+					State.ADJUSTCARDHANDSTATE, State.STOP }) })
 	private State state;
 	@VisibleField(targets = { @TargetInState(states = { State.CONFIGUREGAME,
 			State.READYTOSTARTSTATE, State.EDITDECK, State.PLAYCARDSTATE,
