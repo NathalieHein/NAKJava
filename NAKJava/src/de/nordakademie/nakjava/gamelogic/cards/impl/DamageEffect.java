@@ -11,4 +11,6 @@ public @interface DamageEffect {
 	int count();
 
 	de.nordakademie.nakjava.gamelogic.cards.impl.Target target();
+
+	public String metaText = "{count} Schaden für {target.getAkkusativDescription}";
 }

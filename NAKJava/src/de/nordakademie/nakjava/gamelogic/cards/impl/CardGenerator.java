@@ -50,7 +50,7 @@ public class CardGenerator {
 			String cardDescription = generateBasicEffectDescription(annotation
 					.artifactEffects(), annotation.damageEffects());
 			if (!annotation.additionalDescription().equals("")) {
-				cardDescription += annotation.additionalDescription() + "/";
+				cardDescription += annotation.additionalDescription() + "\n";
 			}
 			if (!annotation.canDrop()) {
 				cardDescription += "Kann nicht verworfen werden.";
@@ -84,7 +84,7 @@ public class CardGenerator {
 				if (firstRun) {
 					firstRun = false;
 				} else {
-					sb.append("/");
+					sb.append("\n");
 				}
 
 				sb.append(cost.amount() + " "
@@ -104,7 +104,17 @@ public class CardGenerator {
 
 			if (StringUtilities.isNotNullOrEmpty(text)) {
 				sb.append(text);
-				sb.append("/");
+				sb.append("\n");
+			}
+		}
+
+		for (DamageEffect damageEffect : damages) {
+			String text = AnnotationMetatextProcessor
+					.extractMetatext(damageEffect);
+
+			if (StringUtilities.isNotNullOrEmpty(text)) {
+				sb.append(text);
+				sb.append("\n");
 			}
 		}
 

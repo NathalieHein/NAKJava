@@ -27,7 +27,7 @@ import de.nordakademie.nakjava.gamelogic.shared.cards.CardType;
 				target = Target.OPPONENT,
 				count = -5), @ArtifactEffect(artifact = Kristalle.class,
 				target = Target.OPPONENT,
-				count = -5), @ArtifactEffect(artifact = Kristalle.class,
+				count = -5), @ArtifactEffect(artifact = Monster.class,
 				target = Target.OPPONENT,
 				count = -5) })
 public class Kobold extends AbstractCard {

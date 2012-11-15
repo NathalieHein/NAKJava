@@ -9,6 +9,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import de.nordakademie.nakjava.client.internal.gui.component.Label;
 import de.nordakademie.nakjava.client.internal.gui.component.Panel;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.ArtifactFactory;
@@ -33,9 +34,9 @@ public class PlayerPanel extends Panel {
 				VisibleModelFields.INGAMESPECIFICMODEL_ARTIFACTS_SELF);
 		handPanel = new CardHandPanel(
 				VisibleModelFields.INGAMESPECIFICMODEL_CARDS_SELF);
-		stateLabel = new JLabel();
+		stateLabel = new Label("", VisibleModelFields.PLAYERSTATE_STATE_SELF,
+				"");
 		stateLabel.setBorder(BorderFactory.createLineBorder(Color.black));
-		stateLabel.setText("Initialisiere...");
 
 		this.add(infoPanel, BorderLayout.NORTH);
 		this.add(handPanel, BorderLayout.CENTER);
