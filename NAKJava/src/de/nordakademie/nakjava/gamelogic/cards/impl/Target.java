@@ -12,7 +12,7 @@ public enum Target {
 		this.dativDescription = dativDescription;
 	}
 
-	public String getDativDescription() {
+	public String getAkkusativDescription() {
 		return dativDescription;
 	}
 

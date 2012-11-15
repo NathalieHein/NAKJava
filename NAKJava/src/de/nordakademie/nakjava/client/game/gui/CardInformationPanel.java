@@ -21,10 +21,10 @@ public class CardInformationPanel extends JPanel {
 		add(new JLabel("<html><b>" + card.getTitle() + "</b></html>",
 				JLabel.CENTER), BorderLayout.NORTH);
 		add(new JLabel("<html><span style='font-weight:normal;'>"
-				+ card.getInformation() + "</span></html>"),
-				BorderLayout.CENTER);
-		add(new JLabel("<html>" + card.getCost() + "</html>"),
-				BorderLayout.SOUTH);
+				+ card.getInformation().replaceAll("\n", "<br/>")
+				+ "</span></html>"), BorderLayout.CENTER);
+		add(new JLabel("<html>" + card.getCost().replaceAll("\n", "<br/>")
+				+ "</html>"), BorderLayout.SOUTH);
 		setBorder(BorderFactory.createLineBorder(Color.black));
 		this.setMaximumSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
 		this.setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
