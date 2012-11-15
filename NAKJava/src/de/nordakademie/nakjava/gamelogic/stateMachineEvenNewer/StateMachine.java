@@ -5,6 +5,7 @@ import java.util.Map;
 
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.AdjustCardhand;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.ConfigureGameAction;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.GameEndAction;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.Postaction;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.Preaction;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.ReadyToStartAction;
@@ -39,6 +40,7 @@ public class StateMachine {
 		stateToAction.put(State.ADJUSTCARDHANDSTATE, new AdjustCardhand());
 		stateToAction.put(State.STOP, new RoundEndAction());
 		stateToAction.put(State.READYTOSTARTSTATE, new ReadyToStartAction());
+		stateToAction.put(State.ENDOFGAMESTATE, new GameEndAction());
 	}
 
 	public void run(Model model) {

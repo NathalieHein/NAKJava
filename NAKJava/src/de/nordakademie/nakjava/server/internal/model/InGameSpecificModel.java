@@ -10,6 +10,7 @@ import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.CardSet;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.RoundResult;
 import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 import de.nordakademie.nakjava.server.internal.model.transformator.CardTransformator;
 
@@ -17,16 +18,16 @@ public class InGameSpecificModel implements StateSpecificModel {
 	// really including stop-field or me that state opponent that state -> that
 	// information
 	@VisibleField(targets = {
-			@TargetInState(states = { State.PLAYCARDSTATE, State.STOP },
-					target = Target.SELF),
-			@TargetInState(states = { State.PLAYCARDSTATE, State.STOP },
-					target = Target.OPPONENT) })
+			@TargetInState(states = { State.PLAYCARDSTATE, State.STOP,
+					State.ENDOFGAMESTATE }, target = Target.SELF),
+			@TargetInState(states = { State.PLAYCARDSTATE, State.STOP,
+					State.ENDOFGAMESTATE }, target = Target.OPPONENT) })
 	private List<Artifact> artifacts;
 	@VisibleField(targets = { @TargetInState(states = { State.PLAYCARDSTATE,
-			State.ADJUSTCARDHANDSTATE, State.STOP },
-			target = Target.SELF) },
-			transformer = CardTransformator.class)
+			State.ADJUSTCARDHANDSTATE, State.STOP }, target = Target.SELF) }, transformer = CardTransformator.class)
 	private CardSet cards;
+	@VisibleField(targets = { @TargetInState(states = { State.ENDOFGAMESTATE }, target = Target.SELF) })
+	private RoundResult roundResult;
 
 	// EnumMap not possible because of different enums
 	private Map<Class<? extends Artifact>, Integer> cache = new HashMap<>();
@@ -34,6 +35,7 @@ public class InGameSpecificModel implements StateSpecificModel {
 	public InGameSpecificModel(List<Artifact> initialArtifacts) {
 		this.artifacts = initialArtifacts;
 		this.cards = new CardSet();
+		this.roundResult = RoundResult.NEUTRAL;
 	}
 
 	public List<? extends Artifact> getArtifacts() {
@@ -99,5 +101,13 @@ public class InGameSpecificModel implements StateSpecificModel {
 
 	public void setCards(Set<String> cardNames) {
 		cards = new CardSet(cardNames);
+	}
+
+	public RoundResult getRoundResult() {
+		return roundResult;
+	}
+
+	public void setRoundResult(RoundResult roundResult) {
+		this.roundResult = roundResult;
 	}
 }

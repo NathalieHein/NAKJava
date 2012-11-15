@@ -79,6 +79,22 @@ public enum State implements Serializable {
 			return READYTOSTARTSTATE;
 		}
 
+	},
+	ENDOFGAMESTATE {
+
+		@Override
+		public State getFollowUpState() {
+			return CLEANUP;
+		}
+
+	},
+	CLEANUP {
+
+		@Override
+		public State getFollowUpState() {
+			return null;
+		}
+
 	};
 
 	public abstract State getFollowUpState();

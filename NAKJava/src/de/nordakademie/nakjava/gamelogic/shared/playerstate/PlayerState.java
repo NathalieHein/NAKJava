@@ -19,11 +19,12 @@ public class PlayerState {
 			@TargetInState(target = Target.SELF, states = { State.LOGIN,
 					State.CONFIGUREGAME, State.READYTOSTARTSTATE,
 					State.PLAYCARDSTATE, State.ADJUSTCARDHANDSTATE, State.STOP,
-					State.EDITDECK }),
+					State.EDITDECK, State.ENDOFGAMESTATE,
+					State.OTHERPLAYERLEFTGAME }),
 			@TargetInState(target = Target.OPPONENT, states = { State.LOGIN,
-					State.CONFIGUREGAME, State.EDITDECK,
+					State.EDITDECK, State.CONFIGUREGAME,
 					State.READYTOSTARTSTATE, State.PLAYCARDSTATE,
-					State.ADJUSTCARDHANDSTATE, State.STOP }) })
+					State.ADJUSTCARDHANDSTATE, State.STOP, State.ENDOFGAMESTATE }) })
 	private State state;
 	@VisibleField(targets = { @TargetInState(states = { State.CONFIGUREGAME,
 			State.READYTOSTARTSTATE, State.EDITDECK, State.PLAYCARDSTATE,
