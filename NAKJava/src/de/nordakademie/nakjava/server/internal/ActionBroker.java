@@ -56,15 +56,16 @@ public class ActionBroker {
 				serverAction.getSessionNr());
 
 		if (!checkSessionDeletion(serverAction.getSessionNr())) {
+			session.releaseLock();
 			session.commit();
 		}
-		session.releaseLock();
 	}
 
 	private boolean checkSessionDeletion(long sessionId) {
 		Session session = Sessions.getInstance().getSession(sessionId);
 		if (session.isToBeDeleted()) {
 			Sessions.getInstance().deleteSession(sessionId);
+			session.releaseLock();
 			return true;
 		}
 		return false;

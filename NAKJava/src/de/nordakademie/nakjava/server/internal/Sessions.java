@@ -35,14 +35,13 @@ public class Sessions {
 		return instance;
 	}
 
-	public long addPlayer(Player player) {
+	public synchronized long addPlayer(Player player) {
 		readLock.lock();
 		try {
 			for (Session session : sessions.values()) {
 				session.lock();
-				if (session.isStillRoom()) {
-					session.addPlayer(player);
-					return nextSessionId;
+				if (session.addPlayer(player)) {
+					return session.getSessionId();
 				}
 				session.releaseLock();
 			}
@@ -53,10 +52,10 @@ public class Sessions {
 		writeLock.lock();
 		try {
 			nextSessionId++;
-			Session newSession = new Session(player);
+			Session newSession = new Session(player, nextSessionId);
 			sessions.put(nextSessionId, newSession);
 			newSession.lock();
-			return nextSessionId;
+			return newSession.getSessionId();
 		} finally {
 			writeLock.unlock();
 		}

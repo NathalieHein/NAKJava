@@ -41,10 +41,10 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 			@Override
 			public void run() {
 				boolean verified = false;
-				synchronized (ActionBroker.getInstance()) {
-					verified = ActionBroker.getInstance().verify(
-							ActionAbstractImpl.this);
-				}
+				// synchronized (ActionBroker.getInstance()) {
+				verified = ActionBroker.getInstance().verify(
+						ActionAbstractImpl.this);
+				// }
 				if (verified) {
 					Session session = Sessions.getInstance().getSession(
 							sessionId);
