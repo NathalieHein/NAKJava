@@ -33,11 +33,17 @@ public class CardHandPanel extends JPanel implements ValueHolder {
 			newCardNames.add(card.getTitle());
 		}
 
+		List<String> toRemove = new LinkedList<>();
+
 		for (String knownCard : this.cards.keySet()) {
 			if (!newCardNames.contains(knownCard)) {
 				remove(this.cards.get(knownCard));
-				this.cards.remove(knownCard);
+				toRemove.add(knownCard);
 			}
+		}
+
+		for (String remove : toRemove) {
+			this.cards.remove(remove);
 		}
 
 		for (CardInformation newCard : cards) {

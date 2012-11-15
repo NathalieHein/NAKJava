@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.List;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -25,12 +24,10 @@ public abstract class AbstractGUIClient extends Client {
 	protected PanelPicker panelPicker;
 
 	private Lock updatePanelLock;
-	private Condition updatePanelCondition;
 
 	protected AbstractGUIClient() throws RemoteException {
 		super();
 		updatePanelLock = new ReentrantLock();
-		updatePanelCondition = updatePanelLock.newCondition();
 	}
 
 	@Override

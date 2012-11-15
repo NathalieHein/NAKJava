@@ -112,13 +112,7 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 	@Override
 	public void noActionContextAvailable() {
 		listenerActive = false;
-		// Object preSelectedItem = getSelectedItem();
-		actions.clear();
-		removeAllItems();
 		setEnabled(false);
-		// if (preSelectedItem != null) {
-		// setSelectedItem(preSelectedItem);
-		// }
 		listenerActive = true;
 
 	}
