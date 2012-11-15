@@ -6,11 +6,13 @@ import javax.swing.JPanel;
 
 import de.nordakademie.nakjava.client.internal.gui.component.Button;
 import de.nordakademie.nakjava.client.internal.gui.component.ComboBox;
+import de.nordakademie.nakjava.client.internal.gui.component.Label;
 import de.nordakademie.nakjava.client.internal.gui.component.Panel;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.CreateNewDeckAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.EditDeckAction;
+import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.FinishConfiguringAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.SelectDeckAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.SelectWinStrategy;
 
@@ -33,7 +35,11 @@ public class ConfigurationPanel extends Panel {
 		cardDecks = new ComboBox(SelectDeckAction.class,
 				VisibleModelFields.CONFIGUREGAMESPECIFICMODEL_CHOSENDECK_SELF);
 		winStrategies = new ComboBox(SelectWinStrategy.class,
-				VisibleModelFields.CONFIGUREGAMESPECIFICMODEL_WINSTRATEGY_SELF);
+				VisibleModelFields.MODEL_STRATEGY_SELF);
+
+		// opponentPanel.add(new Label("Gegner",VisibleModelFields.))
+		opponentPanel.add(new Label("(",
+				VisibleModelFields.PLAYERSTATE_STATE_OPPONENT, ")"));
 
 		gameTypePanel.add(new JLabel("Spielart:"));
 		gameTypePanel.add(winStrategies);
@@ -42,6 +48,8 @@ public class ConfigurationPanel extends Panel {
 		selfPanel.add(cardDecks);
 		selfPanel.add(new Button("Deckauswal editieren", EditDeckAction.class));
 		selfPanel.add(new Button("Neues Deck", CreateNewDeckAction.class));
+		selfPanel.add(new Button("Bereit zum Spielen",
+				FinishConfiguringAction.class));
 	}
 
 	public void setCurrentCardDeck(String cardDeck) {
@@ -54,6 +62,6 @@ public class ConfigurationPanel extends Panel {
 
 	@Override
 	public State[] getStates() {
-		return new State[] { State.CONFIGUREGAME };
+		return new State[] { State.CONFIGUREGAME, State.READYTOSTARTSTATE };
 	}
 }

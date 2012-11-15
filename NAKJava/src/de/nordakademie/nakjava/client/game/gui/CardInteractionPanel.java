@@ -17,8 +17,10 @@ import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 public class CardInteractionPanel extends JPanel {
 
 	public CardInteractionPanel(final CardInformation card) {
-		setMaximumSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
-		setPreferredSize(new Dimension(CARD_WIDTH, CARD_HEIGHT));
+		setMaximumSize(new Dimension(CardInformationPanel.CARD_WIDTH,
+				CardInformationPanel.CARD_HEIGHT));
+		setPreferredSize(new Dimension(CardInformationPanel.CARD_WIDTH,
+				CardInformationPanel.CARD_HEIGHT));
 		setLayout(new BorderLayout());
 		add(new CardInformationPanel(card), BorderLayout.CENTER);
 		JPanel buttons = new JPanel(new GridLayout(0, 1));

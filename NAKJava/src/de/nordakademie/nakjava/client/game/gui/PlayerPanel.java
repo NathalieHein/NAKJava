@@ -8,8 +8,8 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
+import de.nordakademie.nakjava.client.internal.gui.component.Panel;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.ArtifactFactory;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.infrastructure.Turm;
@@ -18,8 +18,10 @@ import de.nordakademie.nakjava.gamelogic.shared.artifacts.ressources.Ziegel;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardType;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
+import de.nordakademie.nakjava.generated.VisibleModelFields;
 
-public class PlayerPanel extends JPanel {
+public class PlayerPanel extends Panel {
 
 	private ArtifactInfoPanel infoPanel;
 	private CardHandPanel handPanel;
@@ -27,8 +29,10 @@ public class PlayerPanel extends JPanel {
 
 	public PlayerPanel() {
 		this.setLayout(new BorderLayout());
-		infoPanel = new ArtifactInfoPanel();
-		handPanel = new CardHandPanel();
+		infoPanel = new ArtifactInfoPanel(
+				VisibleModelFields.INGAMESPECIFICMODEL_ARTIFACTS_SELF);
+		handPanel = new CardHandPanel(
+				VisibleModelFields.INGAMESPECIFICMODEL_CARDS_SELF);
 		stateLabel = new JLabel();
 		stateLabel.setBorder(BorderFactory.createLineBorder(Color.black));
 		stateLabel.setText("Initialisiere...");
@@ -72,5 +76,11 @@ public class PlayerPanel extends JPanel {
 
 		frame.setVisible(true);
 
+	}
+
+	@Override
+	public State[] getStates() {
+		return new State[] { State.PLAYCARDSTATE, State.ADJUSTCARDHANDSTATE,
+				State.STOP };
 	}
 }

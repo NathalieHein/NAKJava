@@ -1,64 +1,43 @@
 package de.nordakademie.nakjava.client.game.gui;
 
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Label;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import javax.swing.BoxLayout;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
+import de.nordakademie.nakjava.client.internal.gui.ValueHolder;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.ArtifactFactory;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.factories.Steinbruch;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.factories.Verlies;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.infrastructure.Mauer;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.infrastructure.Turm;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.ressources.Monster;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.ressources.Ziegel;
+import de.nordakademie.nakjava.server.internal.VisibleModelField;
 
-public class ArtifactInfoPanel extends JPanel {
-	public ArtifactInfoPanel() {
+public class ArtifactInfoPanel extends JPanel implements ValueHolder {
+
+	private VisibleModelField<List<Artifact>> artifactsField;
+
+	public ArtifactInfoPanel(VisibleModelField<List<Artifact>> artifactsField) {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.artifactsField = artifactsField;
 	}
 
 	public void setArtifacts(final List<Artifact> artifacts) {
 
-		try {
-			SwingUtilities.invokeAndWait(new Runnable() {
+		ArtifactInfoPanel.this.removeAll();
+		Map<Class<? extends Artifact>, List<Artifact>> sortedByArtifacts = splitListToMap(artifacts);
 
-				@Override
-				public void run() {
-					ArtifactInfoPanel.this.removeAll();
-					Map<Class<? extends Artifact>, List<Artifact>> sortedByArtifacts = splitListToMap(artifacts);
-
-					for (Entry<Class<? extends Artifact>, List<Artifact>> entry : sortedByArtifacts
-							.entrySet()) {
-						ArtifactInfoPanel.this.add(new ArtifactTypeInfoPanel(
-								entry.getValue()));
-					}
-
-					ArtifactInfoPanel.this.revalidate();
-
-				}
-			});
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		for (Entry<Class<? extends Artifact>, List<Artifact>> entry : sortedByArtifacts
+				.entrySet()) {
+			ArtifactInfoPanel.this.add(new ArtifactTypeInfoPanel(entry
+					.getValue()));
 		}
+
+		ArtifactInfoPanel.this.revalidate();
 
 	}
 
@@ -118,33 +97,39 @@ public class ArtifactInfoPanel extends JPanel {
 
 	}
 
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		ArtifactInfoPanel infoPanel = new ArtifactInfoPanel();
-		frame.getContentPane().add(infoPanel);
-
-		frame.setSize(new Dimension(800, 600));
-		frame.setVisible(true);
-
-		List<Artifact> tupels = new LinkedList<>();
-		tupels.add(ArtifactFactory.createArtifact(Ziegel.class));
-		tupels.add(ArtifactFactory.createArtifact(Monster.class));
-		tupels.add(ArtifactFactory.createArtifact(Turm.class));
-
-		infoPanel.setArtifacts(tupels);
-
-		try {
-			Thread.sleep(10000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		tupels.add(ArtifactFactory.createArtifact(Mauer.class));
-		tupels.add(ArtifactFactory.createArtifact(Steinbruch.class));
-		tupels.add(ArtifactFactory.createArtifact(Verlies.class));
-
-		infoPanel.setArtifacts(tupels);
+	@Override
+	public void pickValue(Map<String, Object> genericValues) {
+		setArtifacts(artifactsField.getValue(genericValues));
 	}
+
+	// public static void main(String[] args) {
+	// JFrame frame = new JFrame();
+	// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	// ArtifactInfoPanel infoPanel = new ArtifactInfoPanel();
+	// frame.getContentPane().add(infoPanel);
+	//
+	// frame.setSize(new Dimension(800, 600));
+	// frame.setVisible(true);
+	//
+	// List<Artifact> tupels = new LinkedList<>();
+	// tupels.add(ArtifactFactory.createArtifact(Ziegel.class));
+	// tupels.add(ArtifactFactory.createArtifact(Monster.class));
+	// tupels.add(ArtifactFactory.createArtifact(Turm.class));
+	//
+	// infoPanel.setArtifacts(tupels);
+	//
+	// try {
+	// Thread.sleep(10000);
+	// } catch (InterruptedException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	//
+	// tupels.add(ArtifactFactory.createArtifact(Mauer.class));
+	// tupels.add(ArtifactFactory.createArtifact(Steinbruch.class));
+	// tupels.add(ArtifactFactory.createArtifact(Verlies.class));
+	//
+	// infoPanel.setArtifacts(tupels);
+	// }
+
 }

@@ -2,6 +2,7 @@ package de.nordakademie.nakjava.client.game.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -42,14 +43,11 @@ public class CardSelectionPanel extends Panel {
 		cache = new HashMap<>();
 		cardOverview = new JPanel();
 		cardOverview.setLayout(new GridLayout(0, 6));
-		// cardOverview.setMinimumSize(new Dimension(1024, 600));
-		// cardOverview.setPreferredSize(new Dimension(800, 600));
-		// cardOverview.setMaximumSize(new Dimension(1024, 5000));
-		JScrollPane scrollPane = new JScrollPane(cardOverview);
 
-		// setMinimumSize(new Dimension(new Dimension(800, 600)));
-		// setPreferredSize(new Dimension(new Dimension(800, 600)));
-		// setMaximumSize(new Dimension(new Dimension(800, 600)));
+		JScrollPane scrollPane = new JScrollPane(cardOverview);
+		scrollPane.setPreferredSize(new Dimension(
+				CardInformationPanel.CARD_WIDTH * 6 + 20,
+				CardInformationPanel.CARD_HEIGHT * 2 + 80));
 
 		add(scrollPane, BorderLayout.CENTER);
 

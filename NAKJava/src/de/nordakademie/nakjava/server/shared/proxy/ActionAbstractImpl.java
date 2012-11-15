@@ -29,8 +29,8 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 	private static ExecutorService threadPool = Executors.newFixedThreadPool(2);
 	private int threadCount = 2;
 
-	private Lock lock = new ReentrantLock();
-	private Condition waitCondition;
+	private final Lock lock = new ReentrantLock();
+	private final Condition waitCondition = lock.newCondition();
 
 	private long sessionId;
 
@@ -68,7 +68,6 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 					// Needs to be done for changing the thread context back
 					// to the thread that holds the lock in the ActionBroker
 					// TODO this is easier if using thread.join()
-					waitCondition = lock.newCondition();
 					lock.lock();
 					try {
 						waitCondition.await();

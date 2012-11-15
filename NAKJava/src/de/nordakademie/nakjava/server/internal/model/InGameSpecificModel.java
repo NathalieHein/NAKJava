@@ -17,17 +17,21 @@ public class InGameSpecificModel implements StateSpecificModel {
 	// really including stop-field or me that state opponent that state -> that
 	// information
 	@VisibleField(targets = {
-			@TargetInState(states = { State.PLAYCARDSTATE, State.STOP }, target = Target.SELF),
-			@TargetInState(states = { State.PLAYCARDSTATE, State.STOP }, target = Target.OPPONENT) })
-	private List<? extends Artifact> artifacts;
+			@TargetInState(states = { State.PLAYCARDSTATE, State.STOP },
+					target = Target.SELF),
+			@TargetInState(states = { State.PLAYCARDSTATE, State.STOP },
+					target = Target.OPPONENT) })
+	private List<Artifact> artifacts;
 	@VisibleField(targets = { @TargetInState(states = { State.PLAYCARDSTATE,
-			State.ADJUSTCARDHANDSTATE, State.STOP }, target = Target.SELF) }, transformer = CardTransformator.class)
+			State.ADJUSTCARDHANDSTATE, State.STOP },
+			target = Target.SELF) },
+			transformer = CardTransformator.class)
 	private CardSet cards;
 
 	// EnumMap not possible because of different enums
 	private Map<Class<? extends Artifact>, Integer> cache = new HashMap<>();
 
-	public InGameSpecificModel(List<? extends Artifact> initialArtifacts) {
+	public InGameSpecificModel(List<Artifact> initialArtifacts) {
 		this.artifacts = initialArtifacts;
 		this.cards = new CardSet();
 	}

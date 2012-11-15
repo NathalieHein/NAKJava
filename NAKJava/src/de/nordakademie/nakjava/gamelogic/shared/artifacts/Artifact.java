@@ -1,9 +1,10 @@
 package de.nordakademie.nakjava.gamelogic.shared.artifacts;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public abstract class Artifact {
+public abstract class Artifact implements Serializable {
 
 	protected int count;
 

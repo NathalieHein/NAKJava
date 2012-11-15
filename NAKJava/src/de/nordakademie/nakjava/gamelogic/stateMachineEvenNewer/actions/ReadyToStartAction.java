@@ -22,7 +22,7 @@ public class ReadyToStartAction implements StateAction {
 				.getCards());
 		gameSpecificModel.getCards().drawUntilNCardsOnHand(6);
 		self.setStateSpecificModel(gameSpecificModel);
-		if (opponent.getState() == State.READYTOSTARTSTATE) {
+		if (opponent != null && opponent.getState() == State.READYTOSTARTSTATE) {
 			opponent.setState(State.STOP);
 			StateMachine.getInstance().run(model);
 		}
