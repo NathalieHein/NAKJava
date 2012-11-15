@@ -11,6 +11,7 @@ import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.CardSet;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
+import de.nordakademie.nakjava.server.internal.model.transformator.CardTransformator;
 
 public class InGameSpecificModel implements StateSpecificModel {
 	// really including stop-field or me that state opponent that state -> that
@@ -20,7 +21,7 @@ public class InGameSpecificModel implements StateSpecificModel {
 			@TargetInState(states = { State.PLAYCARDSTATE, State.STOP }, target = Target.OPPONENT) })
 	private List<? extends Artifact> artifacts;
 	@VisibleField(targets = { @TargetInState(states = { State.PLAYCARDSTATE,
-			State.ADJUSTCARDHANDSTATE, State.STOP }, target = Target.SELF) })
+			State.ADJUSTCARDHANDSTATE, State.STOP }, target = Target.SELF) }, transformer = CardTransformator.class)
 	private CardSet cards;
 
 	// EnumMap not possible because of different enums
