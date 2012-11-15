@@ -21,72 +21,52 @@ public class ActionBroker {
 
 	// TODO comment missing
 	public boolean verify(ActionAbstractImpl serverAction) {
-		lock.lock();
 
-		try {
-			if (serverAction.isServerInternal()) {
-				return true;
-			}
-			Session session = Sessions.getInstance().getSession(
-					serverAction.getSessionNr());
-			while (session != null && !session.tryLock()) {
-				session.await();
-				// TODO does a problem with the write-lock in sessions occur
-				// TODO here -> definetly waiting quite a while
-				// session might be deleted in the meantime
-				session = Sessions.getInstance().getSession(
-						serverAction.getSessionNr());
-			}
-
-			if (session.verify(serverAction)) {
-				return true;
-			} else {
-				session.releaseLock();
-				return false;
-			}
-
-		} finally {
-			lock.unlock();
+		if (serverAction.isServerInternal()) {
+			return true;
 		}
+		Session session = Sessions.getInstance().getSession(
+				serverAction.getSessionNr());
+		session.lock();
+		// TODO does a problem with the write-lock in sessions occur
+		// TODO here -> definetly waiting quite a while
+		// session might be deleted in the meantime
+		session = Sessions.getInstance()
+				.getSession(serverAction.getSessionNr());
+
+		if (session.verify(serverAction)) {
+			// System.out.println("no drop");
+			return true;
+		} else {
+			// System.out.println("drop");
+			session.releaseLock();
+			return false;
+		}
+
 	}
 
 	public void commit(ActionAbstractImpl serverAction) {
 		// ensures that thread on Model.waitCondition has exclusive access for
 		// rest of its verify()-Process
-		lock.lock();
-		try {
-			// TODO kann hier in der Zwischenzeit die Session gel�scht worden
-			// sein?
-			// Wenn ja, nochmal auf null �berpr�fen -> should not be possible
-			// TODO might be stuck in ReadLock of Sessions
-			Session session = Sessions.getInstance().getSession(
-					serverAction.getSessionNr());
+		// TODO kann hier in der Zwischenzeit die Session gel�scht worden
+		// sein?
+		// Wenn ja, nochmal auf null �berpr�fen -> should not be possible
+		// TODO might be stuck in ReadLock of Sessions
+		Session session = Sessions.getInstance().getSession(
+				serverAction.getSessionNr());
 
-			if (!checkSessionDeletion(serverAction.getSessionNr())) {
-				session.commit();
-			}
-			if (!serverAction.isServerInternal()) {
-				session.signal();
-				session.releaseLock();
-			}
-		} finally {
-			lock.unlock();
+		if (!checkSessionDeletion(serverAction.getSessionNr())) {
+			session.commit();
 		}
+		session.releaseLock();
 	}
 
 	private boolean checkSessionDeletion(long sessionId) {
 		Session session = Sessions.getInstance().getSession(sessionId);
 		if (session.isToBeDeleted()) {
 			Sessions.getInstance().deleteSession(sessionId);
-			session.tryLock();
 			return true;
 		}
 		return false;
-	}
-
-	// TODO not working with sessionId anymore but only passing real reference
-	// around
-	public synchronized Session getSession(long sessionId) {
-		return Sessions.getInstance().getSession(sessionId);
 	}
 }

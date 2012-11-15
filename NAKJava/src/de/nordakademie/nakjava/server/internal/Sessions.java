@@ -36,16 +36,26 @@ public class Sessions {
 	}
 
 	public long addPlayer(Player player) {
-		writeLock.lock();
+		readLock.lock();
 		try {
 			for (Session session : sessions.values()) {
+				session.lock();
 				if (session.isStillRoom()) {
 					session.addPlayer(player);
 					return nextSessionId;
 				}
+				session.releaseLock();
 			}
+
+		} finally {
+			readLock.unlock();
+		}
+		writeLock.lock();
+		try {
 			nextSessionId++;
-			sessions.put(nextSessionId, new Session(player));
+			Session newSession = new Session(player);
+			sessions.put(nextSessionId, newSession);
+			newSession.lock();
 			return nextSessionId;
 		} finally {
 			writeLock.unlock();

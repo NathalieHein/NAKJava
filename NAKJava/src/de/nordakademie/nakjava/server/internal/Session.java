@@ -3,7 +3,6 @@ package de.nordakademie.nakjava.server.internal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -21,28 +20,14 @@ public class Session {
 	private Batch batch;
 
 	private final Lock lock = new ReentrantLock();
-	private final Condition sessionLocked = lock.newCondition();
 	private boolean toBeDeleted;
 
-	public boolean tryLock() {
-		return lock.tryLock();
+	public void lock() {
+		lock.lock();
 	}
 
 	public void releaseLock() {
 		lock.unlock();
-	}
-
-	public void await() {
-		try {
-			sessionLocked.await();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	public void signal() {
-		sessionLocked.signal();
 	}
 
 	public void commit() {
