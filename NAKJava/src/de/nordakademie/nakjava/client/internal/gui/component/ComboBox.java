@@ -21,7 +21,7 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 	private long currentBatch;
 	private ActionContextSelector selector;
 	private Map<String, SelectAction> actions;
-	private boolean listenerActive = true;
+	private boolean listenerActive = false;
 
 	private String currentSelection;
 	private VisibleModelField<? extends Object> currentSelectionField;
@@ -79,6 +79,7 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 
 	@Override
 	public void setActionContext(ActionContext actionContext, long batch) {
+		listenerActive = false;
 		if (!(actionContext instanceof SelectAction)) {
 			return;
 		}
@@ -94,7 +95,6 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 		}
 
 		actions.put(action.getValue(), action);
-		listenerActive = false;
 		addItem(action.getValue());
 		if (action.getValue().equals(currentSelection)) {
 			setSelectedItem(currentSelection);
