@@ -39,12 +39,13 @@ public class PlayCardAction extends AbstractCardAction {
 					if (!session.isActionInvokerCurrentPlayer()) {
 						model.changeSelfAndOpponent();
 					}
+					model.setLastPlayedCard(getCardName());
 					PlayerState self = model.getSelf();
 					PlayerState opponent = model.getOpponent();
 					InGameSpecificModel selfSpecificModel = (InGameSpecificModel) self
 							.getStateSpecificModel();
 					InGameSpecificModel opponetSpecificModel = null;
-					if (opponent.getState() == State.PLAYCARDSTATE) {
+					if (opponent.getState() == State.STOP) {
 						opponetSpecificModel = (InGameSpecificModel) opponent
 								.getStateSpecificModel();
 					} else {

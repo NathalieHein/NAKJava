@@ -8,6 +8,7 @@ import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategies;
 import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
+import de.nordakademie.nakjava.server.internal.model.transformator.SingleCardTransformator;
 import de.nordakademie.nakjava.server.internal.model.transformator.WinStrategyTransformator;
 
 public class Model {
@@ -15,6 +16,9 @@ public class Model {
 			State.READYTOSTARTSTATE, State.PLAYCARDSTATE,
 			State.ADJUSTCARDHANDSTATE, State.STOP }, target = Target.SELF) }, transformer = WinStrategyTransformator.class)
 	protected String strategy;
+	@VisibleField(targets = { @TargetInState(states = { State.PLAYCARDSTATE,
+			State.ADJUSTCARDHANDSTATE, State.STOP }, target = Target.SELF) }, transformer = SingleCardTransformator.class)
+	private String lastPlayedCard;
 	protected PlayerState self;
 	protected PlayerState opponent;
 	protected SimulationModel simulationModel;
@@ -72,6 +76,10 @@ public class Model {
 
 	public void createSimulationModel() {
 		simulationModel = new SimulationModel(this);
+	}
+
+	public void setLastPlayedCard(String lastPlayedCard) {
+		this.lastPlayedCard = lastPlayedCard;
 	}
 
 }
