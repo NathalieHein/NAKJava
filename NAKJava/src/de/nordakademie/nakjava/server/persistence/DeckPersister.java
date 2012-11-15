@@ -62,11 +62,10 @@ public abstract class DeckPersister {
 	// }
 
 	public static void saveDecks(PlayerState playerState) {
-		File file = new File(FOLDER + "/" + playerState.getName() + "_decks");
-
+		File file = new File(playerState.getName() + "_decks");
+		ObjectOutputStream oos = null;
 		if (!file.exists()) {
 
-			ObjectOutputStream oos = null;
 			try {
 				file.createNewFile();
 				oos = new ObjectOutputStream(new BufferedOutputStream(
@@ -83,27 +82,28 @@ public abstract class DeckPersister {
 				} catch (Exception e) {
 				}
 			}
-
-			List<Deck> decks = playerState.getSavedDecks();
-
-			try {
-				oos = new ObjectOutputStream(new BufferedOutputStream(
-						new FileOutputStream(file)));
-				oos.writeObject(decks);
-				try {
-					oos.close();
-				} catch (Exception e) {
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
 		}
+
+		List<Deck> decks = playerState.getSavedDecks();
+
+		try {
+			oos = new ObjectOutputStream(new BufferedOutputStream(
+					new FileOutputStream(file)));
+			oos.writeObject(decks);
+			try {
+				oos.close();
+			} catch (Exception e) {
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	public static List<Deck> getDecks(PlayerState playerState) {
-		File file = new File(FOLDER + "/" + playerState.getName() + "_decks");
+		File file = new File(playerState.getName() + "_decks");
+		System.out.println(file.getAbsolutePath());
 
 		List<Deck> result = new LinkedList<>();
 

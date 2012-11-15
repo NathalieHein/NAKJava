@@ -7,6 +7,7 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.internal.model.EditDeckSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.Model;
+import de.nordakademie.nakjava.server.persistence.Deck;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
@@ -30,7 +31,7 @@ public class CreateNewDeckAction extends ActionContext {
 				PlayerState self = model.getSelf();
 				self.setState(State.EDITDECK);
 				model.getSelf().setStateSpecificModel(
-						new EditDeckSpecificModel(null));
+						new EditDeckSpecificModel(new Deck()));
 			}
 		};
 	}
