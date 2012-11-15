@@ -41,13 +41,6 @@ public class Player {
 			@Override
 			public void run() {
 				state.triggerChangeEvent();
-			}
-
-		});
-		threadPool.execute(new Runnable() {
-
-			@Override
-			public void run() {
 				control.triggerChangeEvent();
 			}
 

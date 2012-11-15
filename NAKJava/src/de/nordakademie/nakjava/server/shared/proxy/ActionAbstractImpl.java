@@ -49,6 +49,11 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 					Session session = Sessions.getInstance().getSession(
 							sessionId);
 					performImpl(session);
+					// Needs to be done for changing the thread context back
+					// to the thread that holds the lock in the ActionBroker
+					// TODO this is easier if using thread.join()
+					// TODO this needs to be put here => otherwise deadlock
+					lock.lock();
 					threadPool.execute(new Runnable() {
 
 						@Override
@@ -65,10 +70,6 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 						}
 					});
 
-					// Needs to be done for changing the thread context back
-					// to the thread that holds the lock in the ActionBroker
-					// TODO this is easier if using thread.join()
-					lock.lock();
 					try {
 						waitCondition.await();
 					} catch (InterruptedException e) {
