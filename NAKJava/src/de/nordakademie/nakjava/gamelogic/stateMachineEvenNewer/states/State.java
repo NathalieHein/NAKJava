@@ -88,6 +88,14 @@ public enum State implements Serializable {
 		}
 
 	},
+	SIMULATIONSTATE {
+
+		@Override
+		public State getFollowUpState() {
+			return PLAYCARDSTATE;
+		}
+
+	},
 	CLEANUP {
 
 		@Override

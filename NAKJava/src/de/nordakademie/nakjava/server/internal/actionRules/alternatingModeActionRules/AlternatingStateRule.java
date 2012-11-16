@@ -2,9 +2,9 @@ package de.nordakademie.nakjava.server.internal.actionRules.alternatingModeActio
 
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.server.internal.Player;
-import de.nordakademie.nakjava.server.internal.actionRules.NonSimulationStateRule;
+import de.nordakademie.nakjava.server.internal.actionRules.StateRule;
 
-public abstract class AlternatingStateRule extends NonSimulationStateRule {
+public abstract class AlternatingStateRule extends StateRule {
 
 	@Override
 	public boolean isRuleApplicable(long sessionId, Player player) {

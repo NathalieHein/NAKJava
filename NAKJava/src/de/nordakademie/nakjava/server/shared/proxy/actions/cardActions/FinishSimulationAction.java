@@ -2,15 +2,16 @@ package de.nordakademie.nakjava.server.shared.proxy.actions.cardActions;
 
 import java.rmi.RemoteException;
 
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
 import de.nordakademie.nakjava.server.internal.Session;
-import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
+import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
-public class PlayCardAction extends AbstractCardAction {
+public class FinishSimulationAction extends ActionContext {
 
-	public PlayCardAction(String cardName, long sessionNr) {
-		super(cardName, sessionNr);
+	public FinishSimulationAction(long sessionNr) {
+		super(sessionNr);
 	}
 
 	@Override
@@ -19,15 +20,12 @@ public class PlayCardAction extends AbstractCardAction {
 
 			@Override
 			protected void performImpl(Session session) {
-				// no need to check whether actionInvoker == currentPlayer -->
-				// action would not be verified otherwise
-				Model model = session.getModel();
 				if (!session.isActionInvokerCurrentPlayer()) {
-					model.changeSelfAndOpponent();
+					session.getModel().changeSelfAndOpponent();
 				}
-				PlayCardAuxiliary.playCard(model, cardName);
-				PlayCardAuxiliary.checkEndOfGame(model);
+				StateMachine.getInstance().run(session.getModel());
 			}
 		};
 	}
+
 }

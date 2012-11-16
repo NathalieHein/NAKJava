@@ -1,6 +1,7 @@
 package de.nordakademie.nakjava.server.internal.model;
 
+import java.io.Serializable;
 
-public interface StateSpecificModel {
+public interface StateSpecificModel extends Serializable {
 
 }

@@ -7,11 +7,11 @@ import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategies;
 import de.nordakademie.nakjava.server.internal.Player;
-import de.nordakademie.nakjava.server.internal.actionRules.NonSimulationStateRule;
+import de.nordakademie.nakjava.server.internal.actionRules.StateRule;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.SelectWinStrategy;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
-public class ChooseStrategyRule extends NonSimulationStateRule {
+public class ChooseStrategyRule extends StateRule {
 
 	@Override
 	protected boolean isRuleApplicableImpl(long sessionId, Player player) {

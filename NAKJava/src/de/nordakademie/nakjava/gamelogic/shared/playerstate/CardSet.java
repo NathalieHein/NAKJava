@@ -41,6 +41,12 @@ public class CardSet implements Serializable {
 		return false;
 	}
 
+	public void discardRandomCardFromHand() {
+		String card = hand
+				.remove((int) (Math.random() * getNumberOfCardsOnHand()));
+		cemetry.add(card);
+	}
+
 	public int getNumberOfCardsOnHand() {
 		return hand.size();
 	}
@@ -88,12 +94,6 @@ public class CardSet implements Serializable {
 			i++;
 		}
 		return list;
-	}
-
-	public void copyToFile(String address) {
-		deck.addAll(hand);
-		shuffle();
-		// TODO copy to file
 	}
 
 	private int getCardSetSize() {
