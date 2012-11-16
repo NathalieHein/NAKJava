@@ -8,6 +8,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import de.nordakademie.nakjava.client.internal.Client;
@@ -132,4 +133,11 @@ public abstract class AbstractGUIClient extends Client {
 		}
 
 	}
+
+	@Override
+	public void error(String text) {
+		JOptionPane.showMessageDialog(getFrame(), text, "Fehler",
+				JOptionPane.ERROR_MESSAGE);
+	}
+
 }

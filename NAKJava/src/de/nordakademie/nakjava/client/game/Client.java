@@ -79,4 +79,10 @@ public class Client extends AbstractGUIClient {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public void remoteClose() {
+		System.exit(0);
+	}
+
 }
