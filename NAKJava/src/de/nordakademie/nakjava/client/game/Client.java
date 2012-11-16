@@ -80,6 +80,13 @@ public class Client extends AbstractGUIClient {
 		}
 	}
 
+	/**
+	 * Subclasses may override
+	 */
+	@Override
+	public void error(String text) {
+	}
+
 	@Override
 	public void remoteClose() {
 		System.exit(0);
