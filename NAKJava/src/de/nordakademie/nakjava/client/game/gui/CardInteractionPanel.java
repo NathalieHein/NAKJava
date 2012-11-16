@@ -10,7 +10,6 @@ import de.nordakademie.nakjava.client.internal.gui.ActionContextSelector;
 import de.nordakademie.nakjava.client.internal.gui.component.Button;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.PlayCardAction;
-import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.SimulateCardAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.WithdrawCardAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
@@ -45,18 +44,6 @@ public class CardInteractionPanel extends JPanel {
 				public boolean select(ActionContext context) {
 					if (context instanceof WithdrawCardAction) {
 						return ((WithdrawCardAction) context).getCardName()
-								.equals(card.getTitle());
-					} else {
-						return false;
-					}
-				}
-			}, true));
-			buttons.add(new Button("Simulieren", new ActionContextSelector() {
-
-				@Override
-				public boolean select(ActionContext context) {
-					if (context instanceof SimulateCardAction) {
-						return ((SimulateCardAction) context).getCardName()
 								.equals(card.getTitle());
 					} else {
 						return false;

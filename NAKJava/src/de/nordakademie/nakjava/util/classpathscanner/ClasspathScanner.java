@@ -51,6 +51,11 @@ public class ClasspathScanner {
 		});
 	}
 
+	public static <T> List<Class<T>> findClasses(String packagge,
+			String additionalPackageProperty, final Class<T> baseClass) {
+		return findClasses(packagge, additionalPackageProperty, null, baseClass);
+	}
+
 	@SuppressWarnings("unchecked")
 	// Eclipse is not intelligent enough...
 	public static <T> List<Class<T>> findClasses(String packagge,
@@ -58,7 +63,6 @@ public class ClasspathScanner {
 			final Class<T> baseClass) {
 
 		@SuppressWarnings("rawtypes")
-		// Generics are not possible here...
 		List<Class<?>> tempClasses = findClasses(packagge,
 				additionalPackageProperty, new ClassAcceptor() {
 
@@ -73,12 +77,13 @@ public class ClasspathScanner {
 
 		for (Class<?> tempClazz : tempClasses) {
 
-			if (acceptor.acceptClass((Class<T>) tempClazz)) {
+			if (acceptor == null || acceptor.acceptClass((Class<T>) tempClazz)) {
 				resultList.add((Class<T>) tempClazz);
 			}
 		}
 
 		return resultList;
+
 	}
 
 	// Generics end here..

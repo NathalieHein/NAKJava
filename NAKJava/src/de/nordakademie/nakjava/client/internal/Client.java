@@ -46,7 +46,8 @@ public abstract class Client extends UnicastRemoteObject implements
 	protected abstract void stateChange(PlayerState state);
 
 	@Override
-	public void stateChanged(final PlayerState state) throws RemoteException {
+	public final void stateChanged(final PlayerState state)
+			throws RemoteException {
 		// TODO perhaps a Thread pool here later
 		new Thread(new Runnable() {
 
