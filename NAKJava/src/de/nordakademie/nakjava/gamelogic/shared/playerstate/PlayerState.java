@@ -1,37 +1,43 @@
 package de.nordakademie.nakjava.gamelogic.shared.playerstate;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
+import de.nordakademie.nakjava.server.internal.model.LeaveOutVisibleCheck;
 import de.nordakademie.nakjava.server.internal.model.LoginSpecificModel;
+import de.nordakademie.nakjava.server.internal.model.SimulationModels;
 import de.nordakademie.nakjava.server.internal.model.StateSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.VisibleField;
 import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 import de.nordakademie.nakjava.server.persistence.Deck;
 import de.nordakademie.nakjava.server.persistence.DeckPersister;
 
-public class PlayerState {
+public class PlayerState implements Serializable {
 
 	@VisibleField(targets = {
 			@TargetInState(target = Target.SELF, states = { State.LOGIN,
 					State.CONFIGUREGAME, State.READYTOSTARTSTATE,
 					State.PLAYCARDSTATE, State.ADJUSTCARDHANDSTATE, State.STOP,
 					State.EDITDECK, State.ENDOFGAMESTATE,
-					State.OTHERPLAYERLEFTGAME }),
+					State.OTHERPLAYERLEFTGAME, State.SIMULATIONSTATE }),
 			@TargetInState(target = Target.OPPONENT, states = { State.LOGIN,
 					State.EDITDECK, State.CONFIGUREGAME,
 					State.READYTOSTARTSTATE, State.PLAYCARDSTATE,
-					State.ADJUSTCARDHANDSTATE, State.STOP, State.ENDOFGAMESTATE }) })
+					State.ADJUSTCARDHANDSTATE, State.STOP,
+					State.ENDOFGAMESTATE, State.SIMULATIONSTATE }) })
 	private State state;
 	@VisibleField(targets = { @TargetInState(states = { State.CONFIGUREGAME,
 			State.READYTOSTARTSTATE, State.EDITDECK, State.PLAYCARDSTATE,
-			State.ADJUSTCARDHANDSTATE, State.STOP }, target = Target.OPPONENT) })
+			State.ADJUSTCARDHANDSTATE, State.STOP, State.SIMULATIONSTATE }, target = Target.OPPONENT) })
 	private String name = "";
+	@LeaveOutVisibleCheck
 	private List<Deck> savedDecks;
 	private StateSpecificModel stateSpecificModel;
+	private SimulationModels simulationModels;
 
 	public PlayerState() {
 
@@ -70,6 +76,14 @@ public class PlayerState {
 
 	public void setSavedDecks(List<Deck> savedDecks) {
 		this.savedDecks = savedDecks;
+	}
+
+	public SimulationModels getSimulationModels() {
+		return simulationModels;
+	}
+
+	public void setSimulationModels(SimulationModels simulationModels) {
+		this.simulationModels = simulationModels;
 	}
 
 	public Deck addDeck(String name, Set<String> cards) {

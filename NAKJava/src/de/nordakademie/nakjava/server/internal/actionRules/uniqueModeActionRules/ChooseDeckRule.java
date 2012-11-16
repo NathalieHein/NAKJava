@@ -6,7 +6,7 @@ import java.util.List;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.Player;
-import de.nordakademie.nakjava.server.internal.actionRules.NonSimulationStateRule;
+import de.nordakademie.nakjava.server.internal.actionRules.StateRule;
 import de.nordakademie.nakjava.server.persistence.Deck;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.CreateNewDeckAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.EditDeckAction;
@@ -14,7 +14,7 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.SelectD
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.SelectStandardDeckAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
-public class ChooseDeckRule extends NonSimulationStateRule {
+public class ChooseDeckRule extends StateRule {
 
 	@Override
 	public List<ActionContext> applyRule(long sessionId, Player player) {

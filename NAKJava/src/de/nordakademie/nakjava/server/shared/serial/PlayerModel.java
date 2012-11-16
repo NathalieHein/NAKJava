@@ -5,12 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
-import de.nordakademie.nakjava.server.shared.serial.stateSpecificInfos.StateSpecificInformation;
 
 public class PlayerModel implements Serializable {
 	private State state;
 	private String name;
-	private StateSpecificInformation stateSpecificInfos;
 	private Map<String, Object> genericTransfer;
 
 	public PlayerModel() {
@@ -39,15 +37,6 @@ public class PlayerModel implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public StateSpecificInformation getStateSpecificInfos() {
-		return stateSpecificInfos;
-	}
-
-	public void setStateSpecificInfos(
-			StateSpecificInformation stateSpecificInfos) {
-		this.stateSpecificInfos = stateSpecificInfos;
 	}
 
 }

@@ -1,5 +1,6 @@
 package de.nordakademie.nakjava.server.internal.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,17 +12,16 @@ import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 import de.nordakademie.nakjava.server.internal.model.transformator.SingleCardTransformator;
 import de.nordakademie.nakjava.server.internal.model.transformator.WinStrategyTransformator;
 
-public class Model {
+public class Model implements Serializable {
 	@VisibleField(targets = { @TargetInState(states = { State.CONFIGUREGAME,
 			State.READYTOSTARTSTATE, State.PLAYCARDSTATE,
-			State.ADJUSTCARDHANDSTATE, State.STOP }, target = Target.SELF) }, transformer = WinStrategyTransformator.class)
+			State.ADJUSTCARDHANDSTATE, State.STOP, State.SIMULATIONSTATE }, target = Target.SELF) }, transformer = WinStrategyTransformator.class)
 	protected String strategy;
 	@VisibleField(targets = { @TargetInState(states = { State.PLAYCARDSTATE,
 			State.ADJUSTCARDHANDSTATE, State.STOP }, target = Target.SELF) }, transformer = SingleCardTransformator.class)
 	private String lastPlayedCard;
 	protected PlayerState self;
 	protected PlayerState opponent;
-	protected SimulationModel simulationModel;
 
 	public Model(PlayerState playerState) {
 		self = playerState;
@@ -69,18 +69,6 @@ public class Model {
 		map.put(Target.SELF, self);
 		map.put(Target.OPPONENT, opponent);
 		return map;
-	}
-
-	public SimulationModel getSimulationModel() {
-		return simulationModel;
-	}
-
-	public void setSimulationModel(SimulationModel simulationModel) {
-		this.simulationModel = simulationModel;
-	}
-
-	public void createSimulationModel() {
-		simulationModel = new SimulationModel(this);
 	}
 
 	public void setLastPlayedCard(String lastPlayedCard) {

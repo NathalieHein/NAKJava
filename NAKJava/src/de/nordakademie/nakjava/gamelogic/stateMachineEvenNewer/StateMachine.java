@@ -10,6 +10,7 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.Postactio
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.Preaction;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.ReadyToStartAction;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.RoundEndAction;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.SimulationAction;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.StateAction;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.model.Model;
@@ -38,6 +39,7 @@ public class StateMachine {
 		stateToAction.put(State.PREACTIONSTATE, new Preaction());
 		stateToAction.put(State.POSTACTIONSTATE, new Postaction());
 		stateToAction.put(State.ADJUSTCARDHANDSTATE, new AdjustCardhand());
+		stateToAction.put(State.SIMULATIONSTATE, new SimulationAction());
 		stateToAction.put(State.STOP, new RoundEndAction());
 		stateToAction.put(State.READYTOSTARTSTATE, new ReadyToStartAction());
 		stateToAction.put(State.ENDOFGAMESTATE, new GameEndAction());
