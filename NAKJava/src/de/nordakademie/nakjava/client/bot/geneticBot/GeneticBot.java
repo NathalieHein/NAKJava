@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.channels.FileLock;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,7 @@ public class GeneticBot extends AbstractBotClient {
 
 	@Override
 	public void turn(PlayerState state) {
+		System.out.println("Turn");
 		List<ActionContext> playCards = AbstractActionSelector.selectActions(
 				state.getActions(), new ActionContextSelector() {
 
@@ -67,8 +69,10 @@ public class GeneticBot extends AbstractBotClient {
 
 			countCard(cardToPlay.getCardName());
 			cardToPlay.perform();
+			System.out.println("Perform Card");
 
 		} else {
+			System.out.println("No Cards");
 			drop(state);
 		}
 	}
@@ -104,6 +108,7 @@ public class GeneticBot extends AbstractBotClient {
 
 	@Override
 	public void initBot(PlayerState state) {
+		System.out.println("Round started");
 		countCards = new HashMap<>();
 		name = VisibleModelFields.MODEL_STRATEGY_SELF.getValue(
 				state.getModel().getGenericTransfer()).getName();
@@ -115,7 +120,8 @@ public class GeneticBot extends AbstractBotClient {
 
 		ObjectInputStream ois = null;
 		try {
-			ois = new ObjectInputStream(new FileInputStream(file));
+			FileInputStream fileInputStream = new FileInputStream(file);
+			ois = new ObjectInputStream(fileInputStream);
 			knowledge = (Map<String, Long>) ois.readObject();
 			if (knowledge == null) {
 				knowledge = new HashMap<>();
@@ -135,6 +141,7 @@ public class GeneticBot extends AbstractBotClient {
 	public void gameFinished(RoundResult result) {
 
 		roundsPlayed++;
+		System.out.println("Roun finished");
 
 		for (Entry<String, Long> card : countCards.entrySet()) {
 			Long knowledgeCount = knowledge.get(card.getKey());
@@ -151,8 +158,11 @@ public class GeneticBot extends AbstractBotClient {
 		File file = new File(GENETIC_BOT_KNOWLEDGE_PATH + name);
 		ObjectOutputStream ous = null;
 		try {
-			ous = new ObjectOutputStream(new FileOutputStream(file));
+			FileOutputStream fileOutputStream = new FileOutputStream(file);
+			FileLock lock = fileOutputStream.getChannel().lock();
+			ous = new ObjectOutputStream(fileOutputStream);
 			ous.writeObject(knowledge);
+			lock.release();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

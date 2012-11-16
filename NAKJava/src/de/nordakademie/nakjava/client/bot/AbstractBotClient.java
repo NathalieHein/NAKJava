@@ -43,15 +43,17 @@ public abstract class AbstractBotClient extends Client {
 
 	@Override
 	protected void stateChange(PlayerState playerState) {
+
 		if (hook != null) {
 			hook.newState(playerState);
 		}
 
 		State newState = VisibleModelFields.PLAYERSTATE_STATE_SELF
 				.getValue(playerState.getModel().getGenericTransfer());
+		System.out.println("StateChange " + newState);
 
-		if (state == State.READYTOSTARTSTATE
-				&& (newState == State.PLAYCARDSTATE || newState == State.STOP)) {
+		if ((state == State.READYTOSTARTSTATE && newState == State.PLAYCARDSTATE)
+				|| (state == State.CONFIGUREGAME && newState == State.STOP)) {
 			initBot(playerState);
 		}
 
