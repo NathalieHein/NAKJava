@@ -36,4 +36,9 @@ public abstract class StateRule implements ActionRule {
 		return Sessions.getInstance().getSession(sessionId);
 	}
 
+	public PlayerState getOtherPlayerState(long sessionId, Player player) {
+		Player otherPlayer = getSession(sessionId).getOneOtherPlayer(player);
+		return getPlayerState(sessionId, otherPlayer);
+	}
+
 }
