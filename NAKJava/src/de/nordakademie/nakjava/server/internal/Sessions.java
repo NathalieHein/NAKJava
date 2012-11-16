@@ -74,13 +74,16 @@ public class Sessions {
 			// model self/opponent
 			Model model = session.getModel();
 			PlayerState self = model.getSelf();
-			Players.getInstance().removePlayerName(model.getSelf().getName());
+			if (self != null && self.getName() != null) {
+				Players.getInstance().removePlayerName(
+						model.getSelf().getName());
+			}
 			PlayerState opponent = model.getOpponent();
 			if (opponent != null) {
 				Players.getInstance().removePlayerName(
 						model.getOpponent().getName());
 			}
-			sessions.remove(session);
+			sessions.remove(sessionId);
 
 		} finally {
 			writeLock.unlock();
