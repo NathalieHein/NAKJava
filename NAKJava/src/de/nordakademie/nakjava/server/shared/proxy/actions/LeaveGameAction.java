@@ -2,9 +2,9 @@ package de.nordakademie.nakjava.server.shared.proxy.actions;
 
 import java.rmi.RemoteException;
 
+import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.Session;
-import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
@@ -24,17 +24,19 @@ public class LeaveGameAction extends ActionContext {
 				if (!session.isActionInvokerCurrentPlayer()) {
 					session.getModel().changeSelfAndOpponent();
 				}
-				Model model = session.getModel();
-				if (model.getOpponent() == null) {
+				PlayerState opponent = session.getModel().getOpponent();
+				if (opponent == null) {
 					session.setToBeDeleted(true);
-				} else {
+				} else if (opponent.getState() != State.LOGIN
+						&& opponent.getState() != State.CONFIGUREGAME
+						&& opponent.getState() != State.EDITDECK) {
 					session.getModel().getOpponent()
 							.setState(State.OTHERPLAYERLEFTGAME);
 				}
+				session.getActionInvoker().getControl().remoteClose();
 				session.removeActionInvoker();
 
 			}
 		};
 	}
-
 }

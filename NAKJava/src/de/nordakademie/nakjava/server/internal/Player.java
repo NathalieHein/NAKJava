@@ -1,29 +1,22 @@
 package de.nordakademie.nakjava.server.internal;
 
-import java.rmi.RemoteException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import de.nordakademie.nakjava.client.shared.PlayerControlListener;
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
-import de.nordakademie.nakjava.server.shared.proxy.PlayerControl;
-import de.nordakademie.nakjava.server.shared.proxy.PlayerControlImpl;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 
 public class Player {
 	private PlayerState state;
-	private PlayerControl control;
+	private PlayerControlListener control;
 
 	private static ExecutorService threadPool = Executors.newCachedThreadPool();
 
 	public Player(PlayerControlListener controlListener,
 			PlayerStateListener stateListener) {
 
-		try {
-			control = new PlayerControlImpl(controlListener);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
+		control = controlListener;
 		state = new PlayerState(stateListener);
 	}
 
@@ -31,7 +24,7 @@ public class Player {
 		return state;
 	}
 
-	public PlayerControl getControl() {
+	public PlayerControlListener getControl() {
 		return control;
 	}
 
@@ -41,7 +34,6 @@ public class Player {
 			@Override
 			public void run() {
 				state.triggerChangeEvent();
-				control.triggerChangeEvent();
 			}
 
 		});
