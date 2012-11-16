@@ -1,6 +1,8 @@
 package de.nordakademie.nakjava.client.game;
 
 import java.rmi.RemoteException;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import de.nordakademie.nakjava.client.internal.gui.AbstractGUIClient;
 
@@ -87,9 +89,23 @@ public class Client extends AbstractGUIClient {
 	public void error(String text) {
 	}
 
+	/**
+	 * Closes the client after method is performed (thx to RMI...)
+	 */
 	@Override
 	public void remoteClose() {
-		System.exit(0);
+		final Lock lock = new ReentrantLock();
+		lock.lock();
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				lock.lock();
+				System.exit(0);
+				lock.unlock();
+			}
+		}).start();
+		lock.unlock();
 	}
 
 }

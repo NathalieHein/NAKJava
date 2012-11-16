@@ -30,10 +30,15 @@ public class LeaveGameAction extends ActionContext {
 				} else if (opponent.getState() != State.LOGIN
 						&& opponent.getState() != State.CONFIGUREGAME
 						&& opponent.getState() != State.EDITDECK) {
-					session.getModel().getOpponent()
-							.setState(State.OTHERPLAYERLEFTGAME);
+					session.getModel().getOpponent().setState(
+							State.OTHERPLAYERLEFTGAME);
 				}
-				session.getActionInvoker().getControl().remoteClose();
+				try {
+					session.getActionInvoker().getControl().remoteClose();
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				session.removeActionInvoker();
 
 			}

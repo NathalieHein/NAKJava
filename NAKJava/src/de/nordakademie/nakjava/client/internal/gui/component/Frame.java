@@ -56,7 +56,7 @@ public class Frame extends JFrame implements ActionContextHolder {
 
 								lock.unlock();
 							}
-						});
+						}).start();
 					} else {
 						System.exit(0);
 					}
@@ -105,6 +105,6 @@ public class Frame extends JFrame implements ActionContextHolder {
 
 	@Override
 	public boolean isDisposed() {
-		return false;
+		return true;
 	}
 }
