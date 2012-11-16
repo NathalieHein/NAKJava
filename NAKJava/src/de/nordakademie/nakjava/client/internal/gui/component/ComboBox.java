@@ -58,32 +58,23 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 		ActionContextDelegator.getInstance().registerActionContextHolder(this);
 	}
 
-	@Override
-	public void setSelectedIndex(int anIndex) {
-		listenerActive = false;
-		super.setSelectedIndex(anIndex);
-		currentSelection = (String) getSelectedItem();
-		listenerActive = true;
-	}
-
-	@Override
-	public void setSelectedItem(Object anObject) {
+	public void addSelectedItem(Object anObject) {
 		listenerActive = false;
 		currentSelection = (String) anObject;
 		if (actions.get(anObject) == null) {
 			addItem((String) anObject);
 		}
-		super.setSelectedItem(anObject);
+		setSelectedItem(anObject);
 		listenerActive = true;
 	}
 
 	@Override
 	public void setActionContext(ActionContext actionContext, long batch) {
-		listenerActive = false;
 		if (!(actionContext instanceof SelectAction)) {
 			return;
 		}
 
+		listenerActive = false;
 		SelectAction action = (SelectAction) actionContext;
 
 		if (batch > currentBatch) {
@@ -91,16 +82,17 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 			actions.clear();
 			removeAllItems();
 		} else if (batch < currentBatch) {
+			listenerActive = true;
 			return;
 		}
 
 		actions.put(action.getValue(), action);
 		addItem(action.getValue());
 		if (action.getValue().equals(currentSelection)) {
-			setSelectedItem(currentSelection);
+			addSelectedItem(currentSelection);
 		}
-		listenerActive = true;
 		setEnabled(true);
+		listenerActive = true;
 
 	}
 
@@ -139,7 +131,7 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 		listenerActive = false;
 		Object value = currentSelectionField.getValue(genericValues);
 		if (value != null) {
-			setSelectedItem(currentSelectionField.getValue(genericValues)
+			addSelectedItem(currentSelectionField.getValue(genericValues)
 					.toString());
 		}
 		listenerActive = true;
