@@ -5,12 +5,19 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import de.nordakademie.nakjava.client.game.Client;
+import de.nordakademie.nakjava.client.internal.Client;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
+import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.proxy.CheckIn;
 import de.nordakademie.nakjava.server.shared.proxy.CheckInImpl;
+import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.FinishConfiguringAction;
+import de.nordakademie.nakjava.server.shared.serial.ActionContext;
+import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 
 public class ActionBrokerTest {
 
@@ -19,7 +26,7 @@ public class ActionBrokerTest {
 
 	}
 
-	public synchronized void test() {
+	private synchronized void test() {
 		startServer();
 		try {
 			wait(300);
@@ -27,64 +34,78 @@ public class ActionBrokerTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		oneAfterEachOther();
-		// sameTime();
+		runClients(50);
 	}
 
-	public synchronized void oneAfterEachOther() {
+	private void runClients(int i) {
+		ExecutorService threadPool = Executors.newFixedThreadPool(i);
+		for (int j = 0; j < i; j++) {
+			threadPool.execute(new Runnable() {
 
-		try {
-			new Client();
-			wait(300);
-			new Client();
-			wait(300);
-			new Client();
-			wait(300);
-		} catch (RemoteException | InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+				@Override
+				public void run() {
+					createAndInitializeClient();
+				}
+
+			});
 		}
 	}
 
-	public void sameTime() {
-		ExecutorService threadpool = Executors.newFixedThreadPool(3);
-		threadpool.execute(new Runnable() {
+	private void createAndInitializeClient() {
+		try {
+			new Client() {
+				private Random random = new Random();
 
-			@Override
-			public void run() {
-				try {
-					Client client1 = new Client();
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				@Override
+				protected void stateChange(PlayerState state) {
+					List<ActionContext> actions = state.getActions();
+					ActionContext action;
+					if (actions.size() > 1) {
+						do {
+							action = actions
+									.get(random.nextInt(actions.size()));
+						} while (action instanceof FinishConfiguringAction);
+						State opponent = VisibleModelFields.PLAYERSTATE_STATE_OPPONENT
+								.getValue(state.getModel().getGenericTransfer());
+						State self = VisibleModelFields.PLAYERSTATE_STATE_SELF
+								.getValue(state.getModel().getGenericTransfer());
+						if (opponent == null) {
+							System.out.println(self.toString() + " "
+									+ action.getClass());
+						} else {
+							System.out
+									.println(opponent.toString() + " "
+											+ self.toString() + " "
+											+ action.getClass());
+						}
+						// for (int i = 0; i < 10; i++) {
+						action.perform();
+						// }
+					}
 				}
-			}
-		});
-		threadpool.execute(new Runnable() {
 
-			@Override
-			public void run() {
-				try {
-					Client client2 = new Client();
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				@Override
+				protected void preCheckin() {
+
 				}
-			}
-		});
-		threadpool.execute(new Runnable() {
 
-			@Override
-			public void run() {
-				try {
-					Client client3 = new Client();
-				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				@Override
+				public void remoteClose() {
+					// TODO Auto-generated method stub
+
 				}
-			}
-		});
 
+				@Override
+				public void error(String text) {
+					// TODO Auto-generated method stub
+
+				}
+
+			};
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public static void startServer() {
