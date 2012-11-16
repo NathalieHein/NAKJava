@@ -3,10 +3,12 @@ package de.nordakademie.nakjava.server.shared.proxy.actions.cardActions;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import de.nordakademie.nakjava.gamelogic.cards.impl.CardLibrary;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
-import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
@@ -40,7 +42,6 @@ public class SimulateCardAction extends ActionContext {
 				}
 				Model model = session.getModel();
 				PlayerState self = model.getSelf();
-				self.setState(State.SIMULATIONSTATE);
 				InGameSpecificModel specificModel = (InGameSpecificModel) self
 						.getStateSpecificModel();
 				List<String> allowedCards = new ArrayList<>();
@@ -57,34 +58,20 @@ public class SimulateCardAction extends ActionContext {
 				SimulationModels simulationModels = new SimulationModels(model,
 						allowedCards, thresholds);
 				self.setSimulationModels(simulationModels);
+				self.setState(State.SIMULATIONSTATE);
+				ExecutorService threadPool = Executors.newFixedThreadPool(5);
 				for (SimulationModel simulationModel : simulationModels
 						.getSimulationModels()) {
-					PlayerState simulationSelf = simulationModel.getSelf();
-					PlayerState simulationOponent = simulationModel
-							.getOpponent();
-					PlayCardAuxiliary.playCard(simulationModel,
-							simulationModel.getSimulatedCard());
-					do {
-						PlayCardAuxiliary.checkEndOfGame(simulationModel);
-						if (simulationSelf.getState() == State.ADJUSTCARDHANDSTATE) {
-							((InGameSpecificModel) simulationSelf
-									.getStateSpecificModel()).getCards()
-									.discardRandomCardFromHand();
-							StateMachine.getInstance().run(simulationModel);
-						}
-						if (simulationOponent.getState() == State.ADJUSTCARDHANDSTATE) {
-							((InGameSpecificModel) simulationOponent
-									.getStateSpecificModel()).getCards()
-									.discardRandomCardFromHand();
-							StateMachine.getInstance().run(simulationModel);
-						}
-						if (simulationSelf.getState() == State.PLAYCARDSTATE) {
-							simulationModel.incrementCountRounds();
-						}
-					} while (!simulationModel.isSimulatingFinished()
-							&& simulationSelf.getState() != State.ENDOFGAMESTATE);
-					System.out.println("Ende");
+					threadPool
+							.execute(new SimulateCardRunnable(simulationModel));
 				}
+				threadPool.shutdown();
+				try {
+					threadPool.awaitTermination(100, TimeUnit.MILLISECONDS);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				threadPool.shutdownNow();
 			}
 		};
 	}
