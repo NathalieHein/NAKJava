@@ -1,6 +1,8 @@
 package de.nordakademie.nakjava.client.internal.gui;
 
 import java.awt.Component;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
 import java.util.List;
@@ -61,7 +63,16 @@ public abstract class AbstractGUIClient extends Client {
 		frame.setResizable(false);
 		delegator = ActionContextDelegator.getInstance();
 		panelPicker = new PanelPicker();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		frame.addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO Auto-generated method stub
+				super.windowClosing(e);
+			}
+
+		});
 		frame.setVisible(true);
 		preCheckinFinalValues.add(frame);
 	}
