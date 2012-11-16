@@ -1,5 +1,8 @@
 package test;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -15,7 +18,7 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.proxy.CheckIn;
 import de.nordakademie.nakjava.server.shared.proxy.CheckInImpl;
-import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.FinishConfiguringAction;
+import de.nordakademie.nakjava.server.shared.proxy.actions.LeaveGameAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 
@@ -64,7 +67,7 @@ public class ActionBrokerTest {
 						do {
 							action = actions
 									.get(random.nextInt(actions.size()));
-						} while (action instanceof FinishConfiguringAction);
+						} while (action instanceof LeaveGameAction);
 						State opponent = VisibleModelFields.PLAYERSTATE_STATE_OPPONENT
 								.getValue(state.getModel().getGenericTransfer());
 						State self = VisibleModelFields.PLAYERSTATE_STATE_SELF
@@ -109,14 +112,49 @@ public class ActionBrokerTest {
 	}
 
 	public static void startServer() {
-		CheckInImpl.load();
+
+		Method method;
+		try {
+			method = CheckInImpl.class.getDeclaredMethod("load", null);
+			method.setAccessible(true);
+			method.invoke(CheckInImpl.class, null);
+		} catch (NoSuchMethodException | SecurityException
+				| IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		// CheckInImpl.load();
 		try {
 			LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
 
-			CheckIn checkIn = new CheckInImpl();
+			Constructor<CheckInImpl> constructor = CheckInImpl.class
+					.getDeclaredConstructor(null);
+			constructor.setAccessible(true);
+
+			CheckIn checkIn = constructor.newInstance(null);
 
 			Naming.rebind("CheckIn", checkIn);
 		} catch (RemoteException | MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
