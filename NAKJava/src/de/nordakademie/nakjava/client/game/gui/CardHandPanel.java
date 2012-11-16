@@ -18,12 +18,20 @@ public class CardHandPanel extends JPanel implements ValueHolder {
 	private Map<String, CardInteractionPanel> cards;
 	private VisibleModelField<List<CardInformation>> cardField;
 
+	private boolean showButtons;
+
 	public CardHandPanel(VisibleModelField<List<CardInformation>> cardField) {
+		this(cardField, true);
+	}
+
+	public CardHandPanel(VisibleModelField<List<CardInformation>> cardField,
+			boolean showButtons) {
 		setLayout(new FlowLayout(FlowLayout.CENTER, 5, 2));
 		setMaximumSize(new Dimension(getMaximumSize().width,
 				CardInformationPanel.CARD_HEIGHT + 2));
 		this.cardField = cardField;
 		cards = new HashMap<>();
+		this.showButtons = showButtons;
 	}
 
 	public void setCards(List<CardInformation> cards) {
@@ -49,7 +57,7 @@ public class CardHandPanel extends JPanel implements ValueHolder {
 		for (CardInformation newCard : cards) {
 			if (!this.cards.containsKey(newCard.getTitle())) {
 				CardInteractionPanel cardPanel = new CardInteractionPanel(
-						newCard);
+						newCard, showButtons);
 				this.cards.put(newCard.getTitle(), cardPanel);
 				this.add(cardPanel);
 			}

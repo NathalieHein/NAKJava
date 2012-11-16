@@ -74,10 +74,11 @@ public class PlayCardAction extends AbstractCardAction {
 						selfSpecificModel.setRoundResult(selfRoundResult);
 						opponetSpecificModel.setRoundResult(roundResult
 								.get(Target.OPPONENT));
+					} else {
+						StateMachine.getInstance().run(model);
 					}
 					// if card states: "Play again" than state must be set to
 					// "PREACTION"
-					StateMachine.getInstance().run(model);
 				} else {
 					// TODO what if card not found
 					// --> should be nothing because should go back to trigger

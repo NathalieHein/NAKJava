@@ -23,6 +23,7 @@ public class Label extends JLabel implements ValueHolder {
 	@Override
 	public void pickValue(Map<String, Object> genericValues) {
 		Object value = field.getValue(genericValues);
+
 		if (value != null) {
 			setText(before + value.toString() + after);
 		}

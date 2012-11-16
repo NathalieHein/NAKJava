@@ -16,51 +16,54 @@ import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
 public class CardInteractionPanel extends JPanel {
 
-	public CardInteractionPanel(final CardInformation card) {
+	public CardInteractionPanel(final CardInformation card, boolean showButtons) {
 		setMaximumSize(new Dimension(CardInformationPanel.CARD_WIDTH,
 				CardInformationPanel.CARD_HEIGHT));
 		setPreferredSize(new Dimension(CardInformationPanel.CARD_WIDTH,
 				CardInformationPanel.CARD_HEIGHT));
 		setLayout(new BorderLayout());
 		add(new CardInformationPanel(card), BorderLayout.CENTER);
-		JPanel buttons = new JPanel(new GridLayout(0, 1));
-		add(buttons, BorderLayout.SOUTH);
-		buttons.add(new Button("Spielen", new ActionContextSelector() {
 
-			@Override
-			public boolean select(ActionContext context) {
-				if (context instanceof PlayCardAction) {
-					return ((PlayCardAction) context).getCardName().equals(
-							card.getTitle());
-				} else {
-					return false;
-				}
-			}
-		}, true));
-		buttons.add(new Button("Verwerfen", new ActionContextSelector() {
+		if (showButtons) {
+			JPanel buttons = new JPanel(new GridLayout(0, 1));
+			add(buttons, BorderLayout.SOUTH);
+			buttons.add(new Button("Spielen", new ActionContextSelector() {
 
-			@Override
-			public boolean select(ActionContext context) {
-				if (context instanceof WithdrawCardAction) {
-					return ((WithdrawCardAction) context).getCardName().equals(
-							card.getTitle());
-				} else {
-					return false;
+				@Override
+				public boolean select(ActionContext context) {
+					if (context instanceof PlayCardAction) {
+						return ((PlayCardAction) context).getCardName().equals(
+								card.getTitle());
+					} else {
+						return false;
+					}
 				}
-			}
-		}, true));
-		buttons.add(new Button("Simulieren", new ActionContextSelector() {
+			}, true));
+			buttons.add(new Button("Verwerfen", new ActionContextSelector() {
 
-			@Override
-			public boolean select(ActionContext context) {
-				if (context instanceof SimulateCardAction) {
-					return ((SimulateCardAction) context).getCardName().equals(
-							card.getTitle());
-				} else {
-					return false;
+				@Override
+				public boolean select(ActionContext context) {
+					if (context instanceof WithdrawCardAction) {
+						return ((WithdrawCardAction) context).getCardName()
+								.equals(card.getTitle());
+					} else {
+						return false;
+					}
 				}
-			}
-		}, true));
+			}, true));
+			buttons.add(new Button("Simulieren", new ActionContextSelector() {
+
+				@Override
+				public boolean select(ActionContext context) {
+					if (context instanceof SimulateCardAction) {
+						return ((SimulateCardAction) context).getCardName()
+								.equals(card.getTitle());
+					} else {
+						return false;
+					}
+				}
+			}, true));
+		}
 
 	}
 }

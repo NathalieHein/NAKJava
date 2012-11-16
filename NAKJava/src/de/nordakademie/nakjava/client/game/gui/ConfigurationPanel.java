@@ -10,11 +10,13 @@ import de.nordakademie.nakjava.client.internal.gui.component.Label;
 import de.nordakademie.nakjava.client.internal.gui.component.Panel;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.generated.VisibleModelFields;
+import de.nordakademie.nakjava.server.internal.VisibleModelField.ClientFieldTransformer;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.CreateNewDeckAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.EditDeckAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.FinishConfiguringAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.SelectDeckAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.SelectWinStrategy;
+import de.nordakademie.nakjava.util.StringUtilities;
 
 public class ConfigurationPanel extends Panel {
 
@@ -37,7 +39,22 @@ public class ConfigurationPanel extends Panel {
 		winStrategies = new ComboBox(SelectWinStrategy.class,
 				VisibleModelFields.MODEL_STRATEGY_SELF);
 
-		// opponentPanel.add(new Label("Gegner",VisibleModelFields.))
+		opponentPanel
+				.add(new Label(
+						"",
+						VisibleModelFields.PLAYERSTATE_NAME_OPPONENT
+								.setTransformer(new ClientFieldTransformer<String, String>() {
+
+									@Override
+									public String transform(String value) {
+										if (StringUtilities
+												.isNotNullOrEmpty(value)) {
+											return value;
+										} else {
+											return "Kein Gegner";
+										}
+									}
+								}), ""));
 		opponentPanel.add(new Label("(",
 				VisibleModelFields.PLAYERSTATE_STATE_OPPONENT, ")"));
 
