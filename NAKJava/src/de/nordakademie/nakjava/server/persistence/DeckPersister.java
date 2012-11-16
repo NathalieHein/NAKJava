@@ -103,8 +103,6 @@ public abstract class DeckPersister {
 
 	public static List<Deck> getDecks(PlayerState playerState) {
 		File file = new File(playerState.getName() + "_decks");
-		System.out.println(file.getAbsolutePath());
-
 		List<Deck> result = new LinkedList<>();
 
 		if (file.exists()) {
