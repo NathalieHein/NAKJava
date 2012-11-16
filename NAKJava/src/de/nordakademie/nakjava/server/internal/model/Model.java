@@ -59,6 +59,11 @@ public class Model {
 		opponent = currentSelf;
 	}
 
+	public void removeSelf() {
+		self = opponent;
+		opponent = null;
+	}
+
 	public Map<Target, PlayerState> getSelfOpponentMap() {
 		Map<Target, PlayerState> map = new HashMap<>();
 		map.put(Target.SELF, self);

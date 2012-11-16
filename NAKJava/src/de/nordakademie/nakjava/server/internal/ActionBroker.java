@@ -35,10 +35,10 @@ public class ActionBroker {
 				.getSession(serverAction.getSessionNr());
 
 		if (session.verify(serverAction)) {
-			// System.out.println("no drop");
+			System.out.println("no drop");
 			return true;
 		} else {
-			// System.out.println("drop");
+			System.out.println("drop");
 			session.releaseLock();
 			return false;
 		}

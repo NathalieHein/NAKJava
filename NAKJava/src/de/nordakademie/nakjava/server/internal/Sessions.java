@@ -7,6 +7,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
@@ -68,22 +69,20 @@ public class Sessions {
 		Session session = getSession(sessionId);
 		writeLock.lock();
 		try {
-			while (!session.tryLock()) {
-				writeCondition.await();
-			}
+			session.lock();
 			// TODO This is not nice because Sessions should know nothing about
 			// model self/opponent
 			Model model = session.getModel();
+			PlayerState self = model.getSelf();
 			Players.getInstance().removePlayerName(model.getSelf().getName());
-			Players.getInstance().removePlayerName(
-					model.getOpponent().getName());
+			PlayerState opponent = model.getOpponent();
+			if (opponent != null) {
+				Players.getInstance().removePlayerName(
+						model.getOpponent().getName());
+			}
 			sessions.remove(session);
 
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} finally {
-			writeCondition.signal();
 			writeLock.unlock();
 		}
 	}

@@ -73,8 +73,6 @@ public class Session {
 			playerToPlayerState.put(player, playerState);
 			model.addPlayerState(playerState);
 			furtherAllowedNumberOfPlayers--;
-			// TODO questionable whether to set modeUnique or do it with an
-			// action (+create a playercontrol message??)
 			return true;
 		}
 		return false;
@@ -123,6 +121,14 @@ public class Session {
 
 	public void setToBeDeleted(boolean toBeDeleted) {
 		this.toBeDeleted = toBeDeleted;
+	}
+
+	public void removeActionInvoker() {
+		furtherAllowedNumberOfPlayers++;
+		playerToPlayerState.remove(actionInvoker);
+		actionInvoker = getOneOtherPlayer(actionInvoker);
+		model.removeSelf();
+
 	}
 
 }
