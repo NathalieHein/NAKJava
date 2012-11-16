@@ -91,8 +91,8 @@ public class PlayerState implements Serializable {
 		Deck deckWithToBeAddedName = getDeckWithName(name);
 		if (deckWithToBeAddedName != null) {
 			savedDecks.remove(deckWithToBeAddedName);
-			savedDecks.add(deck);
 		}
+		savedDecks.add(deck);
 		DeckPersister.saveDecks(this);
 		return deck;
 	}
