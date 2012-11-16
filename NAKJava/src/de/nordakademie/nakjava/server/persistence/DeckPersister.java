@@ -12,6 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
+//does not need locking for the files because the name of the player that defines the name of the file is unique for all current players
+//TODO not rather be final with private constructor???
 
 public abstract class DeckPersister {
 	// TODO why not overwrite file each time with current
