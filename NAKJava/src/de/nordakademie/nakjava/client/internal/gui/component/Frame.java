@@ -107,4 +107,9 @@ public class Frame extends JFrame implements ActionContextHolder {
 	public boolean isDisposed() {
 		return true;
 	}
+
+	@Override
+	public boolean consumeAction() {
+		return false;
+	}
 }

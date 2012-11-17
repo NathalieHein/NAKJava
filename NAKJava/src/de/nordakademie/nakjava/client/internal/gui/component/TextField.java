@@ -31,7 +31,7 @@ public class TextField extends JTextField implements ActionContextHolder,
 	private VisibleModelField<String> value;
 
 	public TextField(Class<? extends KeyAction> desiredAction,
-			VisibleModelField<String> desiredValue) {
+			VisibleModelField<String> desiredValue, boolean actor) {
 		this.desiredAction = desiredAction;
 		this.value = desiredValue;
 		this.setEditable(false);
@@ -45,7 +45,10 @@ public class TextField extends JTextField implements ActionContextHolder,
 		actionMap = new ActionMap();
 		setActionMap(actionMap);
 		this.setPreferredSize(new Dimension(100, 25));
-		ActionContextDelegator.getInstance().registerActionContextHolder(this);
+		if (actor) {
+			ActionContextDelegator.getInstance().registerActionContextHolder(
+					this);
+		}
 		setHighlighter(null);
 	}
 
@@ -152,5 +155,10 @@ public class TextField extends JTextField implements ActionContextHolder,
 	@Override
 	public void pickValue(Map<String, Object> genericValues) {
 		setText(value.getValue(genericValues));
+	}
+
+	@Override
+	public boolean consumeAction() {
+		return true;
 	}
 }

@@ -13,7 +13,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import de.nordakademie.nakjava.client.internal.Client;
+import de.nordakademie.nakjava.client.internal.AbstractClient;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.proxy.CheckIn;
@@ -56,7 +56,7 @@ public class ActionBrokerTest {
 
 	private void createAndInitializeClient() {
 		try {
-			new Client() {
+			new AbstractClient() {
 				private Random random = new Random();
 
 				@Override

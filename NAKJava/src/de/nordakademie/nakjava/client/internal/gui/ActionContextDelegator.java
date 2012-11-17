@@ -68,7 +68,9 @@ public class ActionContextDelegator {
 						holder.setActionContext(context, batch);
 						notMatched.remove(holder);
 						matched = true;
-						break;
+						if (holder.consumeAction()) {
+							break;
+						}
 					}
 				}
 				if (!matched) {

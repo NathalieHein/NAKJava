@@ -6,7 +6,8 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import de.nordakademie.nakjava.client.internal.Client;
+import de.nordakademie.nakjava.client.internal.AbstractClient;
+import de.nordakademie.nakjava.client.internal.gui.GUIHook;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.AdjustCardhand;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.RoundResult;
@@ -14,19 +15,14 @@ import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
-public abstract class AbstractBotClient extends Client {
+public abstract class AbstractBotClient extends AbstractClient {
 
 	private Map<State, BotBehaviour> behaviourLookup;
-	private PlayerStateHook hook;
+	private GUIHook hook;
 	private State state;
 
-	private AbstractBotClient() throws RemoteException {
+	protected AbstractBotClient() throws RemoteException {
 		super();
-	}
-
-	protected AbstractBotClient(PlayerStateHook hook) throws RemoteException {
-		this();
-		this.hook = hook;
 	}
 
 	@Override
@@ -53,7 +49,8 @@ public abstract class AbstractBotClient extends Client {
 		System.out.println("StateChange " + newState);
 
 		if ((state == State.READYTOSTARTSTATE && newState == State.PLAYCARDSTATE)
-				|| (state == State.CONFIGUREGAME && newState == State.STOP)) {
+				|| (state == State.CONFIGUREGAME && newState == State.STOP)
+				|| (state == State.CONFIGUREGAME && newState == State.PLAYCARDSTATE)) {
 			initBot(playerState);
 		}
 
@@ -76,6 +73,10 @@ public abstract class AbstractBotClient extends Client {
 		if (behaviour != null) {
 			behaviour.act(playerState);
 		}
+	}
+
+	public void setHook(GUIHook hook) {
+		this.hook = hook;
 	}
 
 	/**

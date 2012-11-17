@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import de.nordakademie.nakjava.client.internal.gui.component.Button;
 import de.nordakademie.nakjava.client.internal.gui.component.ComboBox;
 import de.nordakademie.nakjava.client.internal.gui.component.Label;
-import de.nordakademie.nakjava.client.internal.gui.component.Panel;
+import de.nordakademie.nakjava.client.internal.gui.component.StatePanel;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.internal.VisibleModelField.ClientFieldTransformer;
@@ -18,12 +18,13 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.SelectD
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.SelectWinStrategy;
 import de.nordakademie.nakjava.util.StringUtilities;
 
-public class ConfigurationPanel extends Panel {
+public class ConfigurationPanel extends StatePanel {
 
 	private ComboBox cardDecks;
 	private ComboBox winStrategies;
 
-	public ConfigurationPanel() {
+	public ConfigurationPanel(Boolean actor) {
+		super(actor);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		JPanel opponentPanel = new JPanel();
@@ -35,9 +36,10 @@ public class ConfigurationPanel extends Panel {
 		add(selfPanel);
 
 		cardDecks = new ComboBox(SelectDeckAction.class,
-				VisibleModelFields.CONFIGUREGAMESPECIFICMODEL_CHOSENDECK_SELF);
+				VisibleModelFields.CONFIGUREGAMESPECIFICMODEL_CHOSENDECK_SELF,
+				actor);
 		winStrategies = new ComboBox(SelectWinStrategy.class,
-				VisibleModelFields.MODEL_STRATEGY_SELF);
+				VisibleModelFields.MODEL_STRATEGY_SELF, actor);
 
 		opponentPanel
 				.add(new Label(
@@ -63,10 +65,14 @@ public class ConfigurationPanel extends Panel {
 
 		selfPanel.add(new JLabel("Deck:"));
 		selfPanel.add(cardDecks);
-		selfPanel.add(new Button("Deckauswal editieren", EditDeckAction.class));
-		selfPanel.add(new Button("Neues Deck", CreateNewDeckAction.class));
-		selfPanel.add(new Button("Bereit zum Spielen",
-				FinishConfiguringAction.class));
+		if (actor) {
+			selfPanel.add(new Button("Deckauswal editieren",
+					EditDeckAction.class));
+			selfPanel.add(new Button("Neues Deck", CreateNewDeckAction.class));
+			selfPanel.add(new Button("Bereit zum Spielen",
+					FinishConfiguringAction.class));
+		}
+
 	}
 
 	public void setCurrentCardDeck(String cardDeck) {

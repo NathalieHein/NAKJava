@@ -6,13 +6,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JPanel;
-
 import de.nordakademie.nakjava.client.internal.gui.ValueHolder;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.shared.serial.PlayerModel;
 
-public abstract class Panel extends JPanel {
+public abstract class StatePanel extends AbstractGUIPanel {
+
+	public StatePanel(boolean actor) {
+		setActor(actor);
+	}
 
 	public abstract State[] getStates();
 

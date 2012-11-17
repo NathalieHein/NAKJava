@@ -6,11 +6,11 @@ import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
+import de.nordakademie.nakjava.client.internal.gui.component.AbstractGUIPanel;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 
-public class CardInformationPanel extends JPanel {
+public class CardInformationPanel extends AbstractGUIPanel {
 
 	public static final int CARD_WIDTH = 160;
 	public static final int CARD_HEIGHT = 240;

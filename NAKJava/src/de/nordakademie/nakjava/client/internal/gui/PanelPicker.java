@@ -1,42 +1,52 @@
 package de.nordakademie.nakjava.client.internal.gui;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import de.nordakademie.nakjava.client.internal.gui.component.Panel;
+import de.nordakademie.nakjava.client.internal.gui.component.StatePanel;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.util.classpathscanner.ClassAcceptor;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class PanelPicker {
 
-	private Map<State, Class<Panel>> panels;
+	private Map<State, Class<StatePanel>> statePanels;
 	private State currentState = null;
-	private Panel currentPanel;
+	private StatePanel currentPanel;
 
-	public PanelPicker() {
-		panels = new EnumMap<State, Class<Panel>>(State.class);
+	private boolean actor;
+
+	public PanelPicker(boolean actor) {
+		this.actor = actor;
+		statePanels = new EnumMap<State, Class<StatePanel>>(State.class);
 		List<Class<?>> classes = ClasspathScanner.findClasses(
 				"de.nordakademie.nakjava.client.game.gui", "",
 				new ClassAcceptor() {
 
 					@Override
 					public boolean acceptClass(Class clazz) {
-						return Panel.class.isAssignableFrom(clazz);
+						return StatePanel.class.isAssignableFrom(clazz);
 					}
 				});
 
 		for (Class clazz : classes) {
 
-			Panel panel;
+			StatePanel statePanel;
 			try {
-				panel = ((Class<Panel>) clazz).newInstance();
+				Constructor constructor = ((Class<StatePanel>) clazz)
+						.getConstructor(Boolean.class);
 
-				for (State state : panel.getStates()) {
-					panels.put(state, clazz);
+				statePanel = (StatePanel) constructor.newInstance(actor);
+
+				for (State state : statePanel.getStates()) {
+					statePanels.put(state, clazz);
 				}
-			} catch (InstantiationException | IllegalAccessException e) {
+			} catch (InstantiationException | IllegalAccessException
+					| NoSuchMethodException | SecurityException
+					| IllegalArgumentException | InvocationTargetException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -51,20 +61,27 @@ public class PanelPicker {
 	 * @param state
 	 * @return
 	 */
-	public Panel pickPanel(State state) {
+	public StatePanel pickPanel(State state) {
 		if (state != currentState) {
 			currentState = state;
-			Class<Panel> panelClass = panels.get(state);
+			Class<StatePanel> panelClass = statePanels.get(state);
 
 			if (currentPanel == null
 					|| !panelClass.equals(currentPanel.getClass())) {
 				try {
 
-					Panel newPanel = panelClass.newInstance();
+					Constructor constructor = panelClass
+							.getConstructor(Boolean.class);
+
+					StatePanel newPanel = (StatePanel) constructor
+							.newInstance(actor);
+
 					currentPanel = newPanel;
 					return newPanel;
 
-				} catch (InstantiationException | IllegalAccessException e) {
+				} catch (InstantiationException | IllegalAccessException
+						| NoSuchMethodException | SecurityException
+						| IllegalArgumentException | InvocationTargetException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -76,7 +93,7 @@ public class PanelPicker {
 		return null;
 	}
 
-	public Panel getCurrentPanel() {
+	public StatePanel getCurrentPanel() {
 		return currentPanel;
 	}
 

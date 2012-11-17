@@ -5,31 +5,34 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import de.nordakademie.nakjava.client.internal.gui.GUIHook;
 import de.nordakademie.nakjava.client.shared.PlayerControlListener;
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
 import de.nordakademie.nakjava.server.shared.proxy.CheckIn;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 
-public abstract class Client extends UnicastRemoteObject implements
+public abstract class AbstractClient extends UnicastRemoteObject implements
 		PlayerStateListener, PlayerControlListener {
 
 	protected CheckIn checkIn;
-	protected final List<Object> preCheckinFinalValues;
 
 	protected long batchNr;
 	protected Lock stateChangeLock;
 
-	protected Client() throws RemoteException {
+	protected GUIHook gui;
+
+	protected AbstractClient(GUIHook gui) throws RemoteException {
 		super();
+		this.gui = gui;
 		batchNr = Long.MIN_VALUE;
 		stateChangeLock = new ReentrantLock(true);
 
-		preCheckinFinalValues = new LinkedList<>();
+		if (gui != null) {
+			gui.preCheckin();
+		}
 		preCheckin();
 
 		try {
@@ -43,8 +46,6 @@ public abstract class Client extends UnicastRemoteObject implements
 		}
 	}
 
-	protected abstract void stateChange(PlayerState state);
-
 	@Override
 	public final void stateChanged(final PlayerState state)
 			throws RemoteException {
@@ -56,6 +57,9 @@ public abstract class Client extends UnicastRemoteObject implements
 				stateChangeLock.lock();
 				if (batchNr < state.getBatch()) {
 					batchNr = state.getBatch();
+					if (gui != null) {
+						gui.newState(state);
+					}
 					stateChange(state);
 				}
 
@@ -65,5 +69,35 @@ public abstract class Client extends UnicastRemoteObject implements
 
 	}
 
-	protected abstract void preCheckin();
+	@Override
+	public void remoteClose() throws RemoteException {
+		final Lock lock = new ReentrantLock();
+		lock.lock();
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				lock.lock();
+				System.exit(0);
+				lock.unlock();
+			}
+		}).start();
+		lock.unlock();
+	}
+
+	@Override
+	public void error(String text) throws RemoteException {
+		if (gui != null) {
+			gui.error(text);
+		}
+
+	}
+
+	protected void preCheckin() {
+
+	}
+	
+protected  void stateChange(PlayerState state){
+		
+	}
 }

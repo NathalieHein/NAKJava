@@ -14,4 +14,6 @@ public interface ActionContextHolder {
 	public void revokeActionContext(long batch);
 
 	public boolean isDisposed();
+
+	public boolean consumeAction();
 }

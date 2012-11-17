@@ -2,38 +2,35 @@ package de.nordakademie.nakjava.client.internal.gui;
 
 import java.awt.Component;
 import java.lang.reflect.InvocationTargetException;
-import java.rmi.RemoteException;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import de.nordakademie.nakjava.client.internal.Client;
 import de.nordakademie.nakjava.client.internal.gui.component.Frame;
-import de.nordakademie.nakjava.client.internal.gui.component.Panel;
+import de.nordakademie.nakjava.client.internal.gui.component.StatePanel;
 import de.nordakademie.nakjava.client.shared.ClientAction;
 import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 import de.nordakademie.nakjava.server.shared.serial.PlayerModel;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 
-public abstract class AbstractGUIClient extends Client {
+public class GUI implements GUIHook {
 
-	protected ActionContextDelegator delegator;
-	protected PanelPicker panelPicker;
+	private Frame frame;
 
-	private Lock updatePanelLock;
+	private ActionContextDelegator delegator;
+	private PanelPicker panelPicker;
 
-	protected AbstractGUIClient() throws RemoteException {
-		super();
-		updatePanelLock = new ReentrantLock();
+	private boolean actor;
+
+	public GUI(boolean actor) {
+		this.actor = actor;
 	}
 
 	@Override
-	public void stateChange(final PlayerState state) {
+	public void newState(final PlayerState state) {
 		try {
 			SwingUtilities.invokeAndWait(new Runnable() {
 
@@ -57,18 +54,17 @@ public abstract class AbstractGUIClient extends Client {
 	}
 
 	@Override
-	protected void preCheckin() {
-		Frame frame = new Frame();
+	public void preCheckin() {
+		frame = new Frame();
 		frame.setResizable(false);
 		delegator = ActionContextDelegator.getInstance();
-		panelPicker = new PanelPicker();
+		panelPicker = new PanelPicker(actor);
 
 		frame.setVisible(true);
-		preCheckinFinalValues.add(frame);
 	}
 
-	protected JFrame getFrame() {
-		return ((JFrame) preCheckinFinalValues.get(0));
+	public JFrame getFrame() {
+		return frame;
 	}
 
 	/**
@@ -88,23 +84,23 @@ public abstract class AbstractGUIClient extends Client {
 			actionContext.addPreClientAction(new ClientAction() {
 				@Override
 				public void perform() {
-					AbstractGUIClient.this.revokeActionContexts(batch);
+					GUI.this.revokeActionContexts(batch);
 				}
 			});
 		}
 	}
 
 	public void playerModelChanged(PlayerModel model) {
-		final Panel panel = panelPicker
+		final StatePanel statePanel = panelPicker
 				.pickPanel(VisibleModelFields.PLAYERSTATE_STATE_SELF
 						.getValue(model.getGenericTransfer()));
 
-		if (panel != null) {
+		if (statePanel != null) {
 			updateFrame(new Runnable() {
 
 				@Override
 				public void run() {
-					getFrame().add(panel);
+					getFrame().add(statePanel);
 				}
 			});
 		}

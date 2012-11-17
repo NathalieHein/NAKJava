@@ -11,17 +11,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import de.nordakademie.nakjava.client.internal.gui.ActionContextSelector;
 import de.nordakademie.nakjava.client.internal.gui.component.Button;
-import de.nordakademie.nakjava.client.internal.gui.component.Panel;
+import de.nordakademie.nakjava.client.internal.gui.component.StatePanel;
 import de.nordakademie.nakjava.client.internal.gui.component.TextField;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
-import de.nordakademie.nakjava.gamelogic.shared.cards.CardType;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.proxy.actions.editdeck.DiscardDeckEditAction;
@@ -30,7 +28,7 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.editdeck.SelectCardFo
 import de.nordakademie.nakjava.server.shared.proxy.actions.editdeck.TypeDeckNameAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
-public class CardSelectionPanel extends Panel {
+public class CardSelectionPanel extends StatePanel {
 
 	private JPanel cardOverview;
 	private JPanel controlPanel;
@@ -38,7 +36,8 @@ public class CardSelectionPanel extends Panel {
 	private Set<CardInformation> oldCardInformation;
 	private Map<CardInformation, CardSelector> cache;
 
-	public CardSelectionPanel() {
+	public CardSelectionPanel(Boolean actor) {
+		super(actor);
 		setLayout(new BorderLayout());
 		cache = new HashMap<>();
 		cardOverview = new JPanel();
@@ -57,9 +56,13 @@ public class CardSelectionPanel extends Panel {
 		controlPanel
 				.add(new TextField(
 						TypeDeckNameAction.class,
-						VisibleModelFields.EDITDECKSPECIFICMODEL_CURRENTPARTOFDECKNAME_SELF));
-		controlPanel.add(new Button("Speichern", SaveDeckAction.class));
-		controlPanel.add(new Button("Abbrechen", DiscardDeckEditAction.class));
+						VisibleModelFields.EDITDECKSPECIFICMODEL_CURRENTPARTOFDECKNAME_SELF,
+						actor));
+		if (actor) {
+			controlPanel.add(new Button("Speichern", SaveDeckAction.class));
+			controlPanel.add(new Button("Abbrechen",
+					DiscardDeckEditAction.class));
+		}
 
 		add(controlPanel, BorderLayout.SOUTH);
 
@@ -139,24 +142,6 @@ public class CardSelectionPanel extends Panel {
 				button.setText("auswählen");
 			}
 		}
-	}
-
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		CardSelectionPanel instance = new CardSelectionPanel();
-		frame.add(instance);
-		Map<CardInformation, Boolean> cards = new HashMap<>();
-		for (int i = 0; i < 180; i++) {
-			cards.put(new CardInformation(i + "", i + i + "", i + i + i + "",
-					CardType.SPEZIAL), i % 2 == 0);
-		}
-
-		instance.setCards(cards);
-		frame.setVisible(true);
-		frame.pack();
 	}
 
 }

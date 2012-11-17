@@ -76,4 +76,9 @@ public class CheckBox extends JCheckBox implements ActionContextHolder {
 		return this.isShowing();
 	}
 
+	@Override
+	public boolean consumeAction() {
+		return true;
+	}
+
 }

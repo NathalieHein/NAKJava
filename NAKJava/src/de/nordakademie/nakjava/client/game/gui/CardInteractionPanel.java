@@ -7,15 +7,16 @@ import java.awt.GridLayout;
 import javax.swing.JPanel;
 
 import de.nordakademie.nakjava.client.internal.gui.ActionContextSelector;
+import de.nordakademie.nakjava.client.internal.gui.component.AbstractGUIPanel;
 import de.nordakademie.nakjava.client.internal.gui.component.Button;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.PlayCardAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.WithdrawCardAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
-public class CardInteractionPanel extends JPanel {
+public class CardInteractionPanel extends AbstractGUIPanel {
 
-	public CardInteractionPanel(final CardInformation card, boolean showButtons) {
+	public CardInteractionPanel(final CardInformation card, boolean actor) {
 		setMaximumSize(new Dimension(CardInformationPanel.CARD_WIDTH,
 				CardInformationPanel.CARD_HEIGHT));
 		setPreferredSize(new Dimension(CardInformationPanel.CARD_WIDTH,
@@ -23,7 +24,7 @@ public class CardInteractionPanel extends JPanel {
 		setLayout(new BorderLayout());
 		add(new CardInformationPanel(card), BorderLayout.CENTER);
 
-		if (showButtons) {
+		if (actor) {
 			JPanel buttons = new JPanel(new GridLayout(0, 1));
 			add(buttons, BorderLayout.SOUTH);
 			buttons.add(new Button("Spielen", new ActionContextSelector() {

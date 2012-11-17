@@ -14,10 +14,11 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import de.nordakademie.nakjava.client.internal.gui.ValueHolder;
+import de.nordakademie.nakjava.client.internal.gui.component.AbstractGUIPanel;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.server.internal.VisibleModelField;
 
-public class ArtifactInfoPanel extends JPanel implements ValueHolder {
+public class ArtifactInfoPanel extends AbstractGUIPanel implements ValueHolder {
 
 	private VisibleModelField<List<Artifact>> artifactsField;
 
@@ -101,35 +102,5 @@ public class ArtifactInfoPanel extends JPanel implements ValueHolder {
 	public void pickValue(Map<String, Object> genericValues) {
 		setArtifacts(artifactsField.getValue(genericValues));
 	}
-
-	// public static void main(String[] args) {
-	// JFrame frame = new JFrame();
-	// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	// ArtifactInfoPanel infoPanel = new ArtifactInfoPanel();
-	// frame.getContentPane().add(infoPanel);
-	//
-	// frame.setSize(new Dimension(800, 600));
-	// frame.setVisible(true);
-	//
-	// List<Artifact> tupels = new LinkedList<>();
-	// tupels.add(ArtifactFactory.createArtifact(Ziegel.class));
-	// tupels.add(ArtifactFactory.createArtifact(Monster.class));
-	// tupels.add(ArtifactFactory.createArtifact(Turm.class));
-	//
-	// infoPanel.setArtifacts(tupels);
-	//
-	// try {
-	// Thread.sleep(10000);
-	// } catch (InterruptedException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	//
-	// tupels.add(ArtifactFactory.createArtifact(Mauer.class));
-	// tupels.add(ArtifactFactory.createArtifact(Steinbruch.class));
-	// tupels.add(ArtifactFactory.createArtifact(Verlies.class));
-	//
-	// infoPanel.setArtifacts(tupels);
-	// }
 
 }

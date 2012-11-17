@@ -7,13 +7,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JPanel;
-
 import de.nordakademie.nakjava.client.internal.gui.ValueHolder;
+import de.nordakademie.nakjava.client.internal.gui.component.AbstractGUIPanel;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 import de.nordakademie.nakjava.server.internal.VisibleModelField;
 
-public class CardHandPanel extends JPanel implements ValueHolder {
+public class CardHandPanel extends AbstractGUIPanel implements ValueHolder {
 
 	private Map<String, CardInteractionPanel> cards;
 	private VisibleModelField<List<CardInformation>> cardField;

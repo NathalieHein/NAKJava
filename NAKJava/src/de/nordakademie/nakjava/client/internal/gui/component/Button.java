@@ -19,9 +19,12 @@ public class Button extends JButton implements ActionListener,
 	private ActionContextSelector selector;
 	private long currentBatch;
 
+	private boolean consume;
+
 	public Button(String text, ActionContextSelector selector,
-			boolean autoRegister) {
+			boolean autoRegister, boolean consume) {
 		super(text);
+		this.consume = consume;
 		currentBatch = Long.MIN_VALUE;
 		this.selector = selector;
 
@@ -32,6 +35,11 @@ public class Button extends JButton implements ActionListener,
 			ActionContextDelegator.getInstance().registerActionContextHolder(
 					this);
 		}
+	}
+
+	public Button(String text, ActionContextSelector selector,
+			boolean autoRegister) {
+		this(text, selector, autoRegister, true);
 	}
 
 	public Button(String text, final Class<? extends ActionContext> actionClass) {
@@ -123,6 +131,11 @@ public class Button extends JButton implements ActionListener,
 		this.setEnabled(false);
 		actionContext = null;
 		removeActionListener(this);
+	}
+
+	@Override
+	public boolean consumeAction() {
+		return consume;
 	}
 
 }

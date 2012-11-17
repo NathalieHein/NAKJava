@@ -15,7 +15,6 @@ import java.util.Map.Entry;
 
 import de.nordakademie.nakjava.client.bot.AbstractActionSelector;
 import de.nordakademie.nakjava.client.bot.AbstractBotClient;
-import de.nordakademie.nakjava.client.bot.PlayerStateHook;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextSelector;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.RoundResult;
 import de.nordakademie.nakjava.generated.VisibleModelFields;
@@ -33,8 +32,8 @@ public class GeneticBot extends AbstractBotClient {
 	private int roundsPlayed = 0;
 	private String name;
 
-	protected GeneticBot(PlayerStateHook hook) throws RemoteException {
-		super(hook);
+	protected GeneticBot() throws RemoteException {
+		super();
 	}
 
 	@Override

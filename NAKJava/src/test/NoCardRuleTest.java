@@ -4,7 +4,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Random;
 
-import de.nordakademie.nakjava.client.internal.Client;
+import de.nordakademie.nakjava.client.internal.AbstractClient;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.generated.VisibleModelFields;
@@ -15,7 +15,7 @@ import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 public class NoCardRuleTest {
 	public static void main(String[] args) {
 		try {
-			new Client() {
+			new AbstractClient() {
 				private Random random = new Random();
 
 				@Override
