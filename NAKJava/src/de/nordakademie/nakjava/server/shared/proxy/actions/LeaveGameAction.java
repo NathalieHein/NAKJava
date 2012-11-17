@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
+import de.nordakademie.nakjava.server.internal.Players;
 import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
@@ -24,14 +25,15 @@ public class LeaveGameAction extends ActionContext {
 				if (!session.isActionInvokerCurrentPlayer()) {
 					session.getModel().changeSelfAndOpponent();
 				}
+				String name = session.getModel().getSelf().getName();
 				PlayerState opponent = session.getModel().getOpponent();
 				if (opponent == null) {
 					session.setToBeDeleted(true);
 				} else if (opponent.getState() != State.LOGIN
 						&& opponent.getState() != State.CONFIGUREGAME
 						&& opponent.getState() != State.EDITDECK) {
-					session.getModel().getOpponent().setState(
-							State.OTHERPLAYERLEFTGAME);
+					session.getModel().getOpponent()
+							.setState(State.OTHERPLAYERLEFTGAME);
 				}
 				try {
 					session.getActionInvoker().getControl().remoteClose();
@@ -40,7 +42,7 @@ public class LeaveGameAction extends ActionContext {
 					e.printStackTrace();
 				}
 				session.removeActionInvoker();
-
+				Players.getInstance().removePlayerName(name);
 			}
 		};
 	}
