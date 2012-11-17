@@ -16,6 +16,7 @@ import java.util.Map.Entry;
 import de.nordakademie.nakjava.client.bot.AbstractActionSelector;
 import de.nordakademie.nakjava.client.bot.AbstractBotClient;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextSelector;
+import de.nordakademie.nakjava.client.internal.gui.GUIHook;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.RoundResult;
 import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.PlayCardAction;
@@ -29,16 +30,15 @@ public class GeneticBot extends AbstractBotClient {
 	private Map<String, Long> countCards;
 	private Map<String, Long> knowledge;
 
-	private int roundsPlayed = 0;
 	private String name;
 
-	protected GeneticBot() throws RemoteException {
-		super();
+	protected GeneticBot(GUIHook gui, boolean showStatistic)
+			throws RemoteException {
+		super(gui, showStatistic);
 	}
 
 	@Override
 	public void turn(PlayerState state) {
-		System.out.println("Turn");
 		List<ActionContext> playCards = AbstractActionSelector.selectActions(
 				state.getActions(), new ActionContextSelector() {
 
@@ -68,10 +68,8 @@ public class GeneticBot extends AbstractBotClient {
 
 			countCard(cardToPlay.getCardName());
 			cardToPlay.perform();
-			System.out.println("Perform Card");
 
 		} else {
-			System.out.println("No Cards");
 			drop(state);
 		}
 	}
@@ -107,7 +105,6 @@ public class GeneticBot extends AbstractBotClient {
 
 	@Override
 	public void initBot(PlayerState state) {
-		System.out.println("Round started");
 		countCards = new HashMap<>();
 		name = VisibleModelFields.MODEL_STRATEGY_SELF.getValue(
 				state.getModel().getGenericTransfer()).getName();
@@ -138,10 +135,6 @@ public class GeneticBot extends AbstractBotClient {
 
 	@Override
 	public void gameFinished(RoundResult result) {
-
-		roundsPlayed++;
-		System.out.println("Roun finished");
-
 		for (Entry<String, Long> card : countCards.entrySet()) {
 			Long knowledgeCount = knowledge.get(card.getKey());
 			if (knowledgeCount == null) {
@@ -188,7 +181,7 @@ public class GeneticBot extends AbstractBotClient {
 
 	public static void main(String[] args) {
 		try {
-			new GeneticBot(null);
+			new GeneticBot(null, true);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

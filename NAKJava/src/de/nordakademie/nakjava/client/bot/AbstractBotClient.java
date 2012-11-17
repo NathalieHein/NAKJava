@@ -6,6 +6,11 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
 import de.nordakademie.nakjava.client.internal.AbstractClient;
 import de.nordakademie.nakjava.client.internal.gui.GUIHook;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions.AdjustCardhand;
@@ -21,8 +26,18 @@ public abstract class AbstractBotClient extends AbstractClient {
 	private GUIHook hook;
 	private State state;
 
-	protected AbstractBotClient() throws RemoteException {
-		super();
+	private int roundsPlayed = 0;
+	private int win = 0;
+	private int lost = 0;
+
+	private BotStatistic statistic;
+
+	protected AbstractBotClient(GUIHook gui, boolean showStatistic)
+			throws RemoteException {
+		super(gui);
+		if (showStatistic) {
+			statistic = new BotStatistic();
+		}
 	}
 
 	@Override
@@ -46,7 +61,6 @@ public abstract class AbstractBotClient extends AbstractClient {
 
 		State newState = VisibleModelFields.PLAYERSTATE_STATE_SELF
 				.getValue(playerState.getModel().getGenericTransfer());
-		System.out.println("StateChange " + newState);
 
 		if ((state == State.READYTOSTARTSTATE && newState == State.PLAYCARDSTATE)
 				|| (state == State.CONFIGUREGAME && newState == State.STOP)
@@ -55,8 +69,20 @@ public abstract class AbstractBotClient extends AbstractClient {
 		}
 
 		if (newState == State.ENDOFGAMESTATE && state != State.ENDOFGAMESTATE) {
-			gameFinished(VisibleModelFields.INGAMESPECIFICMODEL_ROUNDRESULT_SELF
-					.getValue(playerState.getModel().getGenericTransfer()));
+			RoundResult result = VisibleModelFields.INGAMESPECIFICMODEL_ROUNDRESULT_SELF
+					.getValue(playerState.getModel().getGenericTransfer());
+
+			roundsPlayed++;
+			if (result == RoundResult.WIN) {
+				win++;
+			} else if (result == RoundResult.LOST) {
+				lost++;
+			}
+			if (statistic != null) {
+				statistic.updateData();
+			}
+
+			gameFinished(result);
 		}
 
 		if (newState == State.PLAYCARDSTATE) {
@@ -135,5 +161,40 @@ public abstract class AbstractBotClient extends AbstractClient {
 	 * @param result
 	 */
 	public abstract void gameFinished(RoundResult result);
+
+	private class BotStatistic extends JFrame {
+
+		JLabel winLabel;
+		JLabel lostLabel;
+		JLabel gamesPlayed;
+
+		public BotStatistic() {
+			setTitle("Statistik");
+			winLabel = new JLabel("Gewonnen: " + win);
+			lostLabel = new JLabel("Verloren: " + lost);
+			gamesPlayed = new JLabel("Gesamt: " + roundsPlayed);
+			JPanel panel = new JPanel();
+			panel.add(winLabel);
+			panel.add(lostLabel);
+			panel.add(gamesPlayed);
+			add(panel);
+			setResizable(false);
+			setVisible(true);
+			pack();
+		}
+
+		public void updateData() {
+			SwingUtilities.invokeLater(new Runnable() {
+
+				@Override
+				public void run() {
+					winLabel.setText("Gewonnen: " + win);
+					lostLabel.setText("Verloren: " + lost);
+					gamesPlayed.setText("Gesamt: " + roundsPlayed);
+					BotStatistic.this.pack();
+				}
+			});
+		}
+	}
 
 }
