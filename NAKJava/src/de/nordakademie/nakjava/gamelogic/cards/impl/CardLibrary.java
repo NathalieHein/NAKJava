@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
+import de.nordakademie.nakjava.server.persistence.Deck;
 
 /**
  * The {@link CardLibrary} is a singleton that allows lookups for both:
@@ -15,6 +16,7 @@ public class CardLibrary {
 
 	private Map<String, AbstractCard> cards;
 	private Map<String, CardInformation> cardInformation;
+	private final Deck STANDARDDECK;
 
 	private static CardLibrary instance;
 
@@ -25,6 +27,7 @@ public class CardLibrary {
 		cards = new HashMap<>();
 		cardInformation = new HashMap<>();
 		CardLibrary.instance = this;
+		STANDARDDECK = new Deck("StandardDeck", getCards().keySet());
 	}
 
 	public static CardLibrary get() {
@@ -45,6 +48,14 @@ public class CardLibrary {
 
 	public AbstractCard getCardForName(String cardName) {
 		return cards.get(cardName);
+	}
+
+	public Deck getStandardDeck() {
+		return STANDARDDECK;
+	}
+
+	public String getStandardDeckName() {
+		return STANDARDDECK.getName();
 	}
 
 }
