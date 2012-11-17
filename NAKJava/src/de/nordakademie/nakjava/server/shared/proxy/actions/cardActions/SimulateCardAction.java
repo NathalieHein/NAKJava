@@ -67,7 +67,7 @@ public class SimulateCardAction extends ActionContext {
 				}
 				threadPool.shutdown();
 				try {
-					threadPool.awaitTermination(100, TimeUnit.MILLISECONDS);
+					threadPool.awaitTermination(500, TimeUnit.MILLISECONDS);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

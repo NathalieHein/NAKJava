@@ -20,11 +20,12 @@ public class PlayCardAuxiliary {
 		AbstractCard card = CardLibrary.get().getCards().get(cardName);
 		if (card != null) {
 			model.setLastPlayedCard(cardName);
+			PlayerState self = model.getSelf();
+			self.setState(State.ADJUSTCARDHANDSTATE);
 			Map<Target, PlayerState> selfOpponentMap = model
 					.getSelfOpponentMap();
 			card.payImpl(selfOpponentMap);
 			card.performActionImpl(selfOpponentMap);
-			PlayerState self = model.getSelf();
 			InGameSpecificModel selfSpecificModel = (InGameSpecificModel) self
 					.getStateSpecificModel();
 			if (!selfSpecificModel.getCards().discardCardFromHand(cardName)) {
@@ -64,7 +65,7 @@ public class PlayCardAuxiliary {
 			opponetSpecificModel.setRoundResult(roundResult
 					.get(Target.OPPONENT));
 		} else {
-			StateMachine.getInstance().run(model);
+			StateMachine.getInstance().runCurrentState(model);
 		}
 		// if card states: "Play again" than state must be set to
 		// "PREACTION"
