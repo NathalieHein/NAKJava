@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
 
@@ -16,8 +14,6 @@ public class PlayerState implements Serializable {
 	private PlayerStateListener stateListener;
 	private boolean dirty = false;
 
-	private static ExecutorService threadPool = Executors.newFixedThreadPool(5);
-
 	public PlayerState(PlayerStateListener stateListener) {
 		this.stateListener = stateListener;
 		model = new PlayerModel();
@@ -27,12 +23,12 @@ public class PlayerState implements Serializable {
 		return model;
 	}
 
-	public void setModel(PlayerModel model) {
+	public synchronized void setModel(PlayerModel model) {
 		this.model = model;
 		dirty = true;
 	}
 
-	public void setBatch(long batch) {
+	public synchronized void setBatch(long batch) {
 		this.batch = batch;
 	}
 
@@ -44,28 +40,29 @@ public class PlayerState implements Serializable {
 		return new ArrayList<ActionContext>(actions);
 	}
 
-	public void setActions(List<ActionContext> actions) {
+	public synchronized void setActions(List<ActionContext> actions) {
 		this.actions = actions;
 		dirty = true;
 	}
 
-	public void triggerChangeEvent() {
+	public synchronized void triggerChangeEvent() {
 		final PlayerState playerState = this;
 		if (dirty) {
-
-			threadPool.execute(new Runnable() {
+			new Thread(new Runnable() {
 
 				@Override
 				public void run() {
 					try {
-						stateListener.stateChanged(playerState);
+						synchronized (playerState) {
+							stateListener.stateChanged(playerState);
+						}
 					} catch (RemoteException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 
 				}
-			});
+			}).start();
 
 			dirty = false;
 		}
