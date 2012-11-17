@@ -17,10 +17,8 @@ public class FinishTypingPlayerNameRule extends StateRule {
 	protected boolean isRuleApplicableImpl(long sessionId, Player player) {
 		String currentPartOfName = ((LoginSpecificModel) getStateSpecificModel(
 				sessionId, player)).getCurrentPartOfName();
-		for (String otherName : Players.getInstance().getPlayerNames()) {
-			if (otherName.equals(currentPartOfName)) {
-				return false;
-			}
+		if (!Players.getInstance().addPlayerName(currentPartOfName)) {
+			return false;
 		}
 		return !currentPartOfName.equals("");
 	}

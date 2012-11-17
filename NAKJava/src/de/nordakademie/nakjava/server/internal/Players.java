@@ -3,15 +3,12 @@ package de.nordakademie.nakjava.server.internal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Players {
 	private static Players instance;
 	private List<String> playerNames;
-	private final ReadWriteLock rwLock = new ReentrantReadWriteLock(true);
-	private final Lock readLock = rwLock.readLock();
-	private final Lock writeLock = rwLock.writeLock();
+	private final Lock writeLock = new ReentrantLock(true);
 
 	private Players() {
 		playerNames = new ArrayList<>();
@@ -24,19 +21,12 @@ public class Players {
 		return instance;
 	}
 
-	public List<String> getPlayerNames() {
-		readLock.lock();
-		try {
-			return playerNames;
-		} finally {
-			readLock.unlock();
-		}
-	}
-
-	public void addPlayerName(String name) {
+	public boolean addPlayerName(String name) {
 		writeLock.lock();
 		try {
+			boolean contains = playerNames.contains(name);
 			playerNames.add(name);
+			return !contains;
 		} finally {
 			writeLock.unlock();
 		}
@@ -50,4 +40,5 @@ public class Players {
 			writeLock.unlock();
 		}
 	}
+
 }

@@ -3,6 +3,7 @@ package de.nordakademie.nakjava.server.shared.proxy.actions.login;
 import java.rmi.RemoteException;
 
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
+import de.nordakademie.nakjava.server.internal.Players;
 import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.internal.model.LoginSpecificModel;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
@@ -28,7 +29,9 @@ public class TypePlayerNameAction extends KeyAction {
 				LoginSpecificModel model = (LoginSpecificModel) session
 						.getPlayerStateForPlayer(session.getActionInvoker())
 						.getStateSpecificModel();
+				String oldPlayerName = model.getCurrentPartOfName();
 				model.appendPartOfName(getKey());
+				Players.getInstance().removePlayerName(oldPlayerName);
 			}
 		};
 	}

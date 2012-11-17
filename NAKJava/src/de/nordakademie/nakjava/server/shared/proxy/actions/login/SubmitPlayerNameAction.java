@@ -5,7 +5,6 @@ import java.util.List;
 
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
-import de.nordakademie.nakjava.server.internal.Players;
 import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.internal.model.LoginSpecificModel;
 import de.nordakademie.nakjava.server.persistence.Deck;
@@ -34,7 +33,6 @@ public class SubmitPlayerNameAction extends ActionContext {
 						.getStateSpecificModel();
 				String currentName = model.getCurrentPartOfName();
 				self.setName(currentName);
-				Players.getInstance().addPlayerName(currentName);
 				List<Deck> savedDecks = DeckPersister.getDecks(self);
 				self.setSavedDecks(savedDecks);
 				StateMachine.getInstance().run(session.getModel());
