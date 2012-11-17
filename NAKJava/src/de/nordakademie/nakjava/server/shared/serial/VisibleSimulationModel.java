@@ -1,5 +1,6 @@
 package de.nordakademie.nakjava.server.shared.serial;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -10,10 +11,13 @@ import de.nordakademie.nakjava.server.internal.model.VisibleField;
 import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 import de.nordakademie.nakjava.server.internal.model.transformator.SingleCardTransformator;
 
-public class VisibleSimulationModel {
-	@VisibleField(targets = { @TargetInState(states = { State.SIMULATIONSTATE }, target = Target.SELF) })
+public class VisibleSimulationModel implements Serializable {
+	@VisibleField(targets = { @TargetInState(states = { State.SIMULATIONSTATE },
+			target = Target.SELF) })
 	private int toBeSimulatedNumberOfRounds;
-	@VisibleField(targets = { @TargetInState(states = { State.SIMULATIONSTATE }, target = Target.SELF) }, transformer = SingleCardTransformator.class)
+	@VisibleField(targets = { @TargetInState(states = { State.SIMULATIONSTATE },
+			target = Target.SELF) },
+			transformer = SingleCardTransformator.class)
 	private String simulatedCard;
 	private Map<Target, List<? extends Artifact>> targetToArtifacts;
 
