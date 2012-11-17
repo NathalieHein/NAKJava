@@ -31,7 +31,7 @@ public class TypePlayerNameAction extends KeyAction {
 						.getStateSpecificModel();
 				String oldPlayerName = model.getCurrentPartOfName();
 				model.appendPartOfName(getKey());
-				Players.getInstance().removePlayerName(oldPlayerName);
+				Players.getInstance().removeReservedPlayerName(oldPlayerName);
 			}
 		};
 	}

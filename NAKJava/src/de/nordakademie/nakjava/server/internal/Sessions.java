@@ -75,12 +75,12 @@ public class Sessions {
 			Model model = session.getModel();
 			PlayerState self = model.getSelf();
 			if (self != null && self.getName() != null) {
-				Players.getInstance().removePlayerName(
+				Players.getInstance().removeLoggedInPlayerName(
 						model.getSelf().getName());
 			}
 			PlayerState opponent = model.getOpponent();
 			if (opponent != null) {
-				Players.getInstance().removePlayerName(
+				Players.getInstance().removeLoggedInPlayerName(
 						model.getOpponent().getName());
 			}
 			sessions.remove(sessionId);

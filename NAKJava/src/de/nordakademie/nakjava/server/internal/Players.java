@@ -1,17 +1,20 @@
 package de.nordakademie.nakjava.server.internal;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Players {
 	private static Players instance;
-	private List<String> playerNames;
-	private final Lock writeLock = new ReentrantLock(true);
+	private Set<String> loggendInPlayerNames;
+	private Set<String> reservedPlayerNames;
+	private final Lock loggedInLock = new ReentrantLock(true);
+	private final Lock reservedLock = new ReentrantLock(true);
 
 	private Players() {
-		playerNames = new ArrayList<>();
+		loggendInPlayerNames = new HashSet<>();
+		reservedPlayerNames = new HashSet<>();
 	}
 
 	public synchronized static Players getInstance() {
@@ -21,23 +24,50 @@ public class Players {
 		return instance;
 	}
 
-	public boolean addPlayerName(String name) {
-		writeLock.lock();
+	public boolean reservePlayerName(String name) {
+		reservedLock.lock();
+		loggedInLock.lock();
 		try {
-			boolean contains = playerNames.contains(name);
-			playerNames.add(name);
-			return !contains;
+			boolean playerNameExistsAlready = reservedPlayerNames
+					.contains(name) || loggendInPlayerNames.contains(name);
+			if (!playerNameExistsAlready) {
+				reservedPlayerNames.add(name);
+			}
+			return !playerNameExistsAlready;
 		} finally {
-			writeLock.unlock();
+			loggedInLock.unlock();
+			reservedLock.unlock();
 		}
 	}
 
-	public void removePlayerName(String name) {
-		writeLock.lock();
+	public void removeReservedPlayerName(String name) {
+		reservedLock.lock();
 		try {
-			playerNames.remove(name);
+			reservedPlayerNames.remove(name);
 		} finally {
-			writeLock.unlock();
+			reservedLock.unlock();
+		}
+
+	}
+
+	public void logInPlayerName(String name) {
+		reservedLock.lock();
+		loggedInLock.lock();
+		try {
+			loggendInPlayerNames.add(name);
+			reservedPlayerNames.remove(name);
+		} finally {
+			loggedInLock.unlock();
+			reservedLock.unlock();
+		}
+	}
+
+	public void removeLoggedInPlayerName(String name) {
+		loggedInLock.lock();
+		try {
+			loggendInPlayerNames.remove(name);
+		} finally {
+			loggedInLock.unlock();
 		}
 	}
 

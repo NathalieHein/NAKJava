@@ -42,7 +42,7 @@ public class LeaveGameAction extends ActionContext {
 					e.printStackTrace();
 				}
 				session.removeActionInvoker();
-				Players.getInstance().removePlayerName(name);
+				Players.getInstance().removeLoggedInPlayerName(name);
 			}
 		};
 	}
