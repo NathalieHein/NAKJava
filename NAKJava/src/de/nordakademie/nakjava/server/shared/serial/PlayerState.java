@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
+import de.nordakademie.nakjava.util.DeepCopyUtility;
 
 public class PlayerState implements Serializable {
 	private PlayerModel model;
@@ -23,12 +24,12 @@ public class PlayerState implements Serializable {
 		return model;
 	}
 
-	public synchronized void setModel(PlayerModel model) {
+	public void setModel(PlayerModel model) {
 		this.model = model;
 		dirty = true;
 	}
 
-	public synchronized void setBatch(long batch) {
+	public void setBatch(long batch) {
 		this.batch = batch;
 	}
 
@@ -40,22 +41,21 @@ public class PlayerState implements Serializable {
 		return new ArrayList<ActionContext>(actions);
 	}
 
-	public synchronized void setActions(List<ActionContext> actions) {
+	public void setActions(List<ActionContext> actions) {
 		this.actions = actions;
 		dirty = true;
 	}
 
-	public synchronized void triggerChangeEvent() {
-		final PlayerState playerState = this;
+	public void triggerChangeEvent() {
+		final PlayerState playerState = DeepCopyUtility.deepCopy(this);
+
 		if (dirty) {
 			new Thread(new Runnable() {
 
 				@Override
 				public void run() {
 					try {
-						synchronized (playerState) {
-							stateListener.stateChanged(playerState);
-						}
+						stateListener.stateChanged(playerState);
 					} catch (RemoteException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
