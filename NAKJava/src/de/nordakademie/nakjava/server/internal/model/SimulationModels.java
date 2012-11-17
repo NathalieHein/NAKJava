@@ -4,10 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
+import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
+import de.nordakademie.nakjava.server.internal.model.transformator.SimulationModelTransformator;
+
 public class SimulationModels implements Serializable {
-	// TODO do you go through lists as well???
-	// @VisibleField(targets = { @TargetInState(states = { State.SIMULATIONSTATE
-	// }, target = Target.SELF) })
+	@VisibleField(targets = { @TargetInState(states = { State.SIMULATIONSTATE }, target = Target.SELF) }, transformer = SimulationModelTransformator.class)
 	private List<SimulationModel> simulationModels;
 
 	public SimulationModels(Model model, List<String> cards,
@@ -15,12 +18,7 @@ public class SimulationModels implements Serializable {
 		simulationModels = new ArrayList<>();
 		for (String card : cards) {
 			for (int i : simulationThresholds) {
-				try {
-					simulationModels.add(new SimulationModel(model, card, i));
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				simulationModels.add(new SimulationModel(model, card, i));
 			}
 		}
 	}

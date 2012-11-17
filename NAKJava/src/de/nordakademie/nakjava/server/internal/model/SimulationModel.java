@@ -34,7 +34,7 @@ public class SimulationModel extends Model {
 	}
 
 	public SimulationModel(Model model, String simulatedCard,
-			int toBeSimulatedNumberOfRounds) throws Exception {
+			int toBeSimulatedNumberOfRounds) {
 		this(DeepCopyUtility.deepCopy(model.getSelf()), DeepCopyUtility
 				.deepCopy(model.getOpponent()), model.getStrategy());
 		this.simulatedCard = simulatedCard;
