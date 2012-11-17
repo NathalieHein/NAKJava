@@ -35,10 +35,8 @@ public class ActionBroker {
 				.getSession(serverAction.getSessionNr());
 
 		if (session.verify(serverAction)) {
-			System.out.println("no drop");
 			return true;
 		} else {
-			System.out.println("drop");
 			session.releaseLock();
 			return false;
 		}
@@ -56,8 +54,8 @@ public class ActionBroker {
 				serverAction.getSessionNr());
 
 		if (!checkSessionDeletion(serverAction.getSessionNr())) {
-			session.releaseLock();
 			session.commit();
+			session.releaseLock();
 		}
 	}
 

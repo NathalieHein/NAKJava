@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
 
@@ -13,6 +15,8 @@ public class PlayerState implements Serializable {
 	private long batch;
 	private PlayerStateListener stateListener;
 	private boolean dirty = false;
+
+	private static ExecutorService threadPool = Executors.newFixedThreadPool(5);
 
 	public PlayerState(PlayerStateListener stateListener) {
 		this.stateListener = stateListener;
@@ -46,15 +50,24 @@ public class PlayerState implements Serializable {
 	}
 
 	public void triggerChangeEvent() {
+		final PlayerState playerState = this;
 		if (dirty) {
-			try {
-				stateListener.stateChanged(this);
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		dirty = false;
-	}
 
+			threadPool.execute(new Runnable() {
+
+				@Override
+				public void run() {
+					try {
+						stateListener.stateChanged(playerState);
+					} catch (RemoteException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+			});
+
+			dirty = false;
+		}
+	}
 }
