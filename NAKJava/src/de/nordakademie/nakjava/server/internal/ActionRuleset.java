@@ -2,6 +2,7 @@ package de.nordakademie.nakjava.server.internal;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import de.nordakademie.nakjava.util.classpathscanner.ClassAcceptor;
 import de.nordakademie.nakjava.util.classpathscanner.ClassLookup;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
-public class ActionRuleset {
+public final class ActionRuleset {
 	private static List<ActionRule> actionRules;
 
 	// Suppresses default constructor for noninstantiability
@@ -24,6 +25,11 @@ public class ActionRuleset {
 				actions.addAll(actionRule.applyRule(sessionId, player));
 			}
 		}
+		Collections.sort(actions);
+		for (ActionContext actionContext : actions) {
+			System.out.println(actionContext.getClass().getSimpleName());
+		}
+		System.out.println();
 		if (!actions.isEmpty()) {
 			player.getState().setActions(actions);
 		}

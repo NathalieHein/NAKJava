@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import de.nordakademie.nakjava.gamelogic.cards.impl.CardLibrary;
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.model.LeaveOutVisibleCheck;
@@ -103,9 +104,13 @@ public class PlayerState implements Serializable {
 	}
 
 	public Deck getDeckWithName(String name) {
-		for (Deck deck : savedDecks) {
-			if (deck.getName().equals(name)) {
-				return deck;
+		if (name.equals(CardLibrary.get().getStandardDeckName())) {
+			return CardLibrary.get().getStandardDeck();
+		} else {
+			for (Deck deck : savedDecks) {
+				if (deck.getName().equals(name)) {
+					return deck;
+				}
 			}
 		}
 		return null;

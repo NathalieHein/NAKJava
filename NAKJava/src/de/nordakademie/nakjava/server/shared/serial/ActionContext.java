@@ -8,7 +8,8 @@ import java.util.List;
 import de.nordakademie.nakjava.client.shared.ClientAction;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
-public abstract class ActionContext implements Serializable {
+public abstract class ActionContext implements Serializable,
+		Comparable<ActionContext> {
 	// TODO: was tun wir hier???
 
 	protected ServerAction serverAction;
@@ -68,5 +69,11 @@ public abstract class ActionContext implements Serializable {
 
 	protected void setPossiblyStable(boolean stable) {
 		possiblyStable = stable;
+	}
+
+	@Override
+	public int compareTo(ActionContext otherActionContext) {
+		return this.getClass().getSimpleName()
+				.compareTo(otherActionContext.getClass().getSimpleName());
 	}
 }
