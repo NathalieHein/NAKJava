@@ -68,7 +68,7 @@ public class ArtifactCheckTransformer implements WinCheckTransformer {
 			if (artifactCount == targetCount) {
 				return 1;
 			} else {
-				int delta = Math.abs(artifactCount - targetCount);
+				double delta = Math.abs(artifactCount - targetCount);
 				return delta / artifactCount;
 			}
 		}
@@ -76,7 +76,7 @@ public class ArtifactCheckTransformer implements WinCheckTransformer {
 			if (artifactCount > targetCount) {
 				return 1;
 			} else {
-				int delta = Math.abs(artifactCount - targetCount);
+				double delta = Math.abs(artifactCount - targetCount);
 				return delta / targetCount;
 			}
 		}
@@ -84,7 +84,7 @@ public class ArtifactCheckTransformer implements WinCheckTransformer {
 			if (artifactCount < targetCount) {
 				return 1;
 			} else {
-				int delta = Math.abs(artifactCount - targetCount);
+				double delta = Math.abs(artifactCount - targetCount);
 				return 1 / delta;
 			}
 		}
