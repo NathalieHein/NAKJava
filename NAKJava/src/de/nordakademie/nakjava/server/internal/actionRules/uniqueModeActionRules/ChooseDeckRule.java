@@ -14,6 +14,13 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.EditDec
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.SelectDeckAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * Determines and creates ActionContexts(EditDeck-, SelectDeck-, CreateNewDeck)
+ * when configureGame state is currentstate of player
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class ChooseDeckRule extends StateRule {
 
 	@Override

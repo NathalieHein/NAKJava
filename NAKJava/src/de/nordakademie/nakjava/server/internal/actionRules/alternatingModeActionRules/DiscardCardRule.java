@@ -12,6 +12,13 @@ import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.WithdrawCardAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * Determines whether WithdrawCardAction is applicable (in States Adjustcardhand
+ * and Discardonecardstate)
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class DiscardCardRule extends AlternatingStateRule {
 
 	@Override

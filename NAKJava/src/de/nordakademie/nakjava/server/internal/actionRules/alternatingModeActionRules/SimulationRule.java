@@ -8,6 +8,13 @@ import de.nordakademie.nakjava.server.internal.Player;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.FinishSimulationAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * Determines and creates FinishSimulationAction when State of player is
+ * SimulationState
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class SimulationRule extends AlternatingStateRule {
 
 	@Override
