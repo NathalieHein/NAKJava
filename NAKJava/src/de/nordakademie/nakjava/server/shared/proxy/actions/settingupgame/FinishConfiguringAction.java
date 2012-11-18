@@ -11,11 +11,16 @@ import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * finishes configuration of game and runs state-machine
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class FinishConfiguringAction extends ActionContext {
 
 	public FinishConfiguringAction(long sessionNr) {
 		super(sessionNr);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -32,7 +37,7 @@ public class FinishConfiguringAction extends ActionContext {
 				ConfigureGameSpecificModel specificModel = (ConfigureGameSpecificModel) self
 						.getStateSpecificModel();
 				StateMachine.getInstance().run(model);
-				// }
+
 			}
 		};
 	}

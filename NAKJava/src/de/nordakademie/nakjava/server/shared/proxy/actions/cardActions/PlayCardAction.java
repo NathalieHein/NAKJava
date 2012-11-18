@@ -7,6 +7,12 @@ import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
+/**
+ * plays the card stated by variable cardName
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class PlayCardAction extends AbstractCardAction {
 
 	public PlayCardAction(String cardName, long sessionNr) {
@@ -19,8 +25,6 @@ public class PlayCardAction extends AbstractCardAction {
 
 			@Override
 			protected void performImpl(Session session) {
-				// no need to check whether actionInvoker == currentPlayer -->
-				// action would not be verified otherwise
 				Model model = session.getModel();
 				if (!session.isActionInvokerCurrentPlayer()) {
 					model.changeSelfAndOpponent();

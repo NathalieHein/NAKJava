@@ -1,8 +1,13 @@
 package de.nordakademie.nakjava.server.internal.actionRules;
 
+/**
+ * contains all valid letters for TypeActions ('\b' is backspace)
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public abstract class Alphabet {
-	// '/n' means space
-	// '/b' means backspace
+
 	private static final char[] letters = { 'a', 'b', 'c', 'd', 'e', 'f', 'g',
 			'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
 			'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G',

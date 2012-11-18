@@ -11,13 +11,27 @@ import de.nordakademie.nakjava.util.classpathscanner.ClassAcceptor;
 import de.nordakademie.nakjava.util.classpathscanner.ClassLookup;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
+/**
+ * contains list of actionRules to determine which actions are applicabel at the
+ * current state
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public final class ActionRuleset {
 	private static List<ActionRule> actionRules;
 
-	// Suppresses default constructor for noninstantiability
 	private ActionRuleset() {
 	}
 
+	/**
+	 * updates actions for one player
+	 * 
+	 * @param player
+	 *            : player that actions are updated for
+	 * @param sessionId
+	 *            : unique identifier for session
+	 */
 	private static void updatePlayerActions(Player player, long sessionId) {
 		List<ActionContext> actions = new ArrayList<>();
 		for (ActionRule actionRule : actionRules) {
@@ -32,6 +46,12 @@ public final class ActionRuleset {
 
 	}
 
+	/**
+	 * updates actions for all players in session
+	 * 
+	 * @param sessionId
+	 *            : unique identifier for session
+	 */
 	public static void update(long sessionId) {
 		Session session = Sessions.getInstance().getSession(sessionId);
 		session.getBatch().increaseBatchNr();
@@ -41,6 +61,9 @@ public final class ActionRuleset {
 		}
 	}
 
+	/**
+	 * scans classpath and adds all found ActionRules to actionRules-List
+	 */
 	@ClassLookup
 	private static void createActionRules() {
 		actionRules = new LinkedList<>();

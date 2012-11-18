@@ -13,8 +13,6 @@ import de.nordakademie.nakjava.server.shared.serial.PlayerModel;
 public class Batch {
 	private long batch = 0;
 
-	// TODO ausrechnen Überlauf
-
 	public void increaseBatchNr() {
 		batch++;
 	}

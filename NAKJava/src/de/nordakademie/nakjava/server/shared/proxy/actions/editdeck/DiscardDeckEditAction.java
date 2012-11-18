@@ -8,11 +8,17 @@ import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * leaves deck-edit state via state-machine and does not save any changes in
+ * deck
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class DiscardDeckEditAction extends ActionContext {
 
 	public DiscardDeckEditAction(long sessionNr) {
 		super(sessionNr);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -21,8 +27,6 @@ public class DiscardDeckEditAction extends ActionContext {
 
 			@Override
 			protected void performImpl(Session session) {
-				// TODO at the moment: all previously chosen Decks/Strategies
-				// are forgotten
 				if (!session.isActionInvokerCurrentPlayer()) {
 					session.getModel().changeSelfAndOpponent();
 				}

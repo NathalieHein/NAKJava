@@ -8,8 +8,17 @@ import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.internal.Sessions;
 import de.nordakademie.nakjava.server.internal.model.StateSpecificModel;
 
+/**
+ * abstract implementation of ActionRule
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public abstract class StateRule implements ActionRule {
-
+	/**
+	 * checks whether player's state is equal to the state that this rule is
+	 * applicable for
+	 */
 	@Override
 	public boolean isRuleApplicable(long sessionId, Player player) {
 		Session session = Sessions.getInstance().getSession(sessionId);
@@ -17,10 +26,22 @@ public abstract class StateRule implements ActionRule {
 				&& isRuleApplicableImpl(sessionId, player);
 	}
 
+	/**
+	 * might be overriden by subclasses for additional applicability checks
+	 * 
+	 * @param sessionId
+	 * @param player
+	 * @return
+	 */
 	protected boolean isRuleApplicableImpl(long sessionId, Player player) {
 		return true;
 	}
 
+	/**
+	 * returns the state that this rule is applicable for
+	 * 
+	 * @return
+	 */
 	public abstract State getState();
 
 	protected StateSpecificModel getStateSpecificModel(long sessionId,

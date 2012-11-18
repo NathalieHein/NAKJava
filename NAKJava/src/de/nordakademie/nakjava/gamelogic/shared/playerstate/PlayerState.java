@@ -17,6 +17,12 @@ import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 import de.nordakademie.nakjava.server.persistence.Deck;
 import de.nordakademie.nakjava.server.persistence.DeckPersister;
 
+/**
+ * PlayerState that contains Player's current status in game
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class PlayerState implements Serializable {
 
 	@VisibleField(targets = {

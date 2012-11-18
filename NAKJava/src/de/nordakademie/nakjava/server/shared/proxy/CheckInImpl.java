@@ -15,22 +15,36 @@ import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 import de.nordakademie.nakjava.util.GlobalThreadPool;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
+/**
+ * Check-In for incoming clients
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class CheckInImpl extends UnicastRemoteObject implements CheckIn {
 
 	protected CheckInImpl() throws RemoteException {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * called by client at registration: creates Player-object for new Client
+	 * with both listener-references; invokes InitAction that initializes Client
+	 * on Server side
+	 */
 	@Override
 	public void register(PlayerControlListener controlListener,
 			PlayerStateListener stateListener) throws RemoteException {
 		Player player = new Player(controlListener, stateListener);
-		// TODO this is not fine yet
 		ActionContext initAction = new InitAction(player);
 		initAction.perform();
 	}
 
+	/**
+	 * main-method to start server: creates Registry, starts server
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		load();
 		try {
@@ -40,7 +54,6 @@ public class CheckInImpl extends UnicastRemoteObject implements CheckIn {
 
 			Naming.rebind("CheckIn", checkIn);
 		} catch (RemoteException | MalformedURLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -48,6 +61,9 @@ public class CheckInImpl extends UnicastRemoteObject implements CheckIn {
 
 	}
 
+	/**
+	 * invokes classpath-scanner on start of server
+	 */
 	private static void load() {
 		ClasspathScanner.lookupAnnotatedScanners();
 	}

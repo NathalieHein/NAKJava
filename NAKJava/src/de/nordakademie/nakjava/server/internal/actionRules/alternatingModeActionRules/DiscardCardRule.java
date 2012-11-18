@@ -21,8 +21,6 @@ public class DiscardCardRule extends AlternatingStateRule {
 		for (String cardName : ((InGameSpecificModel) session
 				.getPlayerStateForPlayer(player).getStateSpecificModel())
 				.getCards().getCardsOnHand()) {
-			// no check if card is non-withdrawable because this could
-			// potentially cause deadlock if no card is withdrawable
 			actions.add(new WithdrawCardAction(cardName, sessionId));
 		}
 		return actions;

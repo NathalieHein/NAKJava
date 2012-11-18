@@ -10,11 +10,16 @@ import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.SelectAction;
 
+/**
+ * sets the deck in client's server model to the value that client selected
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class SelectDeckAction extends SelectAction {
 
 	public SelectDeckAction(String value, long sessionNr) {
 		super(value, sessionNr);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

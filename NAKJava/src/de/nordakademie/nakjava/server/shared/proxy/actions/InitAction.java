@@ -9,6 +9,13 @@ import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * ActionContext that initializes all hints to client on server when the
+ * client(Player) first registers
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class InitAction extends ActionContext {
 	private Player player;
 
@@ -17,6 +24,9 @@ public class InitAction extends ActionContext {
 		this.player = player;
 	}
 
+	/**
+	 * adds client to new or existing session
+	 */
 	@Override
 	protected ServerAction getAction(long sessionNr) throws RemoteException {
 		return new ActionAbstractImpl(sessionNr) {

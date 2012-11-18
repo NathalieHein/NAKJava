@@ -9,12 +9,21 @@ import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * resets client for playing another game
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class PlayAgainAction extends ActionContext {
 
 	public PlayAgainAction(long sessionNr) {
 		super(sessionNr);
 	}
 
+	/**
+	 * ServerAction sets client back in State Configuregame
+	 */
 	@Override
 	protected ServerAction getAction(long sessionNr) throws RemoteException {
 		return new ActionAbstractImpl(sessionNr) {

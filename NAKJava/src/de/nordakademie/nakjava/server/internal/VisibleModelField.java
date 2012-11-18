@@ -2,6 +2,13 @@ package de.nordakademie.nakjava.server.internal;
 
 import java.util.Map;
 
+/**
+ * Visible field to be accesible by client, includes current information of game
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ * @param <T>: type of field
+ */
 public class VisibleModelField<T> {
 
 	private String identifier;

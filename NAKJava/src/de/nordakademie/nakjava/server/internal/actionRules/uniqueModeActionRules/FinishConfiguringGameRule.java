@@ -28,7 +28,6 @@ public class FinishConfiguringGameRule extends StateRule {
 	protected boolean isRuleApplicableImpl(long sessionId, Player player) {
 		ConfigureGameSpecificModel specificModel = (ConfigureGameSpecificModel) getPlayerState(
 				sessionId, player).getStateSpecificModel();
-		// TODO still necessary?
 		return specificModel.getChosenDeck() != null;
 	}
 

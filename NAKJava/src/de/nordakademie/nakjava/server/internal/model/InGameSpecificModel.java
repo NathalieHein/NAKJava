@@ -15,8 +15,6 @@ import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 import de.nordakademie.nakjava.server.internal.model.transformator.CardTransformator;
 
 public class InGameSpecificModel implements StateSpecificModel {
-	// really including stop-field or me that state opponent that state -> that
-	// information
 	@VisibleField(targets = {
 			@TargetInState(states = { State.PLAYCARDSTATE, State.STOP,
 					State.ENDOFGAMESTATE, State.SIMULATIONSTATE,

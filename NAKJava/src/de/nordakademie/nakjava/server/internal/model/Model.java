@@ -12,6 +12,12 @@ import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 import de.nordakademie.nakjava.server.internal.model.transformator.SingleCardTransformator;
 import de.nordakademie.nakjava.server.internal.model.transformator.WinStrategyTransformator;
 
+/**
+ * Model that contains game-specific information in a session
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class Model implements Serializable {
 	@VisibleField(targets = { @TargetInState(states = { State.CONFIGUREGAME,
 			State.READYTOSTARTSTATE, State.PLAYCARDSTATE,
@@ -31,7 +37,6 @@ public class Model implements Serializable {
 
 	public Model(PlayerState playerState) {
 		self = playerState;
-		// TODO this really doesn't look good
 		strategy = (String) WinStrategies.getInstance().getStrategies()
 				.toArray()[0];
 	}

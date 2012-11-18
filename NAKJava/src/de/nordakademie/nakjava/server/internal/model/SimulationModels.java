@@ -9,8 +9,16 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 import de.nordakademie.nakjava.server.internal.model.transformator.SimulationModelTransformator;
 
+/**
+ * List of SimulationModels
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class SimulationModels implements Serializable {
-	@VisibleField(targets = { @TargetInState(states = { State.SIMULATIONSTATE }, target = Target.SELF) }, transformer = SimulationModelTransformator.class)
+	@VisibleField(targets = { @TargetInState(states = { State.SIMULATIONSTATE },
+			target = Target.SELF) },
+			transformer = SimulationModelTransformator.class)
 	private List<SimulationModel> simulationModels;
 
 	public SimulationModels(Model model, List<String> cards,

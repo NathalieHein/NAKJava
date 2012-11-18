@@ -17,16 +17,26 @@ import de.nordakademie.nakjava.server.internal.model.VisibleField;
 import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 import de.nordakademie.nakjava.server.shared.serial.PlayerModel;
 
+/**
+ * updates the visible models for each player in session based on reading the
+ * server-internal model
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class VisibleModelUpdater {
 
-	// Suppresses default constructor for noninstantiability
 	private VisibleModelUpdater() {
 		throw new AssertionError();
 	}
 
+	/**
+	 * updates visible fields for one single player
+	 * 
+	 * @param player
+	 * @param sessionId
+	 */
 	private static <V> void updatePlayerModel(Player player, long sessionId) {
-		// TODO ErrorHandling: how are we doing it?
-		// TODO needs state to somehow indicate dirtiness of PlayerModel
 		PlayerModel currentPlayerTransferModel = new PlayerModel();
 		player.getState().setModel(currentPlayerTransferModel);
 
@@ -40,95 +50,6 @@ public class VisibleModelUpdater {
 		deepScan(self, currentPlayerTransferModel, Target.SELF, self.getState());
 		deepScan(opponent, currentPlayerTransferModel, Target.OPPONENT,
 				self.getState());
-
-		// TODO create something like "ActionRules"
-		// TODO insert StateSpecificInfos
-		// TODO setting of dirtyBit via "ActionRules"
-		/*
-		 * playerModel.setArtifacts(self.getArtifacts()); List<CardInformation>
-		 * cards = new ArrayList<>(); for (String cardName :
-		 * self.getCards().getCardsOnHand()) { CardInformation cardInfo =
-		 * CardLibrary.get().getCardInformation() .get(cardName); if (cardInfo
-		 * != null) { cards.add(cardInfo); } else { // throw new
-		 * Exception("Card not found in CardLibrary"); } }
-		 * playerModel.setCardHand(cards);
-		 */
-
-		// Map<Target, String> targetToName = new HashMap<>();
-		// targetToName.put(Target.SELF, player.getName());
-		// switch (self.getState()) {
-		// case LOGIN:
-		// targetToName.put(Target.SELF, ((LoginSpecificModel) self
-		// .getStateSpecificModel()).getCurrentPartOfName());
-		// break;
-		// case CONFIGUREGAME:
-		// ConfigureGameSpecificModel configSpecificModel =
-		// (ConfigureGameSpecificModel) self
-		// .getStateSpecificModel();
-		// String deckName;
-		// if (configSpecificModel.getChosenDeck() == null) {
-		// deckName = null;
-		// } else {
-		// deckName = "StandardDeck";
-		//
-		// for (Entry<String, Set<String>> entry : player.getSavedDecks()
-		// .entrySet()) {
-		// if (entry.getValue() == configSpecificModel.getChosenDeck()) {
-		// deckName = entry.getKey();
-		// }
-		// }
-		// }
-		// Map<String, WinStrategyInformation> strategyDescription = new
-		// HashMap<>();
-		// for (String strategyName : WinStrategies.getInstance()
-		// .getStrategies()) {
-		// strategyDescription.put(strategyName, WinStrategies
-		// .getInstance().getStrategyInformationForName(
-		// strategyName));
-		// }
-		// currentPlayerTransferModel
-		// .setStateSpecificInfos(new ConfigurationSpecificInformation(
-		// strategyDescription, configSpecificModel
-		// .getWinStrategy(), deckName));
-		// break;
-		// case EDITDECK:
-		// EditDeckSpecificModel editDeckSpecificModel = (EditDeckSpecificModel)
-		// self
-		// .getStateSpecificModel();
-		// Map<CardInformation, Boolean> chosenCards = new HashMap<>();
-		// for (Entry<String, Boolean> card : editDeckSpecificModel
-		// .getChosenCards().entrySet()) {
-		// for (Entry<String, CardInformation> cardInfo : CardLibrary
-		// .get().getCardInformation().entrySet()) {
-		// if (cardInfo.getKey() == card.getKey()) {
-		// chosenCards.put(cardInfo.getValue(), card.getValue());
-		// }
-		// }
-		// }
-		// currentPlayerTransferModel
-		// .setStateSpecificInfos(new EditDeckSpecificInformation(
-		// chosenCards, editDeckSpecificModel
-		// .getCurrentPartOfDeckName()));
-		// break;
-		// case PLAYCARDSTATE:
-		// break;
-		// }
-		//
-		// Map<Target, State> targetToState = new HashMap<>();
-		// targetToState.put(Target.SELF, self.getState());
-		// Player otherPlayer = session.getOneOtherPlayer(player);
-		// if (otherPlayer != null) {
-		// if (opponent.getState() == State.LOGIN) {
-		// targetToName.put(Target.OPPONENT,
-		// ((LoginSpecificModel) opponent.getStateSpecificModel())
-		// .getCurrentPartOfName());
-		// } else {
-		// targetToName.put(Target.OPPONENT, otherPlayer.getName());
-		// }
-		// targetToState.put(Target.OPPONENT, opponent.getState());
-		// }
-		// currentPlayerTransferModel.setTargetToState(targetToState);
-		// currentPlayerTransferModel.setTargetToName(targetToName);
 	}
 
 	/**
@@ -278,6 +199,12 @@ public class VisibleModelUpdater {
 		return from.getClass().getName() + "." + field.getName() + "." + target;
 	}
 
+	/**
+	 * updates visible fields for each player
+	 * 
+	 * @param sessionId
+	 *            : identifier of session to be updated
+	 */
 	public static void update(long sessionId) {
 		Session session = Sessions.getInstance().getSession(sessionId);
 		for (Player player : session.getSetOfPlayers()) {

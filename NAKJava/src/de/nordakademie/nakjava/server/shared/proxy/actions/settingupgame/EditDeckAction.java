@@ -11,6 +11,13 @@ import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.SelectAction;
 
+/**
+ * sets client to state Editdeck and retrieves information on cards selected in
+ * that deck (EditDeckSpecificModel)
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class EditDeckAction extends SelectAction {
 
 	public EditDeckAction(String value, long sessionNr) {

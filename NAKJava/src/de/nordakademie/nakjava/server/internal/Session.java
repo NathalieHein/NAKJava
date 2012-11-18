@@ -10,7 +10,13 @@ import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
-//No need for synchronization because Action Broker ensures that all Session-methods are called either from a single-threaded context or are only read operations 
+/**
+ * Session that includes a list of players(could be more than two for a
+ * different game) in one game and a model with game-specific information
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class Session {
 	private int furtherAllowedNumberOfPlayers = 2;
 
@@ -23,23 +29,38 @@ public class Session {
 	private final Lock lock = new ReentrantLock();
 	private boolean toBeDeleted;
 
+	/**
+	 * locks session for updating
+	 */
 	public void lock() {
 		lock.lock();
 	}
 
+	/**
+	 * releases session lock
+	 */
 	public void releaseLock() {
 		lock.unlock();
 	}
 
+	/**
+	 * triggers client's notification of change
+	 */
 	public void commit() {
 		for (Player player : getSetOfPlayers()) {
-			// TODO dirtyBits to be set correctly
-			// if (!modeUnique || player == actionInvoker) {
 			player.triggerChangeEvent();
-			// }
 		}
 	}
 
+	/**
+	 * creates new session with a new batch and decreases number of allowed
+	 * players
+	 * 
+	 * @param player
+	 *            : first Player to be added to session
+	 * @param sessionId
+	 *            : unique identification of session
+	 */
 	public Session(Player player, long sessionId) {
 
 		actionInvoker = player;
@@ -52,10 +73,23 @@ public class Session {
 		this.sessionId = sessionId;
 	}
 
+	/**
+	 * checks if last player to invoke an action whose turn it currently is
+	 * 
+	 * @return:
+	 */
 	public boolean isActionInvokerCurrentPlayer() {
 		return playerToPlayerState.get(actionInvoker) == model.getSelf();
 	}
 
+	/**
+	 * verifies if serverAction belongs to one of this session's players and is
+	 * not too old
+	 * 
+	 * @param serverAction
+	 *            : action to be verified
+	 * @return
+	 */
 	public boolean verify(ServerAction serverAction) {
 		for (Player player : getSetOfPlayers()) {
 			if (player.getState().getActions().contains(serverAction)) {
@@ -66,6 +100,12 @@ public class Session {
 		return false;
 	}
 
+	/**
+	 * adds player to current session
+	 * 
+	 * @param player
+	 * @return
+	 */
 	public boolean addPlayer(Player player) {
 		if (furtherAllowedNumberOfPlayers > 0) {
 			actionInvoker = player;
@@ -78,6 +118,12 @@ public class Session {
 		return false;
 	}
 
+	/**
+	 * 
+	 * @param player
+	 * @return any other player that is not the playe in the parameter, if there
+	 *         is none, return null
+	 */
 	public Player getOneOtherPlayer(Player player) {
 		for (Player otherPlayer : playerToPlayerState.keySet()) {
 			if (player != otherPlayer) {
@@ -123,6 +169,9 @@ public class Session {
 		this.toBeDeleted = toBeDeleted;
 	}
 
+	/**
+	 * removes from session last player that invoked an action
+	 */
 	public void removeActionInvoker() {
 		furtherAllowedNumberOfPlayers++;
 		playerToPlayerState.remove(actionInvoker);

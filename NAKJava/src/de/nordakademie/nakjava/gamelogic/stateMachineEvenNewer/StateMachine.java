@@ -19,9 +19,6 @@ public class StateMachine {
 	static StateMachine instance;
 	Map<State, StateAction> stateToAction;
 
-	// TODO can the statemachine work without getting the model but other parts,
-	// otherwise needs to be an object and needs to pass around reference to
-	// itself
 	private StateMachine() {
 		stateToAction = new HashMap<>();
 		initialize();
