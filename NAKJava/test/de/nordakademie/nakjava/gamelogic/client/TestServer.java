@@ -10,9 +10,9 @@ import org.junit.Test;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.proxy.CheckInImpl;
-import de.nordakademie.nakjava.server.shared.proxy.actions.LeaveGameAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.PlayCardAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.editdeck.DiscardDeckEditAction;
+import de.nordakademie.nakjava.server.shared.proxy.actions.login.SubmitPlayerNameAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.login.TypePlayerNameAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.CreateNewDeckAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.FinishConfiguringAction;
@@ -81,7 +81,7 @@ public class TestServer {
 
 		Assert.assertEquals(getState(client1), State.LOGIN);
 		for (ActionContext action : client1.state.getActions()) {
-			if (action instanceof LeaveGameAction) {
+			if (action instanceof SubmitPlayerNameAction) {
 				action.perform();
 			}
 		}
@@ -129,8 +129,8 @@ public class TestServer {
 
 		Assert.assertEquals(getState(client1), State.READYTOSTARTSTATE);
 
-		Assert.assertEquals(currentState, State.LOGIN);
-		for (ActionContext action : client1.state.getActions()) {
+		Assert.assertEquals(getState(client2), State.LOGIN);
+		for (ActionContext action : client2.state.getActions()) {
 			if (action instanceof TypePlayerNameAction) {
 				if (((TypePlayerNameAction) action).getKey() == 'b') {
 					action.perform();
@@ -143,9 +143,9 @@ public class TestServer {
 			e.printStackTrace();
 		}
 
-		Assert.assertEquals(getState(client1), State.LOGIN);
-		for (ActionContext action : client1.state.getActions()) {
-			if (action instanceof LeaveGameAction) {
+		Assert.assertEquals(getState(client2), State.LOGIN);
+		for (ActionContext action : client2.state.getActions()) {
+			if (action instanceof SubmitPlayerNameAction) {
 				action.perform();
 			}
 		}
@@ -155,8 +155,8 @@ public class TestServer {
 			e.printStackTrace();
 		}
 
-		Assert.assertEquals(getState(client1), State.CONFIGUREGAME);
-		for (ActionContext action : client1.state.getActions()) {
+		Assert.assertEquals(getState(client2), State.CONFIGUREGAME);
+		for (ActionContext action : client2.state.getActions()) {
 			if (action instanceof CreateNewDeckAction) {
 				action.perform();
 			}
@@ -167,8 +167,8 @@ public class TestServer {
 			e.printStackTrace();
 		}
 
-		Assert.assertEquals(getState(client1), State.EDITDECK);
-		for (ActionContext action : client1.state.getActions()) {
+		Assert.assertEquals(getState(client2), State.EDITDECK);
+		for (ActionContext action : client2.state.getActions()) {
 			if (action instanceof DiscardDeckEditAction) {
 				action.perform();
 			}
@@ -179,8 +179,8 @@ public class TestServer {
 			e.printStackTrace();
 		}
 
-		Assert.assertEquals(getState(client1), State.CONFIGUREGAME);
-		for (ActionContext action : client1.state.getActions()) {
+		Assert.assertEquals(getState(client2), State.CONFIGUREGAME);
+		for (ActionContext action : client2.state.getActions()) {
 			if (action instanceof FinishConfiguringAction) {
 				action.perform();
 			}
