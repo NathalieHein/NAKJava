@@ -2,6 +2,7 @@ package de.nordakademie.nakjava.gamelogic.shared.playerstate;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -97,7 +98,11 @@ public class CardSet implements Serializable {
 	}
 
 	public void discardAllCardsFromHand() {
+		List<String> toBeDiscarded = new LinkedList<>();
 		for (String card : hand) {
+			toBeDiscarded.add(card);
+		}
+		for (String card : toBeDiscarded) {
 			discardCardFromHand(card);
 		}
 	}
