@@ -36,11 +36,14 @@ public class Weihnachtsmann extends AbstractCard {
 				.getStateSpecificModel()).getCards();
 		int passedCards = 0;
 		String drawnCard;
-		while (passedCards < selfCards.getCardSetSize()) {
+		boolean cardFound = false;
+		while (!cardFound && passedCards < selfCards.getCardSetSize()) {
 			drawnCard = selfCards.drawCardFromDeck();
 			passedCards++;
 			if (CardLibrary.get().getCardForName(drawnCard).getTotalCosts() < 15) {
 				selfCards.discardCardFromHand(drawnCard);
+			} else {
+				cardFound = true;
 			}
 		}
 	}
