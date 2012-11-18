@@ -1,4 +1,4 @@
-package de.nordakademie.nakjava.client.bot.genericBot.transformers;
+package de.nordakademie.nakjava.client.bot.genericbot.transformers;
 
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinCheck;
 

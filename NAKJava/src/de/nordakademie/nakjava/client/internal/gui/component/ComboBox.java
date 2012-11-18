@@ -29,6 +29,7 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 	public ComboBox(final Class<? extends SelectAction> selectAction,
 			VisibleModelField<? extends Object> currentSelectionField,
 			boolean actor) {
+		super();
 		this.currentSelectionField = currentSelectionField;
 		currentSelection = "";
 

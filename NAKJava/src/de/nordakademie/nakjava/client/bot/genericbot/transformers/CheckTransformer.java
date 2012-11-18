@@ -1,4 +1,4 @@
-package de.nordakademie.nakjava.client.bot.genericBot.transformers;
+package de.nordakademie.nakjava.client.bot.genericbot.transformers;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

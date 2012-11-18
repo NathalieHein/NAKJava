@@ -14,8 +14,8 @@ import de.nordakademie.nakjava.util.StringUtilities;
 
 public class LoginBehaviour implements BotBehaviour {
 
-	private String name = "Bot ";
-	private char[] chars = new char[] { 'a', 'b', 'c', 'd', 'e' };
+	private static final String NAME = "Bot ";
+	private static final char[] CHARS = new char[] { 'a', 'b', 'c', 'd', 'e' };
 
 	@Override
 	public State[] getStates() {
@@ -36,13 +36,14 @@ public class LoginBehaviour implements BotBehaviour {
 				}
 			});
 
-			if (name.startsWith(this.name)) {
-				if (name.length() != this.name.length() && submit != null) {
+			if (name.startsWith(LoginBehaviour.NAME)) {
+				if (name.length() != LoginBehaviour.NAME.length()
+						&& submit != null) {
 					submit.perform();
 				} else {
 
-					final char randomChar = chars[new Random()
-							.nextInt(chars.length)];
+					final char randomChar = CHARS[new Random()
+							.nextInt(CHARS.length)];
 					AbstractActionSelector.selectAction(state.getActions(),
 							new ActionContextSelector() {
 
@@ -66,7 +67,7 @@ public class LoginBehaviour implements BotBehaviour {
 							public boolean select(ActionContext context) {
 								if (context instanceof KeyAction) {
 									KeyAction action = (KeyAction) context;
-									return (action.getKey() == LoginBehaviour.this.name
+									return (action.getKey() == LoginBehaviour.NAME
 											.charAt(name.length()));
 								}
 

@@ -15,6 +15,7 @@ public class Label extends JLabel implements ValueHolder {
 
 	public Label(String before, VisibleModelField<? extends Object> field,
 			String after) {
+		super();
 		this.before = before;
 		this.field = field;
 		this.after = after;

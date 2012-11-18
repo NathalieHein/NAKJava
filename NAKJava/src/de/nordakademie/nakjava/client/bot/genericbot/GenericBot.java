@@ -1,4 +1,4 @@
-package de.nordakademie.nakjava.client.bot.genericBot;
+package de.nordakademie.nakjava.client.bot.genericbot;
 
 import java.rmi.RemoteException;
 import java.util.HashMap;
@@ -8,9 +8,9 @@ import java.util.Map;
 
 import de.nordakademie.nakjava.client.bot.AbstractActionSelector;
 import de.nordakademie.nakjava.client.bot.AbstractBotClient;
-import de.nordakademie.nakjava.client.bot.genericBot.transformers.CheckTransformer;
-import de.nordakademie.nakjava.client.bot.genericBot.transformers.WinCheckMeasurement;
-import de.nordakademie.nakjava.client.bot.genericBot.transformers.WinCheckTransformer;
+import de.nordakademie.nakjava.client.bot.genericbot.transformers.CheckTransformer;
+import de.nordakademie.nakjava.client.bot.genericbot.transformers.WinCheckMeasurement;
+import de.nordakademie.nakjava.client.bot.genericbot.transformers.WinCheckTransformer;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextSelector;
 import de.nordakademie.nakjava.client.internal.gui.GUIHook;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
@@ -46,7 +46,7 @@ public class GenericBot extends AbstractBotClient {
 		transformers = new HashMap<>();
 
 		List<Class<?>> classes = ClasspathScanner.findClasses(
-				"de.nordakademie.nakjava.client.bot.genericBot.transformers",
+				"de.nordakademie.nakjava.client.bot.genericbot.transformers",
 				"", new ClassAcceptor() {
 
 					@Override

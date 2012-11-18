@@ -17,6 +17,7 @@ import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 public class CardInteractionPanel extends AbstractGUIPanel {
 
 	public CardInteractionPanel(final CardInformation card, boolean actor) {
+		super();
 		setMaximumSize(new Dimension(CardInformationPanel.CARD_WIDTH,
 				CardInformationPanel.CARD_HEIGHT));
 		setPreferredSize(new Dimension(CardInformationPanel.CARD_WIDTH,

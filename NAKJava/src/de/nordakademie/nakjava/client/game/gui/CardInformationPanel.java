@@ -16,6 +16,7 @@ public class CardInformationPanel extends AbstractGUIPanel {
 	public static final int CARD_HEIGHT = 240;
 
 	public CardInformationPanel(CardInformation card) {
+		super();
 		setLayout(new BorderLayout());
 		setBackground(Color.cyan);
 		add(new JLabel("<html><b>" + card.getTitle() + "</b></html>",

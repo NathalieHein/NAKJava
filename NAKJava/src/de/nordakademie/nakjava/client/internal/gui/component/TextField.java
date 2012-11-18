@@ -32,6 +32,7 @@ public class TextField extends JTextField implements ActionContextHolder,
 
 	public TextField(Class<? extends KeyAction> desiredAction,
 			VisibleModelField<String> desiredValue, boolean actor) {
+		super();
 		this.desiredAction = desiredAction;
 		this.value = desiredValue;
 		this.setEditable(false);

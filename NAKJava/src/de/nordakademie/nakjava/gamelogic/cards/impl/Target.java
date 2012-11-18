@@ -4,19 +4,19 @@ public enum Target {
 
 	SELF("du", "dich"), OPPONENT("dein Gegner", "Gegner");
 
-	private String nominativDescription;
-	private String dativDescription;
+	private String nomDescription;
+	private String datDescription;
 
 	private Target(String nominativDescription, String dativDescription) {
-		this.nominativDescription = nominativDescription;
-		this.dativDescription = dativDescription;
+		this.nomDescription = nominativDescription;
+		this.datDescription = dativDescription;
 	}
 
 	public String getAkkusativDescription() {
-		return dativDescription;
+		return datDescription;
 	}
 
 	public String getNominativDescription() {
-		return nominativDescription;
+		return nomDescription;
 	}
 }

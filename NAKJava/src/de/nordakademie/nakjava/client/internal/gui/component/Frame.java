@@ -22,7 +22,10 @@ public class Frame extends JFrame implements ActionContextHolder {
 	private Lock lock;
 	private Condition condition;
 
+	private ActionContextSelector selector;
+
 	public Frame() {
+		super();
 		currentBatch = Long.MIN_VALUE;
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		lock = new ReentrantLock();
@@ -82,7 +85,11 @@ public class Frame extends JFrame implements ActionContextHolder {
 
 	@Override
 	public boolean isActionContextApplicable(ActionContext context) {
-		return (context instanceof LeaveGameAction);
+		if (selector == null) {
+			return (context instanceof LeaveGameAction);
+		} else {
+			return selector.select(context);
+		}
 	}
 
 	@Override
@@ -93,6 +100,7 @@ public class Frame extends JFrame implements ActionContextHolder {
 
 	@Override
 	public void setActionContextSelector(ActionContextSelector selector) {
+		this.selector = selector;
 	}
 
 	@Override

@@ -97,14 +97,14 @@ public class CardGenerator {
 
 	private static String generateBasicEffectDescription(
 			ArtifactEffect[] artifactEffects, DamageEffect[] damages) {
-		StringBuilder sb = new StringBuilder();
+		StringBuilder string = new StringBuilder();
 		for (ArtifactEffect artifactEffect : artifactEffects) {
 			String text = AnnotationMetatextProcessor
 					.extractMetatext(artifactEffect);
 
 			if (StringUtilities.isNotNullOrEmpty(text)) {
-				sb.append(text);
-				sb.append("\n");
+				string.append(text);
+				string.append("\n");
 			}
 		}
 
@@ -113,11 +113,11 @@ public class CardGenerator {
 					.extractMetatext(damageEffect);
 
 			if (StringUtilities.isNotNullOrEmpty(text)) {
-				sb.append(text);
-				sb.append("\n");
+				string.append(text);
+				string.append("\n");
 			}
 		}
 
-		return sb.toString();
+		return string.toString();
 	}
 }
