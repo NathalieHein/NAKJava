@@ -16,6 +16,12 @@ import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 import de.nordakademie.nakjava.server.shared.serial.PlayerModel;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 
+/**
+ * A GUI is the representation of the current game. A Gui can be attached to a
+ * client. It could be used for passing actions to the server but it needent, a
+ * bot could also do so.
+ * 
+ */
 public class GUI implements GUIHook {
 
 	private Frame frame;
@@ -29,6 +35,9 @@ public class GUI implements GUIHook {
 		this.actor = actor;
 	}
 
+	/**
+	 * After a new states arrives a we will switch to the AWT event Thread.
+	 */
 	@Override
 	public void newState(final PlayerState state) {
 		try {
@@ -90,6 +99,12 @@ public class GUI implements GUIHook {
 		}
 	}
 
+	/**
+	 * Chooses the a registered panel for the passed model The panel will
+	 * automatically attached if it changes.
+	 * 
+	 * @param model
+	 */
 	public void playerModelChanged(PlayerModel model) {
 		final StatePanel statePanel = panelPicker
 				.pickPanel(VisibleModelFields.PLAYERSTATE_STATE_SELF

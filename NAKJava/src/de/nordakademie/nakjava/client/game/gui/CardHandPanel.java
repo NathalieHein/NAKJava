@@ -11,6 +11,13 @@ import de.nordakademie.nakjava.client.internal.gui.component.AbstractGUIPanel;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 import de.nordakademie.nakjava.server.internal.VisibleModelField;
 
+/**
+ * Shows cards which are on the hand. For interacting with cards, buttons are
+ * added.
+ * 
+ * @author Kai
+ * 
+ */
 public class CardHandPanel extends AbstractGUIPanel implements ValueHolder {
 
 	private Map<String, CardInteractionPanel> cards;
@@ -18,6 +25,14 @@ public class CardHandPanel extends AbstractGUIPanel implements ValueHolder {
 
 	private boolean showButtons;
 
+	/**
+	 * Initializes a new cardHandPanel with a given value (
+	 * {@link VisibleModelField}). The value contains the current transferred
+	 * object. Buttons are shown. it is the same as using {@link CardHandPanel}s
+	 * second constructor
+	 * 
+	 * @param cardField
+	 */
 	public CardHandPanel(VisibleModelField<List<CardInformation>> cardField) {
 		this(cardField, true);
 	}

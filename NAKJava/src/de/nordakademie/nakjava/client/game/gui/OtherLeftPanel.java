@@ -8,6 +8,12 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.shared.proxy.actions.LeaveGameAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.PlayAgainAction;
 
+/**
+ * This panel is shown, when one client has closed/lost network connection.
+ * 
+ * @author Kai
+ * 
+ */
 public class OtherLeftPanel extends StatePanel {
 	public OtherLeftPanel(Boolean actor) {
 		super(actor);

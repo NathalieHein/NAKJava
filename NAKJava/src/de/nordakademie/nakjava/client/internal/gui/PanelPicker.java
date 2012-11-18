@@ -11,6 +11,14 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.util.classpathscanner.ClassAcceptor;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
+/**
+ * Panels expose states which they are responsible for. Those states will be
+ * matched to the panels by the panelPicker. It is also responsible for not
+ * reloading a panel when it is not neccessary
+ * 
+ * @author Kai
+ * 
+ */
 public class PanelPicker {
 
 	private Map<State, Class<StatePanel>> statePanels;
@@ -19,6 +27,12 @@ public class PanelPicker {
 
 	private boolean actor;
 
+	/**
+	 * Instantiates a Panel picker
+	 * 
+	 * @param actor
+	 *            whether those panels should have action elements or not
+	 */
 	public PanelPicker(boolean actor) {
 		this.actor = actor;
 		statePanels = new EnumMap<State, Class<StatePanel>>(State.class);

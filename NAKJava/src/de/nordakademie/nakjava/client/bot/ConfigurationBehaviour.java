@@ -6,6 +6,12 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.FinishC
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 
+/**
+ * No changes in game configuration should be perfomed. Just change state to
+ * ready.
+ * 
+ * 
+ */
 public class ConfigurationBehaviour implements BotBehaviour {
 
 	@Override

@@ -16,9 +16,16 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.internal.VisibleModelField.ClientFieldTransformer;
 
-public class PlayerPanel extends StatePanel {
+/**
+ * Main-panel of the game which shows detailled information of the current game
+ * like: cards, artefacts, last played card etc..
+ * 
+ * @author Kai
+ * 
+ */
+public class GamePanel extends StatePanel {
 
-	public PlayerPanel(Boolean actor) {
+	public GamePanel(Boolean actor) {
 		super(actor);
 		this.setLayout(new BorderLayout());
 

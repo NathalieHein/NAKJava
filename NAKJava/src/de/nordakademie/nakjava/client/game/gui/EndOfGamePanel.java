@@ -8,8 +8,18 @@ import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.proxy.actions.LeaveGameAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.PlayAgainAction;
 
+/**
+ * The game has ended. Show if win or loose.
+ * 
+ */
 public class EndOfGamePanel extends StatePanel {
 
+	/**
+	 * Shows the gameresult on a panel.
+	 * 
+	 * @param actor
+	 *            Shall buttons for play again and exit be shown
+	 */
 	public EndOfGamePanel(Boolean actor) {
 		super(actor);
 		add(new Label("Du hast ",

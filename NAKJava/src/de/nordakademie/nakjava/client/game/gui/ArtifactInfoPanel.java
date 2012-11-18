@@ -18,6 +18,10 @@ import de.nordakademie.nakjava.client.internal.gui.component.AbstractGUIPanel;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.server.internal.VisibleModelField;
 
+/**
+ * Visualizes a certain amount of artifacts: Panel-> Name Panel-> Amount
+ * 
+ */
 public class ArtifactInfoPanel extends AbstractGUIPanel implements ValueHolder {
 
 	private VisibleModelField<List<Artifact>> artifactsField;
@@ -42,6 +46,13 @@ public class ArtifactInfoPanel extends AbstractGUIPanel implements ValueHolder {
 
 	}
 
+	/**
+	 * Splits given artifacts to a map, this is needed for ordering by artifact
+	 * types
+	 * 
+	 * @param artifacts
+	 * @return
+	 */
 	private Map<Class<? extends Artifact>, List<Artifact>> splitListToMap(
 			List<Artifact> artifacts) {
 		Map<Class<? extends Artifact>, List<Artifact>> sortedByArtifacts = new TreeMap<Class<? extends Artifact>, List<Artifact>>(
@@ -85,6 +96,10 @@ public class ArtifactInfoPanel extends AbstractGUIPanel implements ValueHolder {
 		return sortedByArtifacts;
 	}
 
+	/**
+	 * For each artifact type (Superclass) a new Type panel (row) is added
+	 * 
+	 */
 	private class ArtifactTypeInfoPanel extends JPanel {
 
 		public ArtifactTypeInfoPanel(List<Artifact> artifacts) {

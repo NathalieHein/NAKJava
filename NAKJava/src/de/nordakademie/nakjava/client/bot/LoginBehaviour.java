@@ -12,6 +12,13 @@ import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 import de.nordakademie.nakjava.util.StringUtilities;
 
+/**
+ * Use the right actions to type your name: Bot ..... The points are random
+ * chars which are used for havin a unique name.
+ * 
+ * @author Kai
+ * 
+ */
 public class LoginBehaviour implements BotBehaviour {
 
 	private static final String NAME = "Bot ";
@@ -22,6 +29,10 @@ public class LoginBehaviour implements BotBehaviour {
 		return new State[] { State.LOGIN };
 	}
 
+	/**
+	 * Three cases: no input -> Begin input -> Fill up until "Bot " "Bot " ->
+	 * add some random letters until login is possible
+	 */
 	@Override
 	public void act(PlayerState state) {
 		final String name = VisibleModelFields.LOGINSPECIFICMODEL_CURRENTPARTOFNAME_SELF

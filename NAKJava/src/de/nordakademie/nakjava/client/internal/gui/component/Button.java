@@ -12,6 +12,9 @@ import de.nordakademie.nakjava.client.internal.gui.ActionContextHolder;
 import de.nordakademie.nakjava.client.internal.gui.ActionContextSelector;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * A button listens to its own events, and triggers if set, the action. *
+ */
 public class Button extends JButton implements ActionListener,
 		ActionContextHolder {
 
@@ -21,6 +24,20 @@ public class Button extends JButton implements ActionListener,
 
 	private boolean consume;
 
+	/**
+	 * Creates a new Button
+	 * 
+	 * @param text
+	 *            Text for the butotn
+	 * @param selector
+	 *            Which kind of action should the button take from delegator
+	 * @param autoRegister
+	 *            should the button automatically register for actions
+	 *            (recommended)
+	 * @param consume
+	 *            shall the button consume the action which means that the
+	 *            action be hold by only one {@link ActionContextHolder}
+	 */
 	public Button(String text, ActionContextSelector selector,
 			boolean autoRegister, boolean consume) {
 		super(text);
@@ -37,11 +54,25 @@ public class Button extends JButton implements ActionListener,
 		}
 	}
 
+	/**
+	 * See other constructor, consume = true
+	 * 
+	 * @param text
+	 * @param selector
+	 * @param autoRegister
+	 */
 	public Button(String text, ActionContextSelector selector,
 			boolean autoRegister) {
 		this(text, selector, autoRegister, true);
 	}
 
+	/**
+	 * If you just want to specify the action class, use this constructor. The
+	 * button is automatically registered and consumes actions
+	 * 
+	 * @param text
+	 * @param actionClass
+	 */
 	public Button(String text, final Class<? extends ActionContext> actionClass) {
 		this(text, new ActionContextSelector() {
 

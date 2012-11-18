@@ -6,6 +6,12 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.PlayAgainAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 
+/**
+ * The bot shall run in an infinite loop. So play again.
+ * 
+ * @author Kai
+ * 
+ */
 public class EndOfGameBehaviour implements BotBehaviour {
 
 	@Override

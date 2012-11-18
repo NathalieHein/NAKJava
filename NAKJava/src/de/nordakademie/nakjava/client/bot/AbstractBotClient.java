@@ -20,6 +20,13 @@ import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
+/**
+ * Abstract base class for bots. Bots may subclass AbstractbotClient and do not
+ * need to deal with login, configuration etc. Only methods for: - Dropping a
+ * card if needed outside a turn - playing a card - initializing the bot before
+ * game - finishing the game with given result (win/lost)
+ * 
+ */
 public abstract class AbstractBotClient extends AbstractClient {
 
 	private Map<State, BotBehaviour> behaviourLookup;
@@ -32,6 +39,15 @@ public abstract class AbstractBotClient extends AbstractClient {
 
 	private BotStatistic statistic;
 
+	/**
+	 * Subclasses can extend this constructor
+	 * 
+	 * @param gui
+	 *            GUI Hook for showing details
+	 * @param showStatistic
+	 *            show the statistic of played, win, lost games
+	 * @throws RemoteException
+	 */
 	protected AbstractBotClient(GUIHook gui, boolean showStatistic)
 			throws RemoteException {
 		super(gui);
@@ -48,10 +64,13 @@ public abstract class AbstractBotClient extends AbstractClient {
 
 	@Override
 	public void error(String text) throws RemoteException {
-		// TODO Auto-generated method stub
-
 	}
 
+	/**
+	 * Normally bots are programmed with behaviour which describe what to do,
+	 * when the bot is in a certain state. Here changes in states are recorded
+	 * (and methods invoked) and the behaviours are triggered.
+	 */
 	@Override
 	protected void stateChange(PlayerState playerState) {
 
@@ -103,6 +122,11 @@ public abstract class AbstractBotClient extends AbstractClient {
 		}
 	}
 
+	/**
+	 * Set a GUIHook while running
+	 * 
+	 * @param hook
+	 */
 	public void setHook(GUIHook hook) {
 		this.hook = hook;
 	}
@@ -164,6 +188,10 @@ public abstract class AbstractBotClient extends AbstractClient {
 	 */
 	public abstract void gameFinished(RoundResult result);
 
+	/**
+	 * GUI representation for the statistic of the bot.
+	 * 
+	 */
 	private class BotStatistic extends JFrame {
 
 		JLabel winLabel;
@@ -185,6 +213,9 @@ public abstract class AbstractBotClient extends AbstractClient {
 			pack();
 		}
 
+		/**
+		 * Draw the latest values on the GUI
+		 */
 		public void updateData() {
 			SwingUtilities.invokeLater(new Runnable() {
 

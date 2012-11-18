@@ -10,6 +10,13 @@ import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.proxy.actions.login.SubmitPlayerNameAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.login.TypePlayerNameAction;
 
+/**
+ * Login panel for entering a unique name. This panel is shown when the client
+ * is connected to the server.
+ * 
+ * @author Kai
+ * 
+ */
 public class LoginPanel extends StatePanel {
 	private TextField playerName;
 

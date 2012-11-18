@@ -15,6 +15,13 @@ import de.nordakademie.nakjava.server.internal.VisibleModelField;
 import de.nordakademie.nakjava.server.shared.proxy.actions.SelectAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * Combobox which can show a value, and fires an event when the selected value
+ * is changed.
+ * 
+ * @author Kai
+ * 
+ */
 public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 		ValueHolder {
 
@@ -26,6 +33,16 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 	private String currentSelection;
 	private VisibleModelField<? extends Object> currentSelectionField;
 
+	/**
+	 * Creates a new Combobox
+	 * 
+	 * @param selectAction
+	 *            the type of action to bind
+	 * @param currentSelectionField
+	 *            field wich contains the current selection
+	 * @param actor
+	 *            true for view only
+	 */
 	public ComboBox(final Class<? extends SelectAction> selectAction,
 			VisibleModelField<? extends Object> currentSelectionField,
 			boolean actor) {
@@ -64,6 +81,11 @@ public class ComboBox extends JComboBox<String> implements ActionContextHolder,
 
 	}
 
+	/**
+	 * Adds a selected item to the combobox
+	 * 
+	 * @param anObject
+	 */
 	public void addSelectedItem(Object anObject) {
 		listenerActive = false;
 		currentSelection = (String) anObject;

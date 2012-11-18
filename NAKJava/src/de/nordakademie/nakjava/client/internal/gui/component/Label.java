@@ -7,6 +7,11 @@ import javax.swing.JLabel;
 import de.nordakademie.nakjava.client.internal.gui.ValueHolder;
 import de.nordakademie.nakjava.server.internal.VisibleModelField;
 
+/**
+ * Custom Label class for showing a specific value.
+ * 
+ * 
+ */
 public class Label extends JLabel implements ValueHolder {
 
 	private String before;

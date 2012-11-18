@@ -91,7 +91,10 @@ public class CardGenerator {
 						+ cost.ressource().getSimpleName());
 			}
 
-			return sb.toString();
+			String result = sb.toString();
+			result = result.replaceAll("Ressource", "von jeder Ressource");
+
+			return result;
 		}
 	}
 
@@ -118,6 +121,9 @@ public class CardGenerator {
 			}
 		}
 
-		return string.toString();
+		String result = string.toString();
+		result = result.replaceAll("Ressource", "von jeder Ressource");
+
+		return result;
 	}
 }

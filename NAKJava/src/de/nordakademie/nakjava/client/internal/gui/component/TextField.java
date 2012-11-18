@@ -19,6 +19,13 @@ import de.nordakademie.nakjava.server.internal.VisibleModelField;
 import de.nordakademie.nakjava.server.shared.proxy.actions.KeyAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * A Textfield hold for each action (Keytype) an {@link ActionContext}. It maps
+ * automatically the actions to the keys. A value holds the current text which
+ * shall be shown in the textfield.
+ * 
+ * 
+ */
 public class TextField extends JTextField implements ActionContextHolder,
 		ValueHolder {
 
@@ -30,11 +37,22 @@ public class TextField extends JTextField implements ActionContextHolder,
 	private long currentBatch = Long.MIN_VALUE;
 	private VisibleModelField<String> value;
 
+	/**
+	 * Creates a new Textfield
+	 * 
+	 * @param desiredAction
+	 *            Type of action which should be bound by
+	 *            {@link ActionContextDelegator}
+	 * @param holdValue
+	 *            hold value for showing current text
+	 * @param actor
+	 *            whether this field should be editible or not
+	 */
 	public TextField(Class<? extends KeyAction> desiredAction,
-			VisibleModelField<String> desiredValue, boolean actor) {
+			VisibleModelField<String> holdValue, boolean actor) {
 		super();
 		this.desiredAction = desiredAction;
-		this.value = desiredValue;
+		this.value = holdValue;
 		this.setEditable(false);
 		setInputMap(WHEN_IN_FOCUSED_WINDOW, null);
 		setInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT, null);

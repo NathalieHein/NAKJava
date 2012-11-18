@@ -10,6 +10,9 @@ import javax.swing.JLabel;
 import de.nordakademie.nakjava.client.internal.gui.component.AbstractGUIPanel;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 
+/**
+ * Graphical representation of one card.
+ */
 public class CardInformationPanel extends AbstractGUIPanel {
 
 	public static final int CARD_WIDTH = 160;
@@ -18,7 +21,7 @@ public class CardInformationPanel extends AbstractGUIPanel {
 	public CardInformationPanel(CardInformation card) {
 		super();
 		setLayout(new BorderLayout());
-		setBackground(Color.cyan);
+		setBackground(Color.white);
 		add(new JLabel("<html><b>" + card.getTitle() + "</b></html>",
 				JLabel.CENTER), BorderLayout.NORTH);
 		add(new JLabel("<html><span style='font-weight:normal;'>"

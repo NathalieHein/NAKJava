@@ -9,6 +9,13 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.Win
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.genericRoundCheckers.Comparator;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.genericRoundCheckers.impl.ArtifactChecker;
 
+/**
+ * Transforms artifact checks into measurements. This enables a distinct
+ * perspective on "how near you are". It considers the type of artifact, target,
+ * comparator and count.
+ * 
+ * 
+ */
 @CheckTransformer(transformTarget = ArtifactChecker.class)
 public class ArtifactCheckTransformer implements WinCheckTransformer {
 
@@ -24,7 +31,28 @@ public class ArtifactCheckTransformer implements WinCheckTransformer {
 
 				List<? extends Artifact> pModel = model
 						.get(checker.getTarget());
-				double result = 0;
+
+				List<? extends Artifact> oModel;
+
+				if (checker.getTarget() == Target.SELF) {
+					oModel = model.get(Target.OPPONENT);
+				} else {
+					oModel = model.get(Target.SELF);
+				}
+
+				double result = check(pModel);
+
+				double opponentResult = check(oModel);
+
+				if (opponentResult == 1) {
+					return 0;
+				} else {
+					return result;
+				}
+			}
+
+			private double check(List<? extends Artifact> pModel) {
+				double result = 0.0;
 
 				if (checker.getOperator() == ArtifactChecker.AND) {
 
@@ -62,6 +90,17 @@ public class ArtifactCheckTransformer implements WinCheckTransformer {
 		};
 	}
 
+	/**
+	 * Artifact checking algorithm.
+	 * 
+	 * @param artifactCount
+	 *            current count
+	 * @param comparator
+	 *            <,>,=
+	 * @param targetCount
+	 *            desired count
+	 * @return measurement 0(beginning)..1(won)
+	 */
 	private double checkArtifact(int artifactCount, Comparator comparator,
 			int targetCount) {
 		if (comparator == Comparator.EQUAL) {
@@ -92,7 +131,17 @@ public class ArtifactCheckTransformer implements WinCheckTransformer {
 		return 0;
 	}
 
-	public Artifact getArtifactFrom(List<? extends Artifact> artifacts,
+	/**
+	 * Returns a certain artifact, which is denoted as a Class from a List of
+	 * artifacts
+	 * 
+	 * @param artifacts
+	 *            list of artifacts
+	 * @param artifactClass
+	 *            class of artifact
+	 * @return Artifact object from the searched class
+	 */
+	private Artifact getArtifactFrom(List<? extends Artifact> artifacts,
 			Class<? extends Artifact> artifactClass) {
 
 		for (Artifact artifact : artifacts) {

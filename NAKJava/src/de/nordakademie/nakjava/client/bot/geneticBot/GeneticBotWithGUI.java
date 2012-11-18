@@ -4,6 +4,12 @@ import java.rmi.RemoteException;
 
 import de.nordakademie.nakjava.client.internal.gui.GUI;
 
+/**
+ * GUI starter for genetic bot
+ * 
+ * @author Kai
+ * 
+ */
 public class GeneticBotWithGUI {
 	public static void main(String[] args) {
 		try {

@@ -4,6 +4,10 @@ import java.rmi.RemoteException;
 
 import de.nordakademie.nakjava.client.internal.gui.GUI;
 
+/**
+ * Starter for a GenericBot with gui.
+ * 
+ */
 public class GenericBotWithGUI {
 	public static void main(String[] args) {
 		try {

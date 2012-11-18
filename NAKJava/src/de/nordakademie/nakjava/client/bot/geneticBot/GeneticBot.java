@@ -24,6 +24,15 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.WithdrawC
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 
+/**
+ * The genetic bot makes use of a basic process of learning which follows the
+ * rules of darwin. It selects randomly cards if it has no knowledge of the
+ * cards, if there is knowledge, it chooses the card which was useful in the
+ * past. The cards are countet positive if the game was won, negative if lost.
+ * 
+ * The knowledge is stored to a textfile.
+ * 
+ */
 public class GeneticBot extends AbstractBotClient {
 
 	private static final String GENETIC_BOT_KNOWLEDGE_PATH = "geneticBot.knowledge";
@@ -156,8 +165,7 @@ public class GeneticBot extends AbstractBotClient {
 			ous.writeObject(knowledge);
 			lock.release();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new IllegalStateException(e);
 		} finally {
 			try {
 				ous.close();

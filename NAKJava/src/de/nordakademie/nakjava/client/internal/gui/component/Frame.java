@@ -16,6 +16,12 @@ import de.nordakademie.nakjava.client.internal.gui.ActionContextSelector;
 import de.nordakademie.nakjava.server.shared.proxy.actions.LeaveGameAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * Custom frame for application. This frame holds an action for closing.
+ * 
+ * @author Kai
+ * 
+ */
 public class Frame extends JFrame implements ActionContextHolder {
 	private ActionContext actionContext = null;
 	private long currentBatch;

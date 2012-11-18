@@ -5,6 +5,10 @@ import java.rmi.RemoteException;
 import de.nordakademie.nakjava.client.internal.AbstractClient;
 import de.nordakademie.nakjava.client.internal.gui.GUI;
 
+/**
+ * Starter for a Client with GUI
+ * 
+ */
 public class GUIClient extends AbstractClient {
 
 	protected GUIClient() throws RemoteException {

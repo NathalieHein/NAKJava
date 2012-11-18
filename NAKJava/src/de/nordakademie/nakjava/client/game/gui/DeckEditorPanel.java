@@ -7,7 +7,11 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,7 +32,11 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.editdeck.SelectCardFo
 import de.nordakademie.nakjava.server.shared.proxy.actions.editdeck.TypeDeckNameAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
-public class CardSelectionPanel extends StatePanel {
+/**
+ * Panel for visualizing the deck editor. Because of the huge amount of actions
+ * (300++) some caching tweaks were possible to have a smooth user experience. *
+ */
+public class DeckEditorPanel extends StatePanel {
 
 	private JPanel cardOverview;
 	private JPanel controlPanel;
@@ -36,7 +44,7 @@ public class CardSelectionPanel extends StatePanel {
 	private Set<CardInformation> oldCardInformation;
 	private Map<CardInformation, CardSelector> cache;
 
-	public CardSelectionPanel(Boolean actor) {
+	public DeckEditorPanel(Boolean actor) {
 		super(actor);
 		setLayout(new BorderLayout());
 		cache = new HashMap<>();
@@ -88,7 +96,16 @@ public class CardSelectionPanel extends StatePanel {
 			}
 		} else {
 			cache = new HashMap<>();
-			for (CardInformation card : cards.keySet()) {
+			List<CardInformation> cardSet = new ArrayList<>(cards.keySet());
+			Collections.sort(cardSet, new Comparator<CardInformation>() {
+
+				@Override
+				public int compare(CardInformation o1, CardInformation o2) {
+					return o1.getTitle().compareTo(o2.getTitle());
+				}
+			});
+
+			for (CardInformation card : cardSet) {
 				CardSelector selector = new CardSelector(card, cards.get(card));
 				cardOverview.add(selector);
 				cache.put(card, selector);
@@ -100,10 +117,23 @@ public class CardSelectionPanel extends StatePanel {
 		// this.revalidate();
 	}
 
+	/**
+	 * Wrapup for a cardInformation with a button which allows it to select or
+	 * deselect a card.
+	 * 
+	 * 
+	 */
 	private class CardSelector extends JPanel {
 
 		private Button button;
 
+		/**
+		 * Creates a card selector for one card, it also visualizes whether the
+		 * card is selected or not.
+		 * 
+		 * @param card
+		 * @param selected
+		 */
 		private CardSelector(final CardInformation card, boolean selected) {
 			this.setLayout(new GridBagLayout());
 			GridBagConstraints constraints = new GridBagConstraints();

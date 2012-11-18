@@ -14,8 +14,24 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.PlayCardA
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.WithdrawCardAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * Adds Game interactions for {@link CardInformationPanel}s. Those can be turned
+ * on and off.
+ * 
+ * @author Kai
+ * 
+ */
 public class CardInteractionPanel extends AbstractGUIPanel {
 
+	/**
+	 * Wraps a cardinformation into a panel with game buttons for play and
+	 * withdraw.
+	 * 
+	 * @param card
+	 *            card to visualize
+	 * @param actor
+	 *            should buttons be shown
+	 */
 	public CardInteractionPanel(final CardInformation card, boolean actor) {
 		super();
 		setMaximumSize(new Dimension(CardInformationPanel.CARD_WIDTH,

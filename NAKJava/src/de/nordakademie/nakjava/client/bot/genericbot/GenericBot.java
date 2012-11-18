@@ -16,6 +16,7 @@ import de.nordakademie.nakjava.client.internal.gui.GUIHook;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.RoundResult;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinCheck;
+import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategy;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategyInformation;
 import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.FinishSimulationAction;
@@ -28,6 +29,14 @@ import de.nordakademie.nakjava.server.shared.serial.VisibleSimulationModel;
 import de.nordakademie.nakjava.util.classpathscanner.ClassAcceptor;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
+/**
+ * Generic bot which calculates its strategy by transforming {@link WinStrategy}
+ * . This bot has a positive card playing habit. It tries to avoid dropping
+ * cards and chooses always the best suiting card. The best card is not obtained
+ * by parsing the card, it is done by simulating the card for the future. This
+ * decouples the bot from the cards.
+ * 
+ */
 public class GenericBot extends AbstractBotClient {
 
 	private List<VisibleSimulationModel> simulation;
@@ -38,6 +47,17 @@ public class GenericBot extends AbstractBotClient {
 
 	private Map<String, SimulationCardResult> simulationResult;
 
+	/**
+	 * Creates the GenericBot
+	 * 
+	 * @param simulationLength
+	 *            how far should be simulated
+	 * @param gui
+	 *            can be passed to the bot for control purposes
+	 * @param showStatistic
+	 *            shows a statistic window
+	 * @throws RemoteException
+	 */
 	protected GenericBot(int simulationLength, GUIHook gui,
 			boolean showStatistic) throws RemoteException {
 		super(gui, showStatistic);
@@ -193,7 +213,7 @@ public class GenericBot extends AbstractBotClient {
 
 	}
 
-	public void play(final String card, PlayerState state) {
+	private void play(final String card, PlayerState state) {
 		AbstractActionSelector.selectAction(state.getActions(),
 				new ActionContextSelector() {
 
@@ -226,10 +246,13 @@ public class GenericBot extends AbstractBotClient {
 
 	@Override
 	public void gameFinished(RoundResult result) {
-		// TODO Auto-generated method stub
-
 	}
 
+	/**
+	 * Bean for organizing simulation card results. It stores a cardName and the
+	 * specific future round results.
+	 * 
+	 */
 	private class SimulationCardResult {
 		private String cardName;
 		private Map<Integer, Double> simulationResult = new HashMap<>();
@@ -238,6 +261,12 @@ public class GenericBot extends AbstractBotClient {
 			this.cardName = name;
 		}
 
+		/**
+		 * Adds a result for a given round
+		 * 
+		 * @param round
+		 * @param result
+		 */
 		public void putResult(int round, double result) {
 			Double res = simulationResult.get(round);
 			if (res == null || res < result) {
@@ -252,6 +281,11 @@ public class GenericBot extends AbstractBotClient {
 
 	}
 
+	/**
+	 * Starter for a headless generic bot
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		try {
 			new GenericBot(10, null, true);

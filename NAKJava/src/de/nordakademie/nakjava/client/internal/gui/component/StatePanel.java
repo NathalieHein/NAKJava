@@ -10,6 +10,14 @@ import de.nordakademie.nakjava.client.internal.gui.ValueHolder;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.shared.serial.PlayerModel;
 
+/**
+ * Panel which gives visual representation for a certain state. If a panel is
+ * registered and the state occurs the panel is automatically shown - no extra
+ * need for integration
+ * 
+ * @author Kai
+ * 
+ */
 public abstract class StatePanel extends AbstractGUIPanel {
 
 	public StatePanel(boolean actor) {
