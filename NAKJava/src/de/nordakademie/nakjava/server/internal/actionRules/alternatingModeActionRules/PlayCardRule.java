@@ -15,6 +15,13 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.SimulateC
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.WithdrawCardAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * Determines and creates ActionContexts(play-, Withdraw- and
+ * SimulateCardAction) when State PlayCardState is applicable
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class PlayCardRule extends AlternatingStateRule {
 
 	@Override

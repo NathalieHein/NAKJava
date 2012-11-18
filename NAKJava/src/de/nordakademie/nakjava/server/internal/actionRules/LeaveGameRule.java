@@ -9,6 +9,12 @@ import de.nordakademie.nakjava.server.internal.Sessions;
 import de.nordakademie.nakjava.server.shared.proxy.actions.LeaveGameAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * LeaveGameRule is always applicable
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class LeaveGameRule implements ActionRule {
 
 	@Override

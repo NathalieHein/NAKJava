@@ -14,6 +14,13 @@ import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * Ends typing in of name of player and sets player to next state(configuregame)
+ * via statemachine typed in name is blocked over all sessions
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class SubmitPlayerNameAction extends ActionContext {
 
 	public SubmitPlayerNameAction(long sessionNr) {

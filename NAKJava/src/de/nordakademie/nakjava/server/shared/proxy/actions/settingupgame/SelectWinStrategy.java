@@ -8,6 +8,12 @@ import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.SelectAction;
 
+/**
+ * Sets the WinStrategy in model to the value that the client selected
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class SelectWinStrategy extends SelectAction {
 
 	public SelectWinStrategy(String value, long sessionNr) {

@@ -2,11 +2,16 @@ package de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.actions;
 
 import de.nordakademie.nakjava.server.internal.model.Model;
 
+/**
+ * performes changes at end of game
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class GameEndAction implements StateAction {
-	// TODO not needed
 	@Override
 	public void perform(Model model) {
-		// model.setLastPlayedCard(null);
+		// (for future use, e.g roundCount)
 	}
 
 }

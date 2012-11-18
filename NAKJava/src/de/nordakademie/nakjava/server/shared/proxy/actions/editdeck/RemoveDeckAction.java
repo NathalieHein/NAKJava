@@ -11,11 +11,16 @@ import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * removes currently edited deck and leaves deckEdit State
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class RemoveDeckAction extends ActionContext {
 
 	public RemoveDeckAction(long sessionNr) {
 		super(sessionNr);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

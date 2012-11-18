@@ -5,6 +5,13 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * global list of player names that need to be unique over all sessions;
+ * provides read/write lock for simultaneous access of multiple threads
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class Players {
 	private static Players instance;
 	private Set<String> loggendInPlayerNames;

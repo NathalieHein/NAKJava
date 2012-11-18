@@ -10,6 +10,12 @@ import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.KeyAction;
 
+/**
+ * appends the variable key to the current name of the player
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class TypePlayerNameAction extends KeyAction {
 
 	public TypePlayerNameAction(char key, long sessionNr) {

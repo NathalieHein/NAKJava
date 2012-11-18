@@ -10,12 +10,22 @@ import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * deletes a client from session
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class LeaveGameAction extends ActionContext {
 
 	public LeaveGameAction(long sessionNr) {
 		super(sessionNr);
 	}
 
+	/**
+	 * Serveraction deletes client's traces on server and sets opponent's state
+	 * back unique client's name can be reused afterwards
+	 */
 	@Override
 	protected ServerAction getAction(long sessionNr) throws RemoteException {
 		return new ActionAbstractImpl(sessionNr) {
@@ -38,7 +48,6 @@ public class LeaveGameAction extends ActionContext {
 				try {
 					session.getActionInvoker().getControl().remoteClose();
 				} catch (RemoteException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				if (session.getModel().getSelf().getState() == State.LOGIN) {

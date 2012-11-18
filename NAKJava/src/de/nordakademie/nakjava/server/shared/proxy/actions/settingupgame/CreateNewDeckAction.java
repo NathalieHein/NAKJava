@@ -12,6 +12,12 @@ import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * Creates new deck with all available cards deselected
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class CreateNewDeckAction extends ActionContext {
 
 	public CreateNewDeckAction(long sessionNr) {

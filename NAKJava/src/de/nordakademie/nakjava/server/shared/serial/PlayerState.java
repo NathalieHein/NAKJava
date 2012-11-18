@@ -7,8 +7,13 @@ import java.util.List;
 
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
 
-//it is ensured that all methods in this class are called from a single threaded-context
-//so only write operations need to be synchronized so that the new created thread in triggerChangeEvent() that invokes RMI gets consistent data when finally executed
+/**
+ * Contains Listener on client-side and data that will be serialized to
+ * client(PlayerModel, List of ActionContext)
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class PlayerState implements Serializable {
 	private PlayerModel model;
 	private List<ActionContext> actions;
@@ -54,6 +59,11 @@ public class PlayerState implements Serializable {
 		dirty = true;
 	}
 
+	/**
+	 * called when server-processing of action is finished. New Thread is opened
+	 * to invoke client via RMI. PlayerState is shallow-copied because of
+	 * multithreading
+	 */
 	public void triggerChangeEvent() {
 		final PlayerState playerState = new PlayerState(this);
 
@@ -66,7 +76,6 @@ public class PlayerState implements Serializable {
 						stateListener.stateChanged(playerState);
 
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 

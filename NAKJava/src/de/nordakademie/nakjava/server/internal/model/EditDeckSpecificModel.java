@@ -10,12 +10,14 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 import de.nordakademie.nakjava.server.internal.model.transformator.CardInformationTransformator;
 import de.nordakademie.nakjava.server.persistence.Deck;
-import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class EditDeckSpecificModel implements StateSpecificModel {
-	@VisibleField(targets = { @TargetInState(states = { State.EDITDECK }, target = Target.SELF) }, transformer = CardInformationTransformator.class)
+	@VisibleField(targets = { @TargetInState(states = { State.EDITDECK },
+			target = Target.SELF) },
+			transformer = CardInformationTransformator.class)
 	private Map<String, Boolean> chosenCards;
-	@VisibleField(targets = { @TargetInState(states = { State.EDITDECK }, target = Target.SELF) })
+	@VisibleField(targets = { @TargetInState(states = { State.EDITDECK },
+			target = Target.SELF) })
 	private String currentPartOfDeckName = "";
 	private Deck deck;
 
@@ -62,26 +64,6 @@ public class EditDeckSpecificModel implements StateSpecificModel {
 			}
 		}
 		return count;
-	}
-
-	public static void main(String[] args) {
-		ClasspathScanner.lookupAnnotatedScanners();
-		EditDeckSpecificModel mod = new EditDeckSpecificModel(null);
-		String card = "Ausbeutung";
-		if (mod.getChosenCards().values().contains(true)) {
-			System.out.println("something wron");
-		}
-		System.out.println("CardCount: " + mod.getChosenCards().size());
-		System.out.println(mod.getNumberOfSelectedCards());
-		System.out.println(card + " , " + mod.getChosenCards().get(card));
-		mod.reverseSelectionOfCard(card);
-		System.out.println(mod.getNumberOfSelectedCards());
-
-		System.out.println(card + " , " + mod.getChosenCards().get(card));
-		mod.reverseSelectionOfCard(card);
-		System.out.println(mod.getNumberOfSelectedCards());
-
-		System.out.println(card + " , " + mod.getChosenCards().get(card));
 	}
 
 	public Deck getDeck() {

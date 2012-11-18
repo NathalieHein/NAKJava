@@ -9,6 +9,12 @@ import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.SelectAction;
 
+/**
+ * selects/deselects single card for the edited deck depending on current value
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class SelectCardForDeckAction extends SelectAction {
 
 	public SelectCardForDeckAction(String value, long sessionNr) {

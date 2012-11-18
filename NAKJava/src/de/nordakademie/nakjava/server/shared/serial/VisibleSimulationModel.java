@@ -11,6 +11,13 @@ import de.nordakademie.nakjava.server.internal.model.VisibleField;
 import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 import de.nordakademie.nakjava.server.internal.model.transformator.SingleCardTransformator;
 
+/**
+ * contains to be serialized information to client that contains result(List of
+ * Artifacts) of one simulation (simulatedCard and toBeSimulatedNumberOfRounds)
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class VisibleSimulationModel implements Serializable {
 	@VisibleField(targets = { @TargetInState(states = { State.SIMULATIONSTATE },
 			target = Target.SELF) })

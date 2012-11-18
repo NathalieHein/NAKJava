@@ -6,6 +6,13 @@ import java.util.Map;
 
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 
+/**
+ * contains to be serialized information (about current state of game) to
+ * client.
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class PlayerModel implements Serializable {
 	private State state;
 	private String name;

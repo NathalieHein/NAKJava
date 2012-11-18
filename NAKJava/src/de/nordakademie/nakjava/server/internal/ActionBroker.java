@@ -1,13 +1,15 @@
 package de.nordakademie.nakjava.server.internal;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 
+/**
+ * singleton that is called to verify and commit a ServerAction
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class ActionBroker {
 	private static ActionBroker instance;
-	private final Lock lock = new ReentrantLock(true);
 
 	private ActionBroker() {
 	}
@@ -19,7 +21,14 @@ public class ActionBroker {
 		return instance;
 	}
 
-	// TODO comment missing
+	/**
+	 * verfies a serverAction. if succesful, the thread possesses the lock of
+	 * the session afterwards for exclusive updating of session
+	 * 
+	 * @param serverAction
+	 *            : the ServerAction to be verified
+	 * @return true if verification succesful, false if not
+	 */
 	public boolean verify(ActionAbstractImpl serverAction) {
 
 		if (serverAction.isServerInternal()) {
@@ -28,9 +37,6 @@ public class ActionBroker {
 		Session session = Sessions.getInstance().getSession(
 				serverAction.getSessionNr());
 		session.lock();
-		// TODO does a problem with the write-lock in sessions occur
-		// TODO here -> definetly waiting quite a while
-		// session might be deleted in the meantime
 		session = Sessions.getInstance()
 				.getSession(serverAction.getSessionNr());
 
@@ -43,13 +49,15 @@ public class ActionBroker {
 
 	}
 
+	/**
+	 * commits a ServerAction after this has finished updating and processing
+	 * the session. Session might be deleted afterwards. the thread releases the
+	 * lock on the Session.
+	 * 
+	 * @param serverAction
+	 *            : The ServerAction to be commited
+	 */
 	public void commit(ActionAbstractImpl serverAction) {
-		// ensures that thread on Model.waitCondition has exclusive access for
-		// rest of its verify()-Process
-		// TODO kann hier in der Zwischenzeit die Session gel�scht worden
-		// sein?
-		// Wenn ja, nochmal auf null �berpr�fen -> should not be possible
-		// TODO might be stuck in ReadLock of Sessions
 		Session session = Sessions.getInstance().getSession(
 				serverAction.getSessionNr());
 
@@ -59,6 +67,14 @@ public class ActionBroker {
 		}
 	}
 
+	/**
+	 * if Session is set to be deleted it will be removed from Sessions-list and
+	 * the lock on the session will be released
+	 * 
+	 * @param sessionId
+	 *            : The session to check for deletion
+	 * @return true if session was deleted
+	 */
 	private boolean checkSessionDeletion(long sessionId) {
 		Session session = Sessions.getInstance().getSession(sessionId);
 		if (session.isToBeDeleted()) {

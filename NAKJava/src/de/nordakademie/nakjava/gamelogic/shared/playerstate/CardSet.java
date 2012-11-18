@@ -6,6 +6,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * CardSet that represents a Player's card-deck, -hand, - cemetry
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class CardSet implements Serializable {
 
 	private List<String> deck = new ArrayList<>();

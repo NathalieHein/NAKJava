@@ -9,6 +9,12 @@ import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.KeyAction;
 
+/**
+ * appends variable key to name of the currently selected deck
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class TypeDeckNameAction extends KeyAction {
 
 	public TypeDeckNameAction(char key, long sessionNr) {

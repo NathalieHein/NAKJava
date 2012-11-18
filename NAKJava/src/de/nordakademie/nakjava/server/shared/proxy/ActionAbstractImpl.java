@@ -14,17 +14,26 @@ import de.nordakademie.nakjava.server.internal.Session;
 import de.nordakademie.nakjava.server.internal.Sessions;
 import de.nordakademie.nakjava.server.internal.VisibleModelUpdater;
 
+/**
+ * Abstract Implementation of Server-Action that does processing common to every
+ * ServerAction
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 		ServerAction {
-
-	// TODO THIS is not possible because RemoteObject needs constructor without
-	// parameters, otherwise RemoteException
+	/**
+	 * 
+	 * @param sessionId
+	 *            : used to identify the session this action belongs to
+	 * @throws RemoteException
+	 */
 	protected ActionAbstractImpl(long sessionId) throws RemoteException {
 		super();
 		this.sessionId = sessionId;
 	}
 
-	// Executor-Interface?
 	private static ExecutorService threadPool = Executors.newCachedThreadPool();
 	private int threadCount = 2;
 
@@ -33,6 +42,14 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 
 	private long sessionId;
 
+	/**
+	 * processing of a client's request: needs verification of validity of
+	 * ServerAction + locking of corresponding session for processing; updating
+	 * the model of the session(performImpl()); creating new Actions and
+	 * extracting the visible-status of the model(is done with multithreading
+	 * because only read-access to model); commit(update to be send to
+	 * client+releasing the session-lock)
+	 */
 	@Override
 	public void perform() throws RemoteException {
 		threadPool.execute(new Runnable() {
@@ -40,30 +57,17 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 			@Override
 			public void run() {
 				boolean verified = false;
-				// synchronized (ActionBroker.getInstance()) {
 				verified = ActionBroker.getInstance().verify(
 						ActionAbstractImpl.this);
-				// }
 				if (verified) {
-					System.out.println(System.currentTimeMillis()
-							+ "Action verified");
 					Session session = Sessions.getInstance().getSession(
 							sessionId);
 					performImpl(session);
-					System.out
-							.println(System.currentTimeMillis() + "performed");
-					// Needs to be done for changing the thread context back
-					// to the thread that holds the lock in the ActionBroker
-					// TODO this is easier if using thread.join()
-					// TODO this needs to be put here => otherwise deadlock
 					lock.lock();
-					System.out.println(System.currentTimeMillis() + "locked");
 					threadPool.execute(new Runnable() {
 
 						@Override
 						public void run() {
-							System.out.println(System.currentTimeMillis()
-									+ "ARupdated");
 							ActionRuleset.update(sessionId);
 							finishThread();
 						}
@@ -71,8 +75,6 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 					threadPool.execute(new Runnable() {
 						@Override
 						public void run() {
-							System.out.println(System.currentTimeMillis()
-									+ "VMupdated");
 							VisibleModelUpdater.update(sessionId);
 							finishThread();
 						}
@@ -85,7 +87,6 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 					} finally {
 						lock.unlock();
 					}
-					System.out.println(System.currentTimeMillis() + "commit");
 					ActionBroker.getInstance().commit(ActionAbstractImpl.this);
 
 				}
@@ -94,9 +95,10 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 
 	}
 
+	// used for changing the threadcontext back to the thread that acquired the
+	// lock on the session
 	private synchronized void finishThread() {
 		threadCount--;
-		System.out.println(System.currentTimeMillis() + "finishThread");
 		if (threadCount == 0) {
 			lock.lock();
 			try {
@@ -107,8 +109,18 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 		}
 	}
 
+	/**
+	 * 
+	 * @param session
+	 *            : Session-object on which this ServerAction operates
+	 */
 	protected abstract void performImpl(Session session);
 
+	/**
+	 * 
+	 * @return: returns true, if serverInternal-action that is verified whithout
+	 *          knowing the session
+	 */
 	public boolean isServerInternal() {
 		return false;
 	}

@@ -8,6 +8,12 @@ import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * sets client to the next state (Playcard)
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class FinishSimulationAction extends ActionContext {
 
 	public FinishSimulationAction(long sessionNr) {

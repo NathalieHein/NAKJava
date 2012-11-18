@@ -14,8 +14,25 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.Win
 import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.Model;
 
-public class PlayCardAuxiliary {
+/**
+ * Utility-class for playing cards
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
+public final class PlayCardAuxiliary {
+	private PlayCardAuxiliary() {
 
+	}
+
+	/**
+	 * plays the card: pays the card's costs + performs the card-actions
+	 * 
+	 * @param model
+	 *            : the model to be processed
+	 * @param cardName
+	 *            : name of card that was played
+	 */
 	public static void playCard(Model model, String cardName) {
 		AbstractCard card = CardLibrary.get().getCards().get(cardName);
 		if (card != null) {
@@ -32,14 +49,16 @@ public class PlayCardAuxiliary {
 			}
 			card.payImpl(selfOpponentMap);
 			card.performActionImpl(selfOpponentMap);
-		} else {
-			// TODO what if card not found
-			// --> should be nothing because should go back to trigger
-			// ActionRuleSet
 		}
 
 	}
 
+	/**
+	 * checks if either has won and sets both players to endofgame-state
+	 * 
+	 * @param model
+	 *            : the model to be processed
+	 */
 	public static void checkEndOfGame(Model model) {
 		PlayerState self = model.getSelf();
 		PlayerState opponent = model.getOpponent();
@@ -50,8 +69,8 @@ public class PlayCardAuxiliary {
 			opponetSpecificModel = (InGameSpecificModel) opponent
 					.getStateSpecificModel();
 		} else {
-			// TODO Fehlerbehandlung
-			System.out.println("wrong state of opponent in playCard");
+			throw new IllegalStateException(
+					"wrong state of opponent in playCard");
 		}
 		WinStrategy winStrategy = WinStrategies.getInstance()
 				.getStrategyForName(model.getStrategy());
@@ -68,7 +87,5 @@ public class PlayCardAuxiliary {
 		} else {
 			StateMachine.getInstance().runCurrentState(model);
 		}
-		// if card states: "Play again" than state must be set to
-		// "PREACTION"
 	}
 }

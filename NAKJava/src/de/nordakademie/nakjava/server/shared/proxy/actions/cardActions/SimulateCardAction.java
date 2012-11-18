@@ -19,6 +19,15 @@ import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * simulates all playable(i.e. where costs can be payed) cards on the cardhand
+ * for all number of rounds given by thresholds
+ * 
+ * the simulation is multithreaded using SimulateCardRunnable
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class SimulateCardAction extends ActionContext {
 	private int[] thresholds;
 

@@ -11,6 +11,13 @@ import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
+/**
+ * global singleton to administer all sessions; read/write lock necessary for
+ * simultaneous access of multiple threads
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class Sessions {
 	private static Sessions instance;
 	private Map<Long, Session> sessions = new HashMap<>();
@@ -36,6 +43,12 @@ public class Sessions {
 		return instance;
 	}
 
+	/**
+	 * adds player to an either existing session or creatin a new one
+	 * 
+	 * @param player
+	 * @return
+	 */
 	public synchronized long addPlayer(Player player) {
 		readLock.lock();
 		try {
@@ -62,16 +75,17 @@ public class Sessions {
 		}
 	}
 
-	// this method can NOT be called from Action.performImpl() ->
-	// VisibleModelUpdater + ActionRuleSet rely on Session to exist
+	/**
+	 * deletion of session by removing it from global list
+	 * 
+	 * @param sessionId
+	 *            : session to be removed
+	 */
 	public void deleteSession(long sessionId) {
-		// no check for null necessary because session cannot be deleted before
 		Session session = getSession(sessionId);
 		writeLock.lock();
 		try {
 			session.lock();
-			// TODO This is not nice because Sessions should know nothing about
-			// model self/opponent
 			Model model = session.getModel();
 			PlayerState self = model.getSelf();
 			if (self != null && self.getName() != null) {
@@ -90,6 +104,11 @@ public class Sessions {
 		}
 	}
 
+	/**
+	 * 
+	 * @param sessionId
+	 * @return: Session-object for param sessionId
+	 */
 	public Session getSession(long sessionId) {
 		readLock.lock();
 		try {

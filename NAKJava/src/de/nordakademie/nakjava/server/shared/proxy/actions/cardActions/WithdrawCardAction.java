@@ -11,6 +11,12 @@ import de.nordakademie.nakjava.server.internal.model.Model;
 import de.nordakademie.nakjava.server.shared.proxy.ActionAbstractImpl;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
 
+/**
+ * discards the card on hand given by variable cardName
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class WithdrawCardAction extends AbstractCardAction {
 
 	public WithdrawCardAction(String cardName, long sessionNr) {

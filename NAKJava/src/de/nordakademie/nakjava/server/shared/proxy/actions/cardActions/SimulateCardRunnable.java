@@ -6,6 +6,13 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.SimulationModel;
 
+/**
+ * auxiliary-runnable class that processes one simulation for one card and one
+ * specified number of rounds
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class SimulateCardRunnable implements Runnable {
 	SimulationModel simulationModel;
 

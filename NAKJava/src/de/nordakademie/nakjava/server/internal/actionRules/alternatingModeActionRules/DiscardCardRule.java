@@ -12,6 +12,13 @@ import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.WithdrawCardAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * Determines whether WithdrawCardAction is applicable (in States Adjustcardhand
+ * and Discardonecardstate)
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class DiscardCardRule extends AlternatingStateRule {
 
 	@Override
@@ -21,8 +28,6 @@ public class DiscardCardRule extends AlternatingStateRule {
 		for (String cardName : ((InGameSpecificModel) session
 				.getPlayerStateForPlayer(player).getStateSpecificModel())
 				.getCards().getCardsOnHand()) {
-			// no check if card is non-withdrawable because this could
-			// potentially cause deadlock if no card is withdrawable
 			actions.add(new WithdrawCardAction(cardName, sessionId));
 		}
 		return actions;
