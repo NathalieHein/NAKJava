@@ -56,7 +56,7 @@ public class PlayerState implements Serializable {
 				@Override
 				public void run() {
 					try {
-						synchronized (this) {
+						synchronized (playerState) {
 							stateListener.stateChanged(playerState);
 						}
 					} catch (RemoteException e) {
