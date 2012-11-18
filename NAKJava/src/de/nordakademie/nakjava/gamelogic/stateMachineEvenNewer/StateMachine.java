@@ -59,35 +59,4 @@ public class StateMachine {
 			stateToAction.get(state).perform(model);
 		}
 	}
-
-	// public static void main(String[] args) {
-	// // TODO convert to JUnit-test
-	// PlayerState ps1 = new PlayerState(null);
-	// PlayerState ps2 = new PlayerState(null);
-	// List<String> cards = new ArrayList<>();
-	// for (int i = 1; i < 11; i++) {
-	// cards.add("Card" + i);
-	// }
-	// ps1.getCards().addAllCards(cards);
-	// ps1.setState(State.STOP);
-	// ps2.getCards().addAllCards(cards);
-	// ps2.setState(State.NEXT);
-	// ps1.getCards().drawUntilNCardsOnHand(7);
-	// ps2.getCards().drawUntilNCardsOnHand(5);
-	// Map<Target, PlayerState> playerStateMap = new HashMap<>();
-	// playerStateMap.put(Target.SELF, ps2);
-	// playerStateMap.put(Target.OPPONENT, ps1);
-	// do {
-	// StateMachine.run(playerStateMap);
-	// System.out.println("State: "
-	// + playerStateMap.get(Target.SELF).getState());
-	// System.out.print("Cards:   ");
-	// for (String string : playerStateMap.get(Target.SELF).getCards()
-	// .getCardsOnHand()) {
-	// System.out.print(string + " ,");
-	// }
-	// System.out.println();
-	// } while (playerStateMap.get(Target.SELF).getState() != State.NEXT);
-	//
-	// }
 }
