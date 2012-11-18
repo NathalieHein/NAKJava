@@ -21,7 +21,8 @@ public class Model implements Serializable {
 			transformer = WinStrategyTransformator.class)
 	protected String strategy;
 	@VisibleField(targets = { @TargetInState(states = { State.PLAYCARDSTATE,
-			State.ADJUSTCARDHANDSTATE, State.STOP, State.ENDOFGAMESTATE },
+			State.ADJUSTCARDHANDSTATE, State.STOP, State.ENDOFGAMESTATE,
+			State.DISCARDONECARDSTATE },
 			target = Target.SELF) },
 			transformer = SingleCardTransformator.class)
 	private String lastPlayedCard;

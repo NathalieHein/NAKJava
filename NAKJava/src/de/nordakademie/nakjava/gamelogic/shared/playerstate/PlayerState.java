@@ -20,20 +20,24 @@ import de.nordakademie.nakjava.server.persistence.DeckPersister;
 public class PlayerState implements Serializable {
 
 	@VisibleField(targets = {
-			@TargetInState(target = Target.SELF, states = { State.LOGIN,
-					State.CONFIGUREGAME, State.READYTOSTARTSTATE,
-					State.PLAYCARDSTATE, State.ADJUSTCARDHANDSTATE, State.STOP,
-					State.EDITDECK, State.ENDOFGAMESTATE,
-					State.OTHERPLAYERLEFTGAME, State.SIMULATIONSTATE }),
-			@TargetInState(target = Target.OPPONENT, states = { State.LOGIN,
-					State.EDITDECK, State.CONFIGUREGAME,
-					State.READYTOSTARTSTATE, State.PLAYCARDSTATE,
-					State.ADJUSTCARDHANDSTATE, State.STOP,
-					State.ENDOFGAMESTATE, State.SIMULATIONSTATE }) })
+			@TargetInState(target = Target.SELF,
+					states = { State.LOGIN, State.CONFIGUREGAME,
+							State.READYTOSTARTSTATE, State.PLAYCARDSTATE,
+							State.ADJUSTCARDHANDSTATE, State.STOP,
+							State.EDITDECK, State.ENDOFGAMESTATE,
+							State.OTHERPLAYERLEFTGAME, State.SIMULATIONSTATE,
+							State.DISCARDONECARDSTATE }),
+			@TargetInState(target = Target.OPPONENT,
+					states = { State.LOGIN, State.EDITDECK,
+							State.CONFIGUREGAME, State.READYTOSTARTSTATE,
+							State.PLAYCARDSTATE, State.ADJUSTCARDHANDSTATE,
+							State.STOP, State.ENDOFGAMESTATE,
+							State.SIMULATIONSTATE, State.DISCARDONECARDSTATE }) })
 	private State state;
 	@VisibleField(targets = { @TargetInState(states = { State.CONFIGUREGAME,
 			State.READYTOSTARTSTATE, State.EDITDECK, State.PLAYCARDSTATE,
-			State.ADJUSTCARDHANDSTATE, State.STOP, State.SIMULATIONSTATE }, target = Target.OPPONENT) })
+			State.ADJUSTCARDHANDSTATE, State.STOP, State.SIMULATIONSTATE },
+			target = Target.OPPONENT) })
 	private String name = "";
 	@LeaveOutVisibleCheck
 	private List<Deck> savedDecks;
