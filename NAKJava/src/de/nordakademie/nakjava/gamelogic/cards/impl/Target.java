@@ -1,5 +1,10 @@
 package de.nordakademie.nakjava.gamelogic.cards.impl;
 
+/**
+ * Enumeration for targets. The targets are view dependant and may be changed
+ * during game.
+ * 
+ */
 public enum Target {
 
 	SELF("du", "dich"), OPPONENT("dein Gegner", "Gegner");

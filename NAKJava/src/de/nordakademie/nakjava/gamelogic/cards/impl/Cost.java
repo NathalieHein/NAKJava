@@ -7,6 +7,9 @@ import java.lang.annotation.Target;
 
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 
+/**
+ * Represents certain artifact costs of a card. *
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
 public @interface Cost {

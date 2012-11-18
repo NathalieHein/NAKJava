@@ -200,6 +200,7 @@ public abstract class AbstractBotClient extends AbstractClient {
 
 		public BotStatistic() {
 			setTitle("Statistik");
+			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			winLabel = new JLabel("Gewonnen: " + win);
 			lostLabel = new JLabel("Verloren: " + lost);
 			gamesPlayed = new JLabel("Gesamt: " + roundsPlayed);

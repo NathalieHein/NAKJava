@@ -12,7 +12,6 @@ import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
  * Looks for cards in classpath, instantiates them and generates
  * {@link CardInformation}.
  * 
- * @author Kai
  * 
  */
 public class CardGenerator {
@@ -21,6 +20,9 @@ public class CardGenerator {
 	 * Loads all cards with {@link CardInformation} annotation. For performance
 	 * reasons just the cards package will be scanned. The class must be loaded
 	 * for introspection :-/. Normally we would use javassist...
+	 * 
+	 * Cards as well as Card Information will be generated an put into the
+	 * library
 	 * 
 	 * Additional packages may be given by property:
 	 * de.nordakademie.nakjava.cardPackages

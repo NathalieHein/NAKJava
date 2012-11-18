@@ -7,5 +7,10 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
+/**
+ * Annotation to tag a class scanning method. 
+ * By invoking one method those methods are all invoked.
+ *
+ */
 public @interface ClassLookup {
 }

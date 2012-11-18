@@ -7,6 +7,10 @@ import java.lang.annotation.Target;
 
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 
+/**
+ * Artifact effects change the an given artifact of a player.
+ * 
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
 public abstract @interface ArtifactEffect {
@@ -16,5 +20,8 @@ public abstract @interface ArtifactEffect {
 
 	de.nordakademie.nakjava.gamelogic.cards.impl.Target target();
 
+	/**
+	 * Description which will be generated on a cardInformation
+	 */
 	public String metaText = "{count} {artifact.getSimpleName} für {target.getAkkusativDescription}";
 }

@@ -12,8 +12,20 @@ import java.util.List;
 
 import de.nordakademie.nakjava.util.StringUtilities;
 
+/**
+ * Scans the whole classpath for certain classes which may have annotation or
+ * extends a certain class. This is used for building up dependencies on runtime
+ * and decoupling dependencies.
+ */
 public class ClasspathScanner {
 
+	/**
+	 * By invoking this method all methods annotated with {@link ClassLookup}
+	 * annotation will be performed. All uses of classpathScanners do not need
+	 * to be known. Scanning the whole classpath for the application is possible
+	 * because 1.) The classes are mostly all used when deployed in the right
+	 * way 2.) No javaassist is usable
+	 */
 	public static void lookupAnnotatedScanners() {
 		findClasses("de.nordakademie.nakjava", "", new ClassAcceptor() {
 
@@ -27,7 +39,7 @@ public class ClasspathScanner {
 						} catch (IllegalAccessException
 								| IllegalArgumentException
 								| InvocationTargetException e) {
-							e.printStackTrace();
+							throw new IllegalArgumentException(e);
 						}
 						return true;
 					}
@@ -40,7 +52,7 @@ public class ClasspathScanner {
 						} catch (IllegalAccessException
 								| IllegalArgumentException
 								| InvocationTargetException e) {
-							e.printStackTrace();
+							throw new IllegalArgumentException(e);
 						}
 						return true;
 					}
@@ -86,7 +98,20 @@ public class ClasspathScanner {
 
 	}
 
-	// Generics end here..
+	/**
+	 * Finds all classes which are feasible for the passed {@link ClassAcceptor}
+	 * . This enables DI at runtime.
+	 * 
+	 * @param packagge
+	 *            package in which to lookup the classes - otherwise it would
+	 *            scan the whole jre
+	 * @param additionalPackageProperty
+	 *            other packages can always be passed via system property so the
+	 *            programm can be enhanced without changing code
+	 * @param acceptor
+	 * @returnthe List of found classes
+	 */
+	// Generics end here...
 	public static List<Class<?>> findClasses(String packagge,
 			String additionalPackageProperty, ClassAcceptor acceptor) {
 		List<Class<?>> classes = new LinkedList<>();

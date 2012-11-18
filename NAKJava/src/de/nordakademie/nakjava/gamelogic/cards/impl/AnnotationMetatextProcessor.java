@@ -7,8 +7,22 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
+
+/**
+ * Looks for metatext attributes in effects and parses them according to the
+ * following rules: {...} denotes a type of effect. type.method invokes that a
+ * method on the type.
+ */
 public class AnnotationMetatextProcessor {
 
+	/**
+	 * This method is automatically called by the card generator to add text
+	 * information to {@link CardInformation} objects of geneneric effects.
+	 * 
+	 * @param annotation
+	 * @return
+	 */
 	public static String extractMetatext(Object annotation) {
 		Class<?> clazz = annotation.getClass();
 
