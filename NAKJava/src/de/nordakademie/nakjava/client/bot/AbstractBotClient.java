@@ -117,7 +117,6 @@ public abstract class AbstractBotClient extends AbstractClient {
 
 		BotBehaviour behaviour = behaviourLookup.get(newState);
 		if (behaviour != null) {
-			System.out.println("behaviour found");
 			behaviour.act(playerState);
 		}
 	}

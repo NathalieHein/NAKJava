@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.generated.VisibleModelFields;
-import de.nordakademie.nakjava.server.shared.proxy.CheckInImpl;
+import de.nordakademie.nakjava.server.shared.proxy.Server;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.PlayCardAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.SimulateCardAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.editdeck.DiscardDeckEditAction;
@@ -29,7 +29,7 @@ public class TestServer {
 	@BeforeClass
 	public static void init() {
 
-		CheckInImpl.main(new String[] {});
+		Server.main(new String[] {});
 		try {
 			client1 = new TestClient(null);
 			Thread.sleep(1000);

@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 import de.nordakademie.nakjava.client.internal.gui.GUIHook;
 import de.nordakademie.nakjava.client.shared.PlayerControlListener;
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
-import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.proxy.CheckIn;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
 import de.nordakademie.nakjava.util.GlobalThreadPool;
@@ -81,8 +80,7 @@ public abstract class AbstractClient extends UnicastRemoteObject implements
 			@Override
 			public void run() {
 				stateChangeLock.lock();
-				System.out.println(VisibleModelFields.PLAYERSTATE_STATE_SELF
-						.getValue(state.getModel().getGenericTransfer()));
+
 				if (batchNr < state.getBatch()) {
 					batchNr = state.getBatch();
 					if (gui != null) {

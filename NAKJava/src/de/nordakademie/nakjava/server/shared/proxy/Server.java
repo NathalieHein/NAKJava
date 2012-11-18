@@ -21,9 +21,9 @@ import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
  * @author Nathalie Hein (12154)
  * 
  */
-public class CheckInImpl extends UnicastRemoteObject implements CheckIn {
+public class Server extends UnicastRemoteObject implements CheckIn {
 
-	protected CheckInImpl() throws RemoteException {
+	protected Server() throws RemoteException {
 		super();
 	}
 
@@ -50,7 +50,7 @@ public class CheckInImpl extends UnicastRemoteObject implements CheckIn {
 		try {
 			LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
 			GlobalThreadPool.init(1);
-			CheckIn checkIn = new CheckInImpl();
+			CheckIn checkIn = new Server();
 
 			Naming.rebind("CheckIn", checkIn);
 		} catch (RemoteException | MalformedURLException e) {
