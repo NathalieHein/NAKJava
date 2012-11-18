@@ -41,12 +41,12 @@ public class LeaveGameAction extends ActionContext {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				session.removeActionInvoker();
 				if (session.getModel().getSelf().getState() == State.LOGIN) {
 					Players.getInstance().removeReservedPlayerName(name);
 				} else {
 					Players.getInstance().removeLoggedInPlayerName(name);
 				}
+				session.removeActionInvoker();
 			}
 		};
 	}
