@@ -95,7 +95,6 @@ public class GenericBot extends AbstractBotClient {
 
 	@Override
 	public void turn(PlayerState state) {
-		System.out.println("turn");
 		if (simulation == null) {
 			AbstractActionSelector.selectAction(state.getActions(),
 					new ActionContextSelector() {
