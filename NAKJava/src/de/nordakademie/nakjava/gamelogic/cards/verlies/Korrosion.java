@@ -6,34 +6,29 @@ import de.nordakademie.nakjava.gamelogic.cards.impl.AbstractCard;
 import de.nordakademie.nakjava.gamelogic.cards.impl.Card;
 import de.nordakademie.nakjava.gamelogic.cards.impl.Cost;
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
-import de.nordakademie.nakjava.gamelogic.shared.artifacts.factories.Zauberlabor;
+import de.nordakademie.nakjava.gamelogic.shared.artifacts.infrastructure.Mauer;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.ressources.Monster;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardType;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 
-@Card(name = "Einhorn",
+@Card(name = "Korrosion",
 		type = CardType.VERLIES,
-		costs = { @Cost(amount = 9,
+		costs = { @Cost(amount = 11,
 				ressource = Monster.class) },
-		additionalDescription = "Wenn Zauberlabor>gegnerisches Zauberlabor dann 12 Schaden sonst 8 Schaden.")
-public class Einhorn extends AbstractCard {
+		additionalDescription = "Wenn gegnerische Mauer > 0 dann 10 Schaden sonst 7 Schaden.")
+public class Korrosion extends AbstractCard {
 
 	@Override
 	protected void performAction(Map<Target, PlayerState> states) {
 		super.performAction(states);
-		InGameSpecificModel selfModel = (InGameSpecificModel) states.get(
-				Target.SELF).getStateSpecificModel();
 		InGameSpecificModel opponentModel = (InGameSpecificModel) states.get(
 				Target.OPPONENT).getStateSpecificModel();
-		Zauberlabor selfZauberlabor = selfModel
-				.getTupelForClass(Zauberlabor.class);
-		Zauberlabor opponentZauberlabor = opponentModel
-				.getTupelForClass(Zauberlabor.class);
-		if (selfZauberlabor.getCount() > opponentZauberlabor.getCount()) {
-			performOneDamage(states, 12, Target.OPPONENT);
+		Mauer opponentMauer = opponentModel.getTupelForClass(Mauer.class);
+		if (opponentMauer.getCount() > 0) {
+			performOneDamage(states, 10, Target.OPPONENT);
 		} else {
-			performOneDamage(states, 8, Target.OPPONENT);
+			performOneDamage(states, 7, Target.OPPONENT);
 		}
 	}
 

@@ -8,8 +8,6 @@ import java.util.Set;
 
 public class CardSet implements Serializable {
 
-	// TODO questionable return-types: boolean (operation worked) or
-	// List<>(performed for those cards) or void
 	private List<String> deck = new ArrayList<>();
 	private List<String> hand = new ArrayList<>();
 	private List<String> cemetry = new ArrayList<>();
@@ -110,4 +108,27 @@ public class CardSet implements Serializable {
 	public int getCardSetSize() {
 		return hand.size() + deck.size() + cemetry.size();
 	}
+
+	public void exchangeCardsOnHand(CardSet cards) {
+		List<String> removedCardsSelf = new LinkedList<>();
+		removedCardsSelf.addAll(hand);
+		List<String> removedCardsOther = new LinkedList<>();
+		removedCardsOther.addAll(cards.getCardsOnHand());
+
+		this.removeIrrevokablyFromHand();
+		cards.removeIrrevokablyFromHand();
+
+		this.putIntoHand(removedCardsOther);
+		cards.putIntoHand(removedCardsSelf);
+
+	}
+
+	public void removeIrrevokablyFromHand() {
+		hand.clear();
+	}
+
+	public void putIntoHand(List<String> cards) {
+		hand.addAll(cards);
+	}
+
 }
