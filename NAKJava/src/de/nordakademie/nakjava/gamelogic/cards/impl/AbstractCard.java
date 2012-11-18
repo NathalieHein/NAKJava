@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import de.nordakademie.nakjava.gamelogic.shared.artifacts.Artifact;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.ArtifactFactory;
 import de.nordakademie.nakjava.gamelogic.shared.artifacts.infrastructure.Infrastructure;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
@@ -35,11 +36,16 @@ public abstract class AbstractCard {
 
 	private final void performArtifactEffects(Map<Target, PlayerState> states) {
 		for (ArtifactEffect artifactEffect : annotation.artifactEffects()) {
-			((InGameSpecificModel) states.get(artifactEffect.target())
-					.getStateSpecificModel()).getTupelForClass(
-					artifactEffect.artifact()).merge(
-					ArtifactFactory.createArtifact(artifactEffect.artifact(),
-							artifactEffect.count()));
+
+			InGameSpecificModel model = ((InGameSpecificModel) states.get(
+					artifactEffect.target()).getStateSpecificModel());
+
+			for (Artifact artifact : model
+					.getTupelsForArtifactType(artifactEffect.artifact())) {
+				artifact.merge(ArtifactFactory.createArtifact(artifact
+						.getClass(), artifactEffect.count()));
+			}
+
 		}
 	}
 

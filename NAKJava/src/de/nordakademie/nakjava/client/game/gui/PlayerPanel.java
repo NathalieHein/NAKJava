@@ -67,6 +67,6 @@ public class PlayerPanel extends StatePanel {
 	@Override
 	public State[] getStates() {
 		return new State[] { State.PLAYCARDSTATE, State.ADJUSTCARDHANDSTATE,
-				State.STOP };
+				State.STOP, State.DISCARDONECARDSTATE };
 	}
 }

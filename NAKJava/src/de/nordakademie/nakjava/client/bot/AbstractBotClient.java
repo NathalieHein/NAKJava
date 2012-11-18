@@ -89,7 +89,8 @@ public abstract class AbstractBotClient extends AbstractClient {
 			turn(playerState);
 		}
 
-		if (newState == State.ADJUSTCARDHANDSTATE) {
+		if (newState == State.ADJUSTCARDHANDSTATE
+				|| newState == State.DISCARDONECARDSTATE) {
 			drop(playerState);
 		}
 

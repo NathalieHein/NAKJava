@@ -65,6 +65,9 @@ public class PanelPicker {
 		if (state != currentState) {
 			currentState = state;
 			Class<StatePanel> panelClass = statePanels.get(state);
+			if (panelClass == null) {
+				return null;
+			}
 
 			if (currentPanel == null
 					|| !panelClass.equals(currentPanel.getClass())) {
