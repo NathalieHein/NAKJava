@@ -83,9 +83,10 @@ public class CardTest {
 
 	private void testInformation(CardInformation information) {
 		assertEquals("TestKarte", information.getTitle());
-		assertEquals("-15 Monster für dich/zusätzlicherTest/",
+		assertEquals(
+				"-15 Monster für dich\n5 Schaden für dich\nzusätzlicherTest\n",
 				information.getInformation());
-		assertEquals("15 Ziegel/30 Kristalle", information.getCost());
+		assertEquals("15 Ziegel\n30 Kristalle", information.getCost());
 	}
 
 	private void testCard(AbstractCard card) {
