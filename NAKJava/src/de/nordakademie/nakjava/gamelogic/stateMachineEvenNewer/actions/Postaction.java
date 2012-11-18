@@ -7,7 +7,7 @@ public class Postaction implements StateAction {
 
 	@Override
 	public void perform(Model model) {
-		// TODO Auto-generated method stub
+		// (for future use, e.g postprocessing of artifacts)
 		StateMachine.getInstance().run(model);
 	}
 }

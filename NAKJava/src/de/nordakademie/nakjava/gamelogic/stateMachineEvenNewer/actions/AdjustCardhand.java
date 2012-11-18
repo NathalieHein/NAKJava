@@ -5,18 +5,24 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
 import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.Model;
 
+/**
+ * adjusts the cardhand so that the player has numberOfCardsOnHand on his hand
+ * afterwards
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class AdjustCardhand implements StateAction {
+	private final int numberOfCardsOnHand = 6;
 
 	@Override
 	public void perform(Model model) {
-		// TODO Auto-generated method stub
-		// TODO put number 6 in model somewhere, as constant or enum
 		CardSet currentPlayersCards = ((InGameSpecificModel) model.getSelf()
 				.getStateSpecificModel()).getCards();
-		if (currentPlayersCards.getNumberOfCardsOnHand() < 6) {
-			currentPlayersCards.drawUntilNCardsOnHand(6);
+		if (currentPlayersCards.getNumberOfCardsOnHand() < numberOfCardsOnHand) {
+			currentPlayersCards.drawUntilNCardsOnHand(numberOfCardsOnHand);
 			StateMachine.getInstance().run(model);
-		} else if (currentPlayersCards.getNumberOfCardsOnHand() == 6) {
+		} else if (currentPlayersCards.getNumberOfCardsOnHand() == numberOfCardsOnHand) {
 			StateMachine.getInstance().run(model);
 		}
 	}

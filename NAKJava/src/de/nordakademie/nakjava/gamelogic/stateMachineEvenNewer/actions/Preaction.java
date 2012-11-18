@@ -8,11 +8,16 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.StateMachine;
 import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.Model;
 
+/**
+ * produces and adds a player's new artifacts at start of round
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class Preaction implements StateAction {
 
 	@Override
 	public void perform(Model model) {
-		// TODO comment this thing!!!!
 		List<Artifact> producedArtifacts = new LinkedList<>();
 		for (Artifact factory : ((InGameSpecificModel) model.getSelf()
 				.getStateSpecificModel())

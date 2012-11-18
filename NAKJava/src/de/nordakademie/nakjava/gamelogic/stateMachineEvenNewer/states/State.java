@@ -2,6 +2,13 @@ package de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states;
 
 import java.io.Serializable;
 
+/**
+ * Enum that contains State that Player's can have throughout a game and their
+ * followup state
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public enum State implements Serializable {
 	LOGIN {
 
@@ -65,7 +72,6 @@ public enum State implements Serializable {
 		}
 	},
 	STOP {
-		// TODO take out the stop of statemachine here
 
 		@Override
 		public State getFollowUpState() {

@@ -8,6 +8,13 @@ import de.nordakademie.nakjava.server.internal.model.ConfigureGameSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 import de.nordakademie.nakjava.server.internal.model.Model;
 
+/**
+ * sets up InGameSpecificModel at start of game + checks whether both players
+ * are already in that state -> if yes, then game begins
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class ReadyToStartAction implements StateAction {
 
 	@Override
