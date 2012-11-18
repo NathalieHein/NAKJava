@@ -73,16 +73,19 @@ public abstract class AbstractClient extends UnicastRemoteObject implements
 	public void remoteClose() throws RemoteException {
 		final Lock lock = new ReentrantLock();
 		lock.lock();
-		new Thread(new Runnable() {
+		try {
+			new Thread(new Runnable() {
 
-			@Override
-			public void run() {
-				lock.lock();
-				System.exit(0);
-				lock.unlock();
-			}
-		}).start();
-		lock.unlock();
+				@Override
+				public void run() {
+					lock.lock();
+					System.exit(0);
+					lock.unlock();
+				}
+			}).start();
+		} finally {
+			lock.unlock();
+		}
 	}
 
 	@Override
@@ -96,8 +99,8 @@ public abstract class AbstractClient extends UnicastRemoteObject implements
 	protected void preCheckin() {
 
 	}
-	
-protected  void stateChange(PlayerState state){
-		
+
+	protected void stateChange(PlayerState state) {
+
 	}
 }

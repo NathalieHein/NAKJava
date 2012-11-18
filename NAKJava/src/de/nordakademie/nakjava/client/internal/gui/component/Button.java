@@ -69,28 +69,29 @@ public class Button extends JButton implements ActionListener,
 
 		final Lock lock = new ReentrantLock();
 		lock.lock();
+		try {
+			new Thread(new Runnable() {
 
-		new Thread(new Runnable() {
+				@Override
+				public void run() {
+					lock.lock();
+					try {
+						if (actionContext != null) {
 
-			@Override
-			public void run() {
-				lock.lock();
-				try {
-					if (actionContext != null) {
+							Button.this.setEnabled(false);
+							actionContext.perform();
+							actionContext = null;
 
-						Button.this.setEnabled(false);
-						actionContext.perform();
-						actionContext = null;
-
+						}
+					} finally {
+						lock.unlock();
 					}
-				} finally {
-					lock.unlock();
+
 				}
-
-			}
-		}).start();
-
-		lock.unlock();
+			}).start();
+		} finally {
+			lock.unlock();
+		}
 
 	}
 
