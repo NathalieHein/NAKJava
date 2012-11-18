@@ -24,9 +24,8 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 		this.sessionId = sessionId;
 	}
 
-	// TODO implement shutDown method after use? If not needed than simply
 	// Executor-Interface?
-	private static ExecutorService threadPool = Executors.newFixedThreadPool(2);
+	private static ExecutorService threadPool = Executors.newCachedThreadPool();
 	private int threadCount = 2;
 
 	private final Lock lock = new ReentrantLock();
@@ -36,7 +35,7 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 
 	@Override
 	public void perform() throws RemoteException {
-		new Thread(new Runnable() {
+		threadPool.execute(new Runnable() {
 
 			@Override
 			public void run() {
@@ -46,18 +45,25 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 						ActionAbstractImpl.this);
 				// }
 				if (verified) {
+					System.out.println(System.currentTimeMillis()
+							+ "Action verified");
 					Session session = Sessions.getInstance().getSession(
 							sessionId);
 					performImpl(session);
+					System.out
+							.println(System.currentTimeMillis() + "performed");
 					// Needs to be done for changing the thread context back
 					// to the thread that holds the lock in the ActionBroker
 					// TODO this is easier if using thread.join()
 					// TODO this needs to be put here => otherwise deadlock
 					lock.lock();
+					System.out.println(System.currentTimeMillis() + "locked");
 					threadPool.execute(new Runnable() {
 
 						@Override
 						public void run() {
+							System.out.println(System.currentTimeMillis()
+									+ "ARupdated");
 							ActionRuleset.update(sessionId);
 							finishThread();
 						}
@@ -65,6 +71,8 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 					threadPool.execute(new Runnable() {
 						@Override
 						public void run() {
+							System.out.println(System.currentTimeMillis()
+									+ "VMupdated");
 							VisibleModelUpdater.update(sessionId);
 							finishThread();
 						}
@@ -77,17 +85,18 @@ public abstract class ActionAbstractImpl extends UnicastRemoteObject implements
 					} finally {
 						lock.unlock();
 					}
+					System.out.println(System.currentTimeMillis() + "commit");
 					ActionBroker.getInstance().commit(ActionAbstractImpl.this);
 
 				}
-
 			}
-		}).start();
+		});
 
 	}
 
 	private synchronized void finishThread() {
 		threadCount--;
+		System.out.println(System.currentTimeMillis() + "finishThread");
 		if (threadCount == 0) {
 			lock.lock();
 			try {

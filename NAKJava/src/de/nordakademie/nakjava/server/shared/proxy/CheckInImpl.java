@@ -12,6 +12,7 @@ import de.nordakademie.nakjava.client.shared.PlayerStateListener;
 import de.nordakademie.nakjava.server.internal.Player;
 import de.nordakademie.nakjava.server.shared.proxy.actions.InitAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
+import de.nordakademie.nakjava.util.GlobalThreadPool;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
 public class CheckInImpl extends UnicastRemoteObject implements CheckIn {
@@ -34,7 +35,7 @@ public class CheckInImpl extends UnicastRemoteObject implements CheckIn {
 		load();
 		try {
 			LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
-
+			GlobalThreadPool.init(1);
 			CheckIn checkIn = new CheckInImpl();
 
 			Naming.rebind("CheckIn", checkIn);

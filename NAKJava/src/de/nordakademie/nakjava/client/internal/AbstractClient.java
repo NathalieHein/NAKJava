@@ -11,8 +11,10 @@ import java.util.concurrent.locks.ReentrantLock;
 import de.nordakademie.nakjava.client.internal.gui.GUIHook;
 import de.nordakademie.nakjava.client.shared.PlayerControlListener;
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
+import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.proxy.CheckIn;
 import de.nordakademie.nakjava.server.shared.serial.PlayerState;
+import de.nordakademie.nakjava.util.GlobalThreadPool;
 
 public abstract class AbstractClient extends UnicastRemoteObject implements
 		PlayerStateListener, PlayerControlListener {
@@ -33,7 +35,7 @@ public abstract class AbstractClient extends UnicastRemoteObject implements
 		if (gui != null) {
 			gui.preCheckin();
 		}
-		preCheckin();
+		preCheckinImpl();
 
 		try {
 			checkIn = (CheckIn) Naming.lookup("//127.0.0.1/CheckIn");
@@ -49,12 +51,14 @@ public abstract class AbstractClient extends UnicastRemoteObject implements
 	@Override
 	public final void stateChanged(final PlayerState state)
 			throws RemoteException {
-		// TODO perhaps a Thread pool here later
-		new Thread(new Runnable() {
+
+		GlobalThreadPool.perform(new Runnable() {
 
 			@Override
 			public void run() {
 				stateChangeLock.lock();
+				System.out.println(VisibleModelFields.PLAYERSTATE_STATE_SELF
+						.getValue(state.getModel().getGenericTransfer()));
 				if (batchNr < state.getBatch()) {
 					batchNr = state.getBatch();
 					if (gui != null) {
@@ -65,7 +69,7 @@ public abstract class AbstractClient extends UnicastRemoteObject implements
 
 				stateChangeLock.unlock();
 			}
-		}).start();
+		});
 
 	}
 
@@ -94,6 +98,11 @@ public abstract class AbstractClient extends UnicastRemoteObject implements
 			gui.error(text);
 		}
 
+	}
+
+	private void preCheckinImpl() {
+		GlobalThreadPool.init(3);
+		preCheckin();
 	}
 
 	protected void preCheckin() {

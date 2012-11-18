@@ -7,6 +7,7 @@ import java.util.List;
 
 import de.nordakademie.nakjava.client.shared.ClientAction;
 import de.nordakademie.nakjava.server.shared.proxy.ServerAction;
+import de.nordakademie.nakjava.util.GlobalThreadPool;
 
 public abstract class ActionContext implements Serializable,
 		Comparable<ActionContext> {
@@ -37,9 +38,8 @@ public abstract class ActionContext implements Serializable,
 		for (ClientAction action : preClientActions) {
 			action.perform();
 		}
-		// TODO perhaps we could add a client ThreadPool in here...
-		// TODO exception Handling -> asynchronous Feedback
-		new Thread(new Runnable() {
+		System.out.println(System.currentTimeMillis() + "perform action");
+		GlobalThreadPool.perform(new Runnable() {
 
 			@Override
 			public void run() {
@@ -50,7 +50,7 @@ public abstract class ActionContext implements Serializable,
 				}
 
 			}
-		}).start();
+		});
 
 	}
 
@@ -73,7 +73,7 @@ public abstract class ActionContext implements Serializable,
 
 	@Override
 	public int compareTo(ActionContext otherActionContext) {
-		return this.getClass().getSimpleName()
-				.compareTo(otherActionContext.getClass().getSimpleName());
+		return this.getClass().getSimpleName().compareTo(
+				otherActionContext.getClass().getSimpleName());
 	}
 }

@@ -100,10 +100,14 @@ public abstract class AbstractCard {
 		boolean result = true;
 
 		for (Cost cost : annotation.costs()) {
-			result = result
-					&& ((InGameSpecificModel) states.get(Target.SELF)
-							.getStateSpecificModel()).getTupelForClass(
-							cost.ressource()).getCount() >= cost.amount();
+			InGameSpecificModel igsModel = (InGameSpecificModel) states.get(
+					Target.SELF).getStateSpecificModel();
+
+			for (Artifact artifact : igsModel.getTupelsForArtifactType(cost
+					.ressource())) {
+				result &= artifact.getCount() >= cost.amount();
+			}
+
 		}
 
 		return result && checkPrerequirements(states);
@@ -123,11 +127,14 @@ public abstract class AbstractCard {
 	 */
 	public void payImpl(Map<Target, PlayerState> states) {
 		for (Cost cost : annotation.costs()) {
-			((InGameSpecificModel) states.get(Target.SELF)
-					.getStateSpecificModel())
-					.getTupelForClass(cost.ressource()).merge(
-							ArtifactFactory.createArtifact(cost.ressource(),
-									-cost.amount()));
+			InGameSpecificModel igsModel = (InGameSpecificModel) states.get(
+					Target.SELF).getStateSpecificModel();
+
+			for (Artifact artifact : igsModel.getTupelsForArtifactType(cost
+					.ressource())) {
+				artifact.merge(ArtifactFactory.createArtifact(artifact
+						.getClass(), -cost.amount()));
+			}
 		}
 	}
 
