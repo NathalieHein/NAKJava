@@ -44,16 +44,15 @@ public class Dieb extends AbstractCard {
 		InGameSpecificModel opponentModel = (InGameSpecificModel) states.get(
 				Target.OPPONENT).getStateSpecificModel();
 
-		Kristalle opponentKristall = (Kristalle) opponentModel
-				.getTupelForClass(class1);
+		Artifact opponentRessource = opponentModel.getTupelForClass(class1);
 		int opponentDamage;
-		if (opponentKristall.getCount() < maxValue) {
-			opponentDamage = opponentKristall.getCount();
+		if (opponentRessource.getCount() < maxValue) {
+			opponentDamage = opponentRessource.getCount();
 		} else {
 			opponentDamage = maxValue;
 		}
-		int gainedKristall = (int) Math.ceil(((float) opponentDamage) / 2);
+		int gainedArtifacts = (int) Math.ceil(((float) opponentDamage) / 2);
 		selfModel.getTupelForClass(class1).merge(
-				ArtifactFactory.createArtifact(class1, gainedKristall));
+				ArtifactFactory.createArtifact(class1, gainedArtifacts));
 	}
 }
