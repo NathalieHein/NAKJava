@@ -23,6 +23,7 @@ public class FinishSimulationAction extends ActionContext {
 				if (!session.isActionInvokerCurrentPlayer()) {
 					session.getModel().changeSelfAndOpponent();
 				}
+				session.getModel().getSelf().setSimulationModels(null);
 				StateMachine.getInstance().run(session.getModel());
 			}
 		};

@@ -6,8 +6,7 @@ public class GameEndAction implements StateAction {
 
 	@Override
 	public void perform(Model model) {
-		// TODO Auto-generated method stub
-
+		model.setLastPlayedCard(null);
 	}
 
 }

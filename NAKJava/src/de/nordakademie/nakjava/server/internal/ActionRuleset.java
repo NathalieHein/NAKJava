@@ -26,10 +26,6 @@ public final class ActionRuleset {
 			}
 		}
 		Collections.sort(actions);
-		for (ActionContext actionContext : actions) {
-			System.out.println(actionContext.getClass().getSimpleName());
-		}
-		System.out.println();
 		if (!actions.isEmpty()) {
 			player.getState().setActions(actions);
 		}
