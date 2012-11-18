@@ -15,10 +15,15 @@ import de.nordakademie.nakjava.server.internal.model.transformator.WinStrategyTr
 public class Model implements Serializable {
 	@VisibleField(targets = { @TargetInState(states = { State.CONFIGUREGAME,
 			State.READYTOSTARTSTATE, State.PLAYCARDSTATE,
-			State.ADJUSTCARDHANDSTATE, State.STOP, State.SIMULATIONSTATE }, target = Target.SELF) }, transformer = WinStrategyTransformator.class)
+			State.ADJUSTCARDHANDSTATE, State.STOP, State.SIMULATIONSTATE,
+			State.ENDOFGAMESTATE },
+			target = Target.SELF) },
+			transformer = WinStrategyTransformator.class)
 	protected String strategy;
 	@VisibleField(targets = { @TargetInState(states = { State.PLAYCARDSTATE,
-			State.ADJUSTCARDHANDSTATE, State.STOP }, target = Target.SELF) }, transformer = SingleCardTransformator.class)
+			State.ADJUSTCARDHANDSTATE, State.STOP, State.ENDOFGAMESTATE },
+			target = Target.SELF) },
+			transformer = SingleCardTransformator.class)
 	private String lastPlayedCard;
 	protected PlayerState self;
 	protected PlayerState opponent;
