@@ -1,5 +1,12 @@
 package de.nordakademie.nakjava.gamelogic.shared.artifacts;
 
+/**
+ * Factory for generating artifacts due to the fact that they are accessed
+ * through their classes. The factory initialzes the artifacts to the standard
+ * value
+ * 
+ * 
+ */
 public class ArtifactFactory {
 
 	public static Artifact createArtifact(Class<? extends Artifact> clazz) {
@@ -8,15 +15,9 @@ public class ArtifactFactory {
 			artifact.setCount(artifact.getInitialValue());
 
 			return artifact;
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (IllegalAccessException | InstantiationException e) {
+			throw new IllegalArgumentException();
 		}
-
-		return null;
 	}
 
 	public static <T extends Artifact> T cloneArtifact(T artifact) {
@@ -27,14 +28,10 @@ public class ArtifactFactory {
 			clone.setCount(artifact.getCount());
 
 			return clone;
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (IllegalAccessException | InstantiationException e) {
+
+			throw new IllegalArgumentException(e);
 		}
-		return clone;
 
 	}
 
@@ -45,14 +42,9 @@ public class ArtifactFactory {
 			artifact.setCount(count);
 
 			return artifact;
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (IllegalAccessException | InstantiationException e) {
+			throw new IllegalArgumentException(e);
 		}
 
-		return null;
 	}
 }

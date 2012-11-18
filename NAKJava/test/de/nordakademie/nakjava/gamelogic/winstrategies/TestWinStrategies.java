@@ -134,7 +134,6 @@ public class TestWinStrategies {
 				.setCount(0);
 		results = strategy.getRoundResult(neutralModel);
 
-		// TODO is this right?
 		Assert.assertEquals(RoundResult.WIN, results.get(Target.SELF));
 		Assert.assertEquals(RoundResult.WIN, results.get(Target.OPPONENT));
 	}

@@ -6,7 +6,6 @@ import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.RoundResult;
 
-//TODO do we allow only strategies of type "win" or also of other types: e.g. HaveAlwaysNumberOfCardsOnHandStrategy
 public interface WinStrategy {
 	/**
 	 * Returns the RoundResult for both players. The result is in itself
@@ -16,5 +15,6 @@ public interface WinStrategy {
 	 * @param playerMap
 	 * @return
 	 */
-	public Map<Target, RoundResult> getRoundResult(Map<Target, PlayerState> playerMap);
+	public Map<Target, RoundResult> getRoundResult(
+			Map<Target, PlayerState> playerMap);
 }

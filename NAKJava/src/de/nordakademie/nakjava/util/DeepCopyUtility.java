@@ -8,14 +8,20 @@ import java.io.ObjectOutputStream;
 
 public class DeepCopyUtility {
 
+	/**
+	 * Performs a deep copy of this a given object.
+	 * 
+	 * @param toBeCopied
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T deepCopy(T toBeCopied) {
 		T res = null;
 		try {
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 			new ObjectOutputStream(output).writeObject(toBeCopied);
-			ByteArrayInputStream input = new ByteArrayInputStream(
-					output.toByteArray());
+			ByteArrayInputStream input = new ByteArrayInputStream(output
+					.toByteArray());
 			Object copy = new ObjectInputStream(input).readObject();
 			res = (T) copy;
 		} catch (IOException | ClassNotFoundException e) {

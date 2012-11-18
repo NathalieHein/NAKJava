@@ -16,13 +16,11 @@ public class TestBot extends AbstractBotClient {
 
 	@Override
 	public void turn(PlayerState state) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void drop(PlayerState state) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -34,7 +32,6 @@ public class TestBot extends AbstractBotClient {
 
 	@Override
 	public void gameFinished(RoundResult result) {
-		// TODO Auto-generated method stub
 
 	}
 }

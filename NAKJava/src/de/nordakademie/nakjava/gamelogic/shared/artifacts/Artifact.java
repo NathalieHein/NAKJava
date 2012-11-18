@@ -4,6 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * An artifact is passive value, it can have three types: factories,
+ * infrastructure and ressources. Other types can be added by simply subclassing
+ * artifact and adding behaviour.
+ * 
+ */
 public abstract class Artifact implements Serializable {
 
 	protected int count;
@@ -32,6 +38,13 @@ public abstract class Artifact implements Serializable {
 		return 0;
 	}
 
+	/**
+	 * Two artifact objects of the same type can be merged (added) together. A
+	 * minimal value of the merge target is also considered as well as re using
+	 * the target object
+	 * 
+	 * @param other
+	 */
 	public void merge(Artifact other) {
 		if (!this.getClass().equals(other.getClass())) {
 			throw new IllegalArgumentException(this.getClass().getName()

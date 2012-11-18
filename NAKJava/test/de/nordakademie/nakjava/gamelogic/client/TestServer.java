@@ -40,7 +40,6 @@ public class TestServer {
 			bot2 = new TestBot();
 			Thread.sleep(1000);
 		} catch (RemoteException | InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

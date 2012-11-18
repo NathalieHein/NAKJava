@@ -61,8 +61,7 @@ public class PanelPicker {
 			} catch (InstantiationException | IllegalAccessException
 					| NoSuchMethodException | SecurityException
 					| IllegalArgumentException | InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new IllegalArgumentException(e);
 			}
 
 		}
@@ -99,8 +98,7 @@ public class PanelPicker {
 				} catch (InstantiationException | IllegalAccessException
 						| NoSuchMethodException | SecurityException
 						| IllegalArgumentException | InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					throw new IllegalArgumentException(e);
 				}
 
 			}

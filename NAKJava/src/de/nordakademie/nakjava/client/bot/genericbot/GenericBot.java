@@ -290,8 +290,7 @@ public class GenericBot extends AbstractBotClient {
 		try {
 			new GenericBot(10, null, true);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 

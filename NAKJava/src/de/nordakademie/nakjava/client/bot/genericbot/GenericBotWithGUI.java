@@ -2,6 +2,8 @@ package de.nordakademie.nakjava.client.bot.genericbot;
 
 import java.rmi.RemoteException;
 
+import javax.swing.JOptionPane;
+
 import de.nordakademie.nakjava.client.internal.gui.GUI;
 
 /**
@@ -13,8 +15,7 @@ public class GenericBotWithGUI {
 		try {
 			new GenericBot(10, new GUI(false), true);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 	}
 }

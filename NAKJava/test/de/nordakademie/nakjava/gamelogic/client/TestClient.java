@@ -16,7 +16,6 @@ public class TestClient extends AbstractClient {
 
 	@Override
 	protected void stateChange(PlayerState state) {
-		// TODO Auto-generated method stub
 		super.stateChange(state);
 		this.state = state;
 	}

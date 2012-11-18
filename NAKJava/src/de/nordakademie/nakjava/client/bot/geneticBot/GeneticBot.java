@@ -191,8 +191,7 @@ public class GeneticBot extends AbstractBotClient {
 		try {
 			new GeneticBot(null, true);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 	}
 

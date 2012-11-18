@@ -31,7 +31,6 @@ public class ContextHolder implements ActionContextHolder {
 
 	@Override
 	public void setActionContextSelector(ActionContextSelector selector) {
-		// TODO Auto-generated method stub
 
 	}
 

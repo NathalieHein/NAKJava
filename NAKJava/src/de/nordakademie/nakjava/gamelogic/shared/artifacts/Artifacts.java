@@ -8,6 +8,14 @@ import de.nordakademie.nakjava.util.classpathscanner.ClassAcceptor;
 import de.nordakademie.nakjava.util.classpathscanner.ClassLookup;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
+/**
+ * Artifacts represent the general objects in the game, except from cards. All
+ * artifacts have a count and may have an effect on other artifacts. To have a
+ * tree of those, inheritance is used for tagging and giving the artifacts
+ * common attributes. Here the artifacts are searched at runtime and
+ * instanciated with standard count.
+ * 
+ */
 public class Artifacts {
 
 	private static Artifacts instance;
