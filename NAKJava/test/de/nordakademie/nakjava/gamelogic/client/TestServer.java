@@ -11,6 +11,7 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.generated.VisibleModelFields;
 import de.nordakademie.nakjava.server.shared.proxy.CheckInImpl;
 import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.PlayCardAction;
+import de.nordakademie.nakjava.server.shared.proxy.actions.cardActions.SimulateCardAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.editdeck.DiscardDeckEditAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.login.SubmitPlayerNameAction;
 import de.nordakademie.nakjava.server.shared.proxy.actions.login.TypePlayerNameAction;
@@ -208,11 +209,21 @@ public class TestServer {
 				|| getState(client1) == State.STOP);
 		Assert.assertTrue(getState(client2) == State.PLAYCARDSTATE
 				|| getState(client2) == State.STOP);
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		if (getState(client2) == State.PLAYCARDSTATE) {
+			for (ActionContext action : client2.state.getActions()) {
+				if (action instanceof SimulateCardAction) {
+					action.perform();
+				}
+			}
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			Assert.assertTrue(getState(client1) == State.STOP);
+			Assert.assertTrue(getState(client2) == State.SIMULATIONSTATE);
 		}
+
 	}
 
 	private State getState(TestClient client) {
