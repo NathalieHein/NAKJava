@@ -84,7 +84,7 @@ public enum State implements Serializable {
 
 		@Override
 		public State getFollowUpState() {
-			return CLEANUP;
+			return null;
 		}
 
 	},
@@ -96,11 +96,11 @@ public enum State implements Serializable {
 		}
 
 	},
-	CLEANUP {
+	DISCARDONECARDSTATE {
 
 		@Override
 		public State getFollowUpState() {
-			return null;
+			return PLAYCARDSTATE;
 		}
 
 	};

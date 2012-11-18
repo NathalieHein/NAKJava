@@ -19,26 +19,24 @@ public class SimulateCardRunnable implements Runnable {
 		PlayerState simulationOpponent = simulationModel.getOpponent();
 		PlayCardAuxiliary.playCard(simulationModel,
 				simulationModel.getSimulatedCard());
+		simulationSelf.setState(State.PLAYCARDSTATE);
 		do {
+			StateMachine.getInstance().run(simulationModel);
 			if (simulationSelf.getState() == State.ADJUSTCARDHANDSTATE) {
 				((InGameSpecificModel) simulationSelf.getStateSpecificModel())
 						.getCards().discardRandomCardFromHand();
-				StateMachine.getInstance().run(simulationModel);
 			}
 			if (simulationOpponent.getState() == State.ADJUSTCARDHANDSTATE) {
 				((InGameSpecificModel) simulationOpponent
 						.getStateSpecificModel()).getCards()
 						.discardRandomCardFromHand();
-				StateMachine.getInstance().run(simulationModel);
 			}
 			if (simulationSelf.getState() == State.PLAYCARDSTATE) {
 				simulationModel.incrementCountRounds();
 				PlayCardAuxiliary.checkEndOfGame(simulationModel);
-				StateMachine.getInstance().run(simulationModel);
 			}
 			if (simulationOpponent.getState() == State.PLAYCARDSTATE) {
 				PlayCardAuxiliary.checkEndOfGame(simulationModel);
-				StateMachine.getInstance().run(simulationModel);
 			}
 		} while (!simulationModel.isSimulatingFinished()
 				&& simulationSelf.getState() != State.ENDOFGAMESTATE);

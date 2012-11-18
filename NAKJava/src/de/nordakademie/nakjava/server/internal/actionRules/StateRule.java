@@ -23,20 +23,20 @@ public abstract class StateRule implements ActionRule {
 
 	public abstract State getState();
 
-	public StateSpecificModel getStateSpecificModel(long sessionId,
+	protected StateSpecificModel getStateSpecificModel(long sessionId,
 			Player player) {
 		return getPlayerState(sessionId, player).getStateSpecificModel();
 	}
 
-	public PlayerState getPlayerState(long sessionId, Player player) {
+	protected PlayerState getPlayerState(long sessionId, Player player) {
 		return getSession(sessionId).getPlayerStateForPlayer(player);
 	}
 
-	public Session getSession(long sessionId) {
+	protected Session getSession(long sessionId) {
 		return Sessions.getInstance().getSession(sessionId);
 	}
 
-	public PlayerState getOtherPlayerState(long sessionId, Player player) {
+	protected PlayerState getOtherPlayerState(long sessionId, Player player) {
 		Player otherPlayer = getSession(sessionId).getOneOtherPlayer(player);
 		return getPlayerState(sessionId, otherPlayer);
 	}

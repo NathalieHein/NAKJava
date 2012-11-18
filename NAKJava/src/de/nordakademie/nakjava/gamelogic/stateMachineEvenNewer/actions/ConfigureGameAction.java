@@ -13,6 +13,7 @@ public class ConfigureGameAction implements StateAction {
 		ConfigureGameSpecificModel configureModel = new ConfigureGameSpecificModel(
 				new Deck("StandardDeck", CardLibrary.get().getCards().keySet()));
 		model.getSelf().setStateSpecificModel(configureModel);
+		model.setLastPlayedCard(null);
 
 	}
 }

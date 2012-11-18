@@ -24,19 +24,20 @@ public class PlayCardAuxiliary {
 			self.setState(State.ADJUSTCARDHANDSTATE);
 			Map<Target, PlayerState> selfOpponentMap = model
 					.getSelfOpponentMap();
-			card.payImpl(selfOpponentMap);
-			card.performActionImpl(selfOpponentMap);
 			InGameSpecificModel selfSpecificModel = (InGameSpecificModel) self
 					.getStateSpecificModel();
 			if (!selfSpecificModel.getCards().discardCardFromHand(cardName)) {
 				throw new IllegalStateException(
 						"Card to be discarded is not in cardhand");
 			}
+			card.payImpl(selfOpponentMap);
+			card.performActionImpl(selfOpponentMap);
 		} else {
 			// TODO what if card not found
 			// --> should be nothing because should go back to trigger
 			// ActionRuleSet
 		}
+
 	}
 
 	public static void checkEndOfGame(Model model) {

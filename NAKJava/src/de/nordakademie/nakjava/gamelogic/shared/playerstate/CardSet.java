@@ -96,7 +96,13 @@ public class CardSet implements Serializable {
 		return list;
 	}
 
-	private int getCardSetSize() {
+	public void discardAllCardsFromHand() {
+		for (String card : hand) {
+			discardCardFromHand(card);
+		}
+	}
+
+	public int getCardSetSize() {
 		return hand.size() + deck.size() + cemetry.size();
 	}
 }

@@ -45,28 +45,35 @@ public abstract class AbstractCard {
 
 	private final void performDamageEffects(Map<Target, PlayerState> states) {
 		for (DamageEffect damageEffect : annotation.damageEffects()) {
-			List<Infrastructure> infrastructure = ((InGameSpecificModel) states
-					.get(damageEffect.target()).getStateSpecificModel())
-					.getTupelsForArtifactType(Infrastructure.class);
-			Collections.sort(infrastructure);
-
 			int damageToDeal = damageEffect.count();
-			int infrastructurePointer = infrastructure.size() - 1;
+			Target target = damageEffect.target();
 
-			while (damageToDeal > 0 && infrastructurePointer >= 0) {
-				Infrastructure building = infrastructure
-						.get(infrastructurePointer);
+			performOneDamage(states, damageToDeal, target);
+		}
+	}
 
-				if (building.getCount() >= damageToDeal) {
-					building.setCount(building.getCount() - damageToDeal);
-					damageToDeal = 0;
-				} else {
-					damageToDeal -= building.getCount();
-					building.setCount(0);
-				}
+	protected void performOneDamage(Map<Target, PlayerState> states,
+			int damageToDeal, Target target) {
+		List<Infrastructure> infrastructure = ((InGameSpecificModel) states
+				.get(target).getStateSpecificModel())
+				.getTupelsForArtifactType(Infrastructure.class);
 
-				infrastructurePointer--;
+		Collections.sort(infrastructure);
+
+		int infrastructurePointer = infrastructure.size() - 1;
+
+		while (damageToDeal > 0 && infrastructurePointer >= 0) {
+			Infrastructure building = infrastructure.get(infrastructurePointer);
+
+			if (building.getCount() >= damageToDeal) {
+				building.setCount(building.getCount() - damageToDeal);
+				damageToDeal = 0;
+			} else {
+				damageToDeal -= building.getCount();
+				building.setCount(0);
 			}
+
+			infrastructurePointer--;
 		}
 	}
 
