@@ -13,7 +13,7 @@ import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 
 @Card(name = "Glasperlen",
 		type = CardType.ZAUBERLABOR,
-		additionalDescription = "Wenn eigener Turm<gegnerischer Turm dann +2 Turm sonst +1 Turm")
+		additionalDescription = "Wenn gegnerischer Turm > eigener Turmdann +2 Turm sonst +1 Turm")
 public class Glasperlen extends AbstractCard {
 
 	@Override

@@ -20,16 +20,16 @@ public class InGameSpecificModel implements StateSpecificModel {
 	@VisibleField(targets = {
 			@TargetInState(states = { State.PLAYCARDSTATE, State.STOP,
 					State.ENDOFGAMESTATE, State.SIMULATIONSTATE,
-					State.DISCARDONECARDSTATE },
+					State.DISCARDONECARDSTATE, State.ADJUSTCARDHANDSTATE },
 					target = Target.SELF),
 			@TargetInState(states = { State.PLAYCARDSTATE, State.STOP,
 					State.ENDOFGAMESTATE, State.SIMULATIONSTATE,
-					State.DISCARDONECARDSTATE },
+					State.DISCARDONECARDSTATE, State.ADJUSTCARDHANDSTATE },
 					target = Target.OPPONENT) })
 	private List<Artifact> artifacts;
 	@VisibleField(targets = { @TargetInState(states = { State.PLAYCARDSTATE,
 			State.ADJUSTCARDHANDSTATE, State.STOP, State.SIMULATIONSTATE,
-			State.DISCARDONECARDSTATE },
+			State.DISCARDONECARDSTATE, State.ADJUSTCARDHANDSTATE },
 			target = Target.SELF) },
 			transformer = CardTransformator.class)
 	private CardSet cards;

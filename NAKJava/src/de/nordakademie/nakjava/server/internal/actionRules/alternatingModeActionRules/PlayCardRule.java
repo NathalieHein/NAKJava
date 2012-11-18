@@ -32,7 +32,9 @@ public class PlayCardRule extends AlternatingStateRule {
 							.getSelfOpponentMap())) {
 				actions.add(new PlayCardAction(cardName, sessionId));
 			}
-			actions.add(new WithdrawCardAction(cardName, sessionId));
+			if (CardLibrary.get().getCardForName(cardName).canDrop()) {
+				actions.add(new WithdrawCardAction(cardName, sessionId));
+			}
 		}
 		if (cardsOnHand.size() == 0) {
 			final ActionContext noCardAction = new NoCardCanBePlayedAction(

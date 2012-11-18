@@ -3,7 +3,6 @@ package de.nordakademie.nakjava.server.internal.actionRules.alternatingModeActio
 import java.util.ArrayList;
 import java.util.List;
 
-import de.nordakademie.nakjava.gamelogic.cards.impl.CardLibrary;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.states.State;
 import de.nordakademie.nakjava.server.internal.Player;
@@ -22,9 +21,9 @@ public class DiscardCardRule extends AlternatingStateRule {
 		for (String cardName : ((InGameSpecificModel) session
 				.getPlayerStateForPlayer(player).getStateSpecificModel())
 				.getCards().getCardsOnHand()) {
-			if (CardLibrary.get().getCardForName(cardName).canDrop()) {
-				actions.add(new WithdrawCardAction(cardName, sessionId));
-			}
+			// no check if card is non-withdrawable because this could
+			// potentially cause deadlock if no card is withdrawable
+			actions.add(new WithdrawCardAction(cardName, sessionId));
 		}
 		return actions;
 	}
