@@ -15,6 +15,11 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.gen
 import de.nordakademie.nakjava.server.internal.model.InGameSpecificModel;
 import de.nordakademie.nakjava.util.StringUtilities;
 
+/**
+ * Checks artifacts, whether a player has won or not.
+ * 
+ * 
+ */
 public class ArtifactChecker implements WinCheck, Serializable {
 
 	private Class<? extends Artifact>[] artifacts;
