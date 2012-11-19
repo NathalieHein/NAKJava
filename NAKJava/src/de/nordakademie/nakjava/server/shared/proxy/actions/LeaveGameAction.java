@@ -42,13 +42,13 @@ public class LeaveGameAction extends ActionContext {
 				} else if (opponent.getState() != State.LOGIN
 						&& opponent.getState() != State.CONFIGUREGAME
 						&& opponent.getState() != State.EDITDECK) {
-					session.getModel().getOpponent()
-							.setState(State.OTHERPLAYERLEFTGAME);
+					session.getModel().getOpponent().setState(
+							State.OTHERPLAYERLEFTGAME);
 				}
 				try {
 					session.getActionInvoker().getControl().remoteClose();
 				} catch (RemoteException e) {
-					e.printStackTrace();
+					// Not important, the client may have already left
 				}
 				if (session.getModel().getSelf().getState() == State.LOGIN) {
 					Players.getInstance().removeReservedPlayerName(name);

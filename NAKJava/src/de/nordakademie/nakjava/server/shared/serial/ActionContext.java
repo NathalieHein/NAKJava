@@ -22,6 +22,8 @@ public abstract class ActionContext implements Serializable,
 	protected ServerAction serverAction;
 	private List<ClientAction> preClientActions;
 
+	private long sessionNr;
+
 	/**
 	 * 
 	 * @param sessionNr
@@ -29,11 +31,16 @@ public abstract class ActionContext implements Serializable,
 	 */
 	protected ActionContext(long sessionNr) {
 		preClientActions = new LinkedList<>();
+		this.sessionNr = sessionNr;
 		try {
 			serverAction = getAction(sessionNr);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public long getSessionNr() {
+		return sessionNr;
 	}
 
 	/**
@@ -84,7 +91,7 @@ public abstract class ActionContext implements Serializable,
 	 */
 	@Override
 	public int compareTo(ActionContext otherActionContext) {
-		return this.getClass().getSimpleName()
-				.compareTo(otherActionContext.getClass().getSimpleName());
+		return this.getClass().getSimpleName().compareTo(
+				otherActionContext.getClass().getSimpleName());
 	}
 }

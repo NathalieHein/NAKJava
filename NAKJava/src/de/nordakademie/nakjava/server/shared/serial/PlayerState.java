@@ -3,9 +3,11 @@ package de.nordakademie.nakjava.server.shared.serial;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import de.nordakademie.nakjava.client.shared.PlayerStateListener;
+import de.nordakademie.nakjava.server.shared.proxy.actions.LeaveGameAction;
 
 /**
  * Contains Listener on client-side and data that will be serialized to
@@ -60,29 +62,28 @@ public class PlayerState implements Serializable {
 	}
 
 	/**
-	 * called when server-processing of action is finished. New Thread is opened
-	 * to invoke client via RMI. PlayerState is shallow-copied because of
-	 * multithreading
+	 * called when server-processing of action is finished.
 	 */
 	public void triggerChangeEvent() {
-		final PlayerState playerState = new PlayerState(this);
 
 		if (dirty) {
-			new Thread(new Runnable() {
 
-				@Override
-				public void run() {
-					try {
-						stateListener.stateChanged(playerState);
+			try {
+				stateListener.stateChanged(this);
 
-					} catch (RemoteException e) {
-						e.printStackTrace();
-					}
+			} catch (RemoteException e) {
 
-				}
-			}).start();
+				LeaveGameAction action = new LeaveGameAction(this.actions
+						.get(0).getSessionNr());
+				List<ActionContext> actions = new LinkedList<>();
+				actions.add(action);
+				this.setActions(actions);
+				action.perform();
+			}
 
-			dirty = false;
 		}
+
+		dirty = false;
 	}
+
 }

@@ -12,6 +12,11 @@ import de.nordakademie.nakjava.util.classpathscanner.ClassAcceptor;
 import de.nordakademie.nakjava.util.classpathscanner.ClassLookup;
 import de.nordakademie.nakjava.util.classpathscanner.ClasspathScanner;
 
+/**
+ * Gives access to automatically loaded {@link WinStrategy}s. Thoses instances
+ * can be accessed statically by name.
+ * 
+ */
 public class WinStrategies {
 	private Map<String, WinStrategy> strategies;
 	private Map<String, WinStrategyInformation> strategyInformation;
@@ -32,8 +37,7 @@ public class WinStrategies {
 				description.append("- " + check.getDescription() + "\n");
 			}
 
-			this.strategyInformation.put(
-					strategyName,
+			this.strategyInformation.put(strategyName,
 					new WinStrategyInformation(strategyName, description
 							.toString(), strategy.getChecks().toArray(
 							new WinCheck[strategy.getChecks().size()])));

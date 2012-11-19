@@ -1,5 +1,9 @@
 package de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies;
 
+/**
+ * Result for a round
+ * 
+ */
 public enum RoundResult {
 	LOST, WIN, NEUTRAL;
 

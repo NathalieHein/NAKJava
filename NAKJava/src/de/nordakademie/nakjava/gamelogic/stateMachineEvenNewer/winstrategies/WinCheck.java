@@ -5,6 +5,13 @@ import java.util.Map;
 import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 
+/**
+ * Checks whether a player has won. Many Checks form a winstrategy, e.g. Kill
+ * the other player or collect more than x ressources.
+ * 
+ * @author Kai
+ * 
+ */
 public interface WinCheck {
 
 	/**

@@ -9,6 +9,14 @@ import de.nordakademie.nakjava.gamelogic.cards.impl.Target;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.PlayerState;
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.WinStrategy;
 
+/**
+ * Base class for a winstrategy which decides whether a player has win/loose or
+ * a neutral result after a round of playing. This is checked after each round.
+ * Special cases like win/win, loose/neutral etc... are handled here.
+ * 
+ * @author Kai
+ * 
+ */
 public abstract class AbstractWinStrategy implements WinStrategy {
 
 	private List<WinCheck> winChecks;
