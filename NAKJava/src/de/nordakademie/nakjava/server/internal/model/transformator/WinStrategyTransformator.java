@@ -4,6 +4,13 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.Win
 import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.WinStrategyInformation;
 import de.nordakademie.nakjava.server.internal.model.Transformator;
 
+/**
+ * transforms the name of the winStrategy into its corresponding
+ * WinStrategyInformation-object
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class WinStrategyTransformator implements
 		Transformator<String, WinStrategyInformation> {
 

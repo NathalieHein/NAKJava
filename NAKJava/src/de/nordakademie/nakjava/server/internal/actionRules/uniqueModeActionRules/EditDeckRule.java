@@ -14,6 +14,14 @@ import de.nordakademie.nakjava.server.shared.proxy.actions.editdeck.SelectCardFo
 import de.nordakademie.nakjava.server.shared.proxy.actions.editdeck.TypeDeckNameAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * determines and creates ActionContexts(SelectCardForDeckAction,
+ * TypeDeckNameAction, RemoveDeckAction, DiscardDeckAction) if current State of
+ * Player is Editdeck
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class EditDeckRule extends StateRule {
 
 	@Override

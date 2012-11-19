@@ -11,6 +11,13 @@ import de.nordakademie.nakjava.server.internal.model.LoginSpecificModel;
 import de.nordakademie.nakjava.server.shared.proxy.actions.login.SubmitPlayerNameAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * Determines and creates new SubmitPlayerNameAction if applicable and state of
+ * player is Login
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class FinishTypingPlayerNameRule extends StateRule {
 
 	@Override

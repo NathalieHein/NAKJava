@@ -10,6 +10,13 @@ import de.nordakademie.nakjava.server.internal.model.ConfigureGameSpecificModel;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.FinishConfiguringAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * Determines and creates ActionContexts(FinishConfiguringAction) if current
+ * state for player is Configuregame
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class FinishConfiguringGameRule extends StateRule {
 
 	@Override

@@ -8,6 +8,13 @@ import de.nordakademie.nakjava.gamelogic.cards.impl.CardLibrary;
 import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 import de.nordakademie.nakjava.server.internal.model.Transformator;
 
+/**
+ * Transforms the map of cardNames->booleans into a map of
+ * CardInformation-objects-> booleans
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class CardInformationTransformator implements
 		Transformator<Map<String, Boolean>, Map<CardInformation, Boolean>> {
 

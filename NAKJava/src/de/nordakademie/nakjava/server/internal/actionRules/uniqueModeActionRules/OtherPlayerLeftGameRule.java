@@ -9,6 +9,13 @@ import de.nordakademie.nakjava.server.internal.actionRules.StateRule;
 import de.nordakademie.nakjava.server.shared.proxy.actions.PlayAgainAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * determines and creates new PlayAgainAction if current state of player is
+ * Otherplayerleftgame
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class OtherPlayerLeftGameRule extends StateRule {
 
 	@Override

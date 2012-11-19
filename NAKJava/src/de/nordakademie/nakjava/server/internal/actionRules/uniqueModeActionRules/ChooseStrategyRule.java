@@ -11,6 +11,12 @@ import de.nordakademie.nakjava.server.internal.actionRules.StateRule;
 import de.nordakademie.nakjava.server.shared.proxy.actions.settingupgame.SelectWinStrategy;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * Determines and creates ActionContexts(SelectWinStrategy) when applicable
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class ChooseStrategyRule extends StateRule {
 
 	@Override

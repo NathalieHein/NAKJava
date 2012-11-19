@@ -8,6 +8,12 @@ import de.nordakademie.nakjava.gamelogic.shared.cards.CardInformation;
 import de.nordakademie.nakjava.gamelogic.shared.playerstate.CardSet;
 import de.nordakademie.nakjava.server.internal.model.Transformator;
 
+/**
+ * transforms a CardSet into a list of CardInformation-objects
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class CardTransformator implements
 		Transformator<CardSet, List<CardInformation>> {
 

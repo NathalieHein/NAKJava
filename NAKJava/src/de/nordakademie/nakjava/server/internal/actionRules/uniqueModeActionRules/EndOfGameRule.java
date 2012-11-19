@@ -9,6 +9,13 @@ import de.nordakademie.nakjava.server.internal.actionRules.StateRule;
 import de.nordakademie.nakjava.server.shared.proxy.actions.PlayAgainAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * Determines and creates ActionContexts(PlayAgainAction) if current state of
+ * Player is EndofGameState
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class EndOfGameRule extends StateRule {
 
 	@Override

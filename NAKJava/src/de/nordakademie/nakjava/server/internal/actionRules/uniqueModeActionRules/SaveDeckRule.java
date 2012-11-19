@@ -12,6 +12,13 @@ import de.nordakademie.nakjava.server.persistence.Deck;
 import de.nordakademie.nakjava.server.shared.proxy.actions.editdeck.SaveDeckAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * determines and creates new SaveDeckaction if applicable and state of player
+ * is editdeck
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class SaveDeckRule extends StateRule {
 
 	@Override

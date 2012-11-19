@@ -10,6 +10,13 @@ import de.nordakademie.nakjava.server.internal.actionRules.StateRule;
 import de.nordakademie.nakjava.server.shared.proxy.actions.editdeck.TypeDeckNameAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * determines and creates TypeDeckNameAction if current state of player is
+ * editdeck
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class TypeSpecialCharactersForDeck extends StateRule {
 
 	@Override

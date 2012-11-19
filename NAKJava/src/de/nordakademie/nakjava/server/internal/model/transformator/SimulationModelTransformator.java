@@ -12,6 +12,13 @@ import de.nordakademie.nakjava.server.internal.model.SimulationModel;
 import de.nordakademie.nakjava.server.internal.model.Transformator;
 import de.nordakademie.nakjava.server.shared.serial.VisibleSimulationModel;
 
+/**
+ * Transforms a list of SimulationModel into a list of VisibleSimulationModels
+ * that contains less information
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class SimulationModelTransformator implements
 		Transformator<List<SimulationModel>, List<VisibleSimulationModel>> {
 

@@ -14,6 +14,14 @@ import de.nordakademie.nakjava.gamelogic.stateMachineEvenNewer.winstrategies.Rou
 import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 import de.nordakademie.nakjava.server.internal.model.transformator.CardTransformator;
 
+/**
+ * InGameSpecificModel contains specific information of player for all states
+ * within the game(Playcardstate, Simulationstate, Adjustcardhandstate, Stop,
+ * Readytostartstate, Preactionstate, Postactionstate, Gameoverstate)
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class InGameSpecificModel implements StateSpecificModel {
 	@VisibleField(targets = {
 			@TargetInState(states = { State.PLAYCARDSTATE, State.STOP,

@@ -10,6 +10,13 @@ import de.nordakademie.nakjava.server.internal.actionRules.StateRule;
 import de.nordakademie.nakjava.server.shared.proxy.actions.login.TypePlayerNameAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * determines and creates TypePlayerNameAction if current state of player is
+ * Login
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class TypePlayerNameRule extends StateRule {
 
 	@Override

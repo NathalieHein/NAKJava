@@ -11,6 +11,12 @@ import de.nordakademie.nakjava.server.internal.model.VisibleField.TargetInState;
 import de.nordakademie.nakjava.server.internal.model.transformator.CardInformationTransformator;
 import de.nordakademie.nakjava.server.persistence.Deck;
 
+/**
+ * EditDeckSpecificModel that contains data for the State Editdeck
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class EditDeckSpecificModel implements StateSpecificModel {
 	@VisibleField(targets = { @TargetInState(states = { State.EDITDECK },
 			target = Target.SELF) },
@@ -35,6 +41,12 @@ public class EditDeckSpecificModel implements StateSpecificModel {
 		}
 	}
 
+	/**
+	 * reverses the selection status of the given card
+	 * 
+	 * @param card
+	 *            : card in deck whose selection status is to be reversed
+	 */
 	public void reverseSelectionOfCard(String card) {
 		chosenCards.put(card, !chosenCards.get(card));
 	}
@@ -47,6 +59,13 @@ public class EditDeckSpecificModel implements StateSpecificModel {
 		return currentPartOfDeckName;
 	}
 
+	/**
+	 * appends the character to the current name, if '\b': deletes the last
+	 * character
+	 * 
+	 * @param character
+	 *            to be appended to name
+	 */
 	public void appendPartOfDeckName(char character) {
 		if (character != '\b') {
 			currentPartOfDeckName = currentPartOfDeckName + character;

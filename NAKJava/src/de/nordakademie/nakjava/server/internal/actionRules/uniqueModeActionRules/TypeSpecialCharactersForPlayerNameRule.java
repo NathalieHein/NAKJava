@@ -11,6 +11,13 @@ import de.nordakademie.nakjava.server.internal.model.LoginSpecificModel;
 import de.nordakademie.nakjava.server.shared.proxy.actions.login.TypePlayerNameAction;
 import de.nordakademie.nakjava.server.shared.serial.ActionContext;
 
+/**
+ * determines and creates TypePlayerNameaction if current state of player is
+ * Login
+ * 
+ * @author Nathalie Hein (12154)
+ * 
+ */
 public class TypeSpecialCharactersForPlayerNameRule extends StateRule {
 
 	@Override
